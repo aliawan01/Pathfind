@@ -1,0 +1,14 @@
+TODO:
+- Lock the screen when drawing paths so that the user cannot mark more nodes.
+- Be able to tell the user that there isn't any path (we know that there isn't a path
+  when the path stack is empty {in other words it is full of None values})
+- Abstract get_valid_adjacent_nodes into rectArray class.
+- Add a way to unmark already marked nodes.
+
+
+FINISH:
+- Turn lists in stacks and fix the bugs which come with such responsiblity...
+- Use self.parent_child_dict to backtrack and find out the shortest path.
+
+IDEAS:
+- Fullscreen/rescaling?
