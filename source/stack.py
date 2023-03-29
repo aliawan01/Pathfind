@@ -54,4 +54,5 @@ class Stack:
                 break
 
     def reverse(self):
+        self.remove_empty_values()
         self.stack = self.stack[::-1]

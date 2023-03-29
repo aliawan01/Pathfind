@@ -69,6 +69,17 @@ class RectArray:
     def get_valid_adjacent_nodes(self, node):
         valid_adjacent_nodes = [i for i in node.adjacent_nodes if i != None] 
         return valid_adjacent_nodes
+
+    def get_start_and_end_node_coords(self):
+        for y in range(self.num_of_rows):
+            for x in range(self.num_of_columns):
+                if self.array[y][x].is_start_node:
+                    start_node_coords = [y, x]
+                elif self.array[y][x].is_end_node:
+                    end_node_coords = [y, x]
+
+        return start_node_coords, end_node_coords
+
  
 class Grid:
     def __init__(self, screen, screen_width, screen_height, num_of_rows, num_of_columns):

@@ -27,6 +27,9 @@ def main():
     num_of_rows = screen_height//100*4
     num_of_columns = screen_width//100*4
 
+    print("Number of columns:", num_of_columns)
+    print("Number of rows: ", num_of_rows)
+
     screen = pygame.display.set_mode((screen_width, screen_height))
     pygame.display.set_caption("Pathfinding Visualizer")
 
@@ -35,7 +38,8 @@ def main():
 
     dfs = DFS(screen, num_of_rows, num_of_columns)
     bfs = BFS(screen, num_of_rows, num_of_columns)
-
+    dijkastra = Dijkastra(screen, num_of_rows, num_of_columns)
+    astar = AStar(screen, num_of_rows, num_of_columns)
 
     screen_lock = False
 
@@ -84,6 +88,27 @@ def main():
                     screen_lock = True
 
                     pygame.time.set_timer(DRAW_CHECKED_NODES, 25)
+
+                if event.key == pygame.K_j:
+                    rect_array.reset_rect_array_adjacent_nodes()
+                    rect_array.gen_rect_array_with_adjacent_nodes()
+
+                    dijkastra.run_dijkastra(rect_array)
+                    current_algorithm = dijkastra
+                    screen_lock = True
+
+                    pygame.time.set_timer(DRAW_CHECKED_NODES, 25)
+
+                if event.key == pygame.K_a:
+                    rect_array.reset_rect_array_adjacent_nodes()
+                    rect_array.gen_rect_array_with_adjacent_nodes()
+
+                    astar.run_astar(rect_array)
+                    current_algorithm = astar
+                    # screen_lock = True
+
+                    pygame.time.set_timer(DRAW_CHECKED_NODES, 25)
+
 
             if screen_lock == False:
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -134,4 +159,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

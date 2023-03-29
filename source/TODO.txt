@@ -1,14 +1,47 @@
 TODO:
-- Lock the screen when drawing paths so that the user cannot mark more nodes.
 - Be able to tell the user that there isn't any path (we know that there isn't a path
   when the path stack is empty {in other words it is full of None values})
-- Abstract get_valid_adjacent_nodes into rectArray class.
-- Add a way to unmark already marked nodes.
+- Turn frontier in bfs into a queue.
+- Turn frontier in dijakstra's into a priority queue.
+- Add weighted nodes (this is why we need to turn frontier in dijakstra's into 
+  a priority queue)
 
 
 FINISH:
-- Turn lists in stacks and fix the bugs which come with such responsiblity...
-- Use self.parent_child_dict to backtrack and find out the shortest path.
+- Get A* working properly (whether that requires manhattan or euclidean distance)
 
 IDEAS:
 - Fullscreen/rescaling?
+
+
+
+Function astar(graph, start, goal)
+	For each vertex in graph
+		distance[vertex] = infinity :  f[vertex] = infinity
+	Next
+	distance[start] = 0 : f[start] = 0
+	While unvisited_vertices in graph or f[goal].lowest in graph
+		shortest = null
+		For each vertex in graph
+			If shortest == null Then
+				shortest = vertex
+			ElseIf distance[vertex] < distance[shortest] Then shortest = vertex
+			End If
+		Next
+		For each neighbour in graph[shortest]
+			If neighbour in graph and cost + distance[shortest] < distance[neighbour] then
+				distance[neighbour] = cost + distance[shortest]
+				f[neighbour] = cost + g[shortest] + h[neighbour]
+				previous_vertext[neighbour] = shortest
+			End If
+		Next
+		graph.pop(shortest)
+	End While
+	vertex = goal
+	While vertex != start
+		optimal_path.insert(vertex)
+		vertex = previous_vertex[vertex]
+	End While
+	Return optimal_path
+End Function
+
