@@ -2,6 +2,8 @@ TODO:
 - Be able to tell the user that there isn't any path (we know that there isn't a path
   when the path stack is empty {in other words it is full of None values})
 
+- Make a general function to setup and call all the pathfinding algorithms.
+
 - Turn the queues in queue_classes.py into actual queues
 
 - Rename the run_... methods in the pathfinding classes to just run.

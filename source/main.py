@@ -65,7 +65,7 @@ def main():
                     sys.exit()
 
                 # TODO(ali): Toggle this if statement to make sure screen_lock works
-                #            after you've finished testing stuff.
+                #            after you've finished testing the algorithms.
                 # if screen_lock == False:
                 if event.key == pygame.K_c:
                     grid.reset_marked_nodes()
