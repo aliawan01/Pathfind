@@ -391,8 +391,8 @@ class GreedyBFS(SortingAlgorithm):
 class BidirectionalBFS(SortingAlgorithm):
     def __init__(self, screen, rect_array_obj, num_of_rows, num_of_columns):
         super().__init__(screen, rect_array_obj, num_of_rows,  num_of_columns)
-        self.search_a_checked_nodes = Stack(self.num_of_rows*self.num_of_columns)
-        self.search_b_checked_nodes = Stack(self.num_of_rows*self.num_of_columns)
+        self.search_a_checked_nodes = Queue()
+        self.search_b_checked_nodes = Queue()
 
     def find_common_coord(self):
         for item in self.search_a_checked_nodes:
