@@ -1,3 +1,5 @@
+import traceback
+
 class Stack:
     def __init__(self, size): 
         self.size = size
@@ -19,6 +21,7 @@ class Stack:
         else:
             if show_errors:
                 print("STACK PUSH ERROR: The stack is full.")
+                traceback.print_stack()
             return -1
 
     def pop(self, show_errors=True):
@@ -56,3 +59,14 @@ class Stack:
     def reverse(self):
         self.remove_empty_values()
         self.stack = self.stack[::-1]
+
+    def exists(self, item):
+        if item in self.stack:
+            return True
+        else:
+            return False
+
+    def merge(self, stack1, stack2):
+        stack1.remove_empty_values()
+        stack2.remove_empty_values()
+        self.stack = stack1.stack + stack2.stack
