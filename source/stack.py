@@ -31,6 +31,7 @@ class Stack:
         else:
             if show_errors:
                 print("STACK POP ERROR: The stack is empty.")
+                traceback.print_stack()
             return -1
 
     def peek(self, show_errors=True):
@@ -39,6 +40,7 @@ class Stack:
         else:
             if show_errors:
                 print("STACK PEEK ERROR: The stack is empty.")
+                traceback.print_stack()
             return -1
 
     def get_size(self):

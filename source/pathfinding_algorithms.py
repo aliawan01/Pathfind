@@ -4,7 +4,7 @@ from pygame.locals import *
 from stack import Stack
 from queue_classes import Queue, PriorityQueue
 
-class SortingAlgorithm:
+class PathfindingAlgorithm:
     def __init__(self, screen, rect_array_obj, num_of_rows, num_of_columns):
         self.screen = screen
         self.num_of_columns = num_of_columns
@@ -76,7 +76,7 @@ class SortingAlgorithm:
                 pygame.draw.rect(self.screen, path_node_color, self.rect_array[coord[0]][coord[1]]) 
 
 
-class DFS(SortingAlgorithm):
+class DFS(PathfindingAlgorithm):
     def __init__(self, screen, rect_array_obj, num_of_rows, num_of_columns):
         super().__init__(screen, rect_array_obj, num_of_rows, num_of_columns)
 
@@ -117,7 +117,7 @@ class DFS(SortingAlgorithm):
         self.path.remove_empty_values()
 
 
-class BFS(SortingAlgorithm):
+class BFS(PathfindingAlgorithm):
     def __init__(self, screen, rect_array_obj, num_of_rows, num_of_columns):
         super().__init__(screen, rect_array_obj, num_of_rows, num_of_columns)
 
@@ -174,7 +174,7 @@ class BFS(SortingAlgorithm):
         self.path.remove_empty_values()
         self.path.reverse()
 
-class Dijkastra(SortingAlgorithm):
+class Dijkastra(PathfindingAlgorithm):
     def __init__(self, screen, rect_array_obj, num_of_rows, num_of_columns):
         super().__init__(screen, rect_array_obj, num_of_rows,  num_of_columns)
 
@@ -243,7 +243,7 @@ class Dijkastra(SortingAlgorithm):
         self.path.reverse()
 
 
-class AStar(SortingAlgorithm):
+class AStar(PathfindingAlgorithm):
     def __init__(self, screen, rect_array_obj, num_of_rows, num_of_columns):
         super().__init__(screen, rect_array_obj, num_of_rows,  num_of_columns)
         self.heuristic_dict = {}
@@ -324,7 +324,7 @@ class AStar(SortingAlgorithm):
 
 
 
-class GreedyBFS(SortingAlgorithm):
+class GreedyBFS(PathfindingAlgorithm):
     def __init__(self, screen, rect_array_obj, num_of_rows, num_of_columns):
         super().__init__(screen, rect_array_obj, num_of_rows,  num_of_columns)
         self.h_parent_dict = {}
@@ -388,7 +388,7 @@ class GreedyBFS(SortingAlgorithm):
         self.path.reverse()
 
 
-class BidirectionalBFS(SortingAlgorithm):
+class BidirectionalBFS(PathfindingAlgorithm):
     def __init__(self, screen, rect_array_obj, num_of_rows, num_of_columns):
         super().__init__(screen, rect_array_obj, num_of_rows,  num_of_columns)
         self.search_a_checked_nodes = Queue()
@@ -450,23 +450,9 @@ class BidirectionalBFS(SortingAlgorithm):
                     self.search_b_checked_nodes.enqueue(coord)
                     search_b_parent_child_dict[tuple(coord)] = search_b_current_coord
 
-        # NOTE(ali): Getting the checked nodes.
-        while True:
-            coord_a = self.search_a_checked_nodes.dequeue()
-            coord_b = self.search_b_checked_nodes.dequeue()
-
-            if coord_a != None:
-                self.checked_nodes.push(coord_a)
-            if coord_b != None:
-                self.checked_nodes.push(coord_b)
-
-            if coord_a == None and coord_b == None:
-                self.checked_nodes.remove_empty_values()
-                break
         
         if running == False:
             common_coord = self.find_common_coord()
-            print(common_coord)
 
             path_a = Stack(self.num_of_rows*self.num_of_columns)
             path_b = Stack(self.num_of_rows*self.num_of_columns)
@@ -496,3 +482,17 @@ class BidirectionalBFS(SortingAlgorithm):
                 coord = parent_coord
 
             self.path.merge(path_a, path_b)
+
+        # NOTE(ali): Getting the checked nodes.
+        while True:
+            coord_a = self.search_a_checked_nodes.dequeue()
+            coord_b = self.search_b_checked_nodes.dequeue()
+
+            if coord_a != None:
+                self.checked_nodes.push(coord_a)
+            if coord_b != None:
+                self.checked_nodes.push(coord_b)
+
+            if coord_a == None and coord_b == None:
+                self.checked_nodes.remove_empty_values()
+                break

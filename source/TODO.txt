@@ -8,9 +8,10 @@ TODO:
 
 - Rename the run_... methods in the pathfinding classes to just run.
 
-- Turn everthing CamelCase
+- In the menu add a way to add a vertical or horizontal skew
 
 FINISH:
+- Add mazes
 
 
 IDEAS:

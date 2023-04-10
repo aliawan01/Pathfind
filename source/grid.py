@@ -2,7 +2,6 @@ import pygame
 from pygame.locals import *
 import time
 
-
 class RectNode:
     def __init__(self, rect):
         self.rect = rect
