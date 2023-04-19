@@ -2,17 +2,16 @@ TODO:
 - Be able to tell the user that there isn't any path (we know that there isn't a path
   when the path stack is empty {in other words it is full of None values})
 
-- Make a general function to setup and call all the pathfinding algorithms.
-
 - Turn the queues in queue_classes.py into actual queues
 
-- Rename the run_... methods in the pathfinding classes to just run.
+- In the menu add a way to add a vertical skew, horizontal skew, euclidean and manhattan distance
 
-- In the menu add a way to add a vertical or horizontal skew
+- Fix scaling when resolution_divider is greater than 4
+
+- Create client and server classes and send events through e.g. MarkStartNode, ResetWeightedNodes etc.
 
 FINISH:
-- Add mazes
-
+- Networking
 
 IDEAS:
 - Fullscreen/rescaling?
