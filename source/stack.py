@@ -72,3 +72,7 @@ class Stack:
         stack1.remove_empty_values()
         stack2.remove_empty_values()
         self.stack = stack1.stack + stack2.stack
+
+    def to_list(self):
+        self.remove_empty_values()
+        return self.stack

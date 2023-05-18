@@ -1,8 +1,6 @@
-source/__pycache__/*
-__pycache__/*
-.idea/*
-.vs/*
-.vscode/*
+.idea/
+.vs/
+.vscode/
 b.bat
-
-
+*.py[cod]
+__pycache__/

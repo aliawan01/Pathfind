@@ -2,28 +2,33 @@ import pygame
 from pygame.locals import *
 import random
 
-from enum import Enum
+from enum import IntEnum
 
 from animations import *
 
 from stack import Stack
 from queue_classes import Queue, PriorityQueue
 
+class MazeGenerationAlgorithmTypes(IntEnum):
+    RANDOM_WEIGHTED_MAZE = 0,
+    RANDOM_MARKED_MAZE = 1,
+    RECURSIVE_DIVISION = 2
+
 class MazeGenerationAlgorithm:
-    def __init__(self, screen, rect_array_obj, num_of_rows, num_of_columns, colors, animation_manager):
-        self.screen = screen
+    def __init__(self, screen_manager, rect_array_obj, colors, animation_manager):
+        self.screen_manager = screen_manager
         self.animation_manager = animation_manager
-        self.num_of_columns = num_of_columns
-        self.num_of_rows = num_of_rows
         self.rect_array_obj = rect_array_obj
-        self.rect_array = self.rect_array_obj.array
-        self.maze = Stack(self.num_of_rows*self.num_of_columns)
+        self.maze = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
         self.maze_pointer = -1
         self.colors = colors
-        self.animated_coords = Stack(self.num_of_rows*self.num_of_columns)
+        self.animated_coords = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
+
+    def reset_maze(self):
+        self.maze = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
 
     def reset_animated_coords_stack(self):
-        self.animated_coords = Stack(self.num_of_rows*self.num_of_columns)
+        self.animated_coords = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
 
     def reset_maze_pointer(self):
         self.maze_pointer = -1
@@ -40,39 +45,41 @@ class MazeGenerationAlgorithm:
             coord = self.maze.stack[x]
             if self.animated_coords.exists(coord) == False:
                 self.animation_manager.add_coords_to_animation_dict(coord, AnimationTypes.EXPANDING_SQUARE, self.colors['red'], self.colors['black'])
+                self.rect_array_obj.array[coord[0]][coord[1]].marked = True
                 self.animated_coords.push(coord)
-                self.rect_array[coord[0]][coord[1]].marked = True
             else:
-                pygame.draw.rect(self.screen, marked_node_color, self.rect_array[coord[0]][coord[1]]) 
-
-
+                pygame.draw.rect(self.screen_manager.screen, marked_node_color, self.rect_array_obj.array[coord[0]][coord[1]])
 
 class RandomWeightedMaze(MazeGenerationAlgorithm):
-    def __init__(self, screen, rect_array_obj, num_of_rows, num_of_columns, colors, animation_manager):
-        super().__init__(screen, rect_array_obj, num_of_rows, num_of_columns, colors, animation_manager)
+    def __init__(self, screen_manager, rect_array_obj, colors, animation_manager):
+        super().__init__(screen_manager, rect_array_obj, colors, animation_manager)
 
     def create_random_weighted_maze(self):
-        for y in range(self.num_of_rows):
-            for x in range(self.num_of_columns):
+        self.reset_maze()
+
+        for y in range(self.screen_manager.num_of_rows):
+            for x in range(self.screen_manager.num_of_columns):
                 weight = random.randint(1, 100)
                 should_be_weighted_node = random.choice([0, 0, 1, 0])
                 if should_be_weighted_node:
-                    self.rect_array[y][x].is_user_weight = True
-                    self.rect_array[y][x].weight = weight
+                    self.rect_array_obj.array[y][x].is_user_weight = True
+                    self.rect_array_obj.array[y][x].weight = weight
+                    self.maze.push([[y, x], weight])
                     self.animation_manager.add_coords_to_animation_dict((y, x), AnimationTypes.EXPANDING_SQUARE, self.colors['purple'], self.colors['black'])
 
 class RandomMarkedMaze(MazeGenerationAlgorithm):
-    def __init__(self, screen, rect_array_obj, num_of_rows, num_of_columns, colors, animation_manager):
-        super().__init__(screen, rect_array_obj, num_of_rows, num_of_columns, colors, animation_manager)
+    def __init__(self, screen_manager, rect_array_obj, colors, animation_manager):
+        super().__init__(screen_manager, rect_array_obj, colors, animation_manager)
 
     def create_random_marked_maze(self):
-        self.maze = Stack(self.num_of_rows*self.num_of_columns)
+        self.reset_maze()
 
-        for y in range(self.num_of_rows):
-            for x in range(self.num_of_columns):
+        for y in range(self.screen_manager.num_of_rows):
+            for x in range(self.screen_manager.num_of_columns):
                 should_be_marked = random.choice([0, 0, 1, 0])
                 if should_be_marked:
-                    self.rect_array[y][x].marked = True
+                    self.rect_array_obj.array[y][x].marked = True
+                    self.maze.push([y, x])
                     self.animation_manager.add_coords_to_animation_dict((y, x), AnimationTypes.EXPANDING_SQUARE, self.colors['red'], self.colors['black'])
 
 
@@ -81,17 +88,18 @@ class RecursiveDivisionSkew(Enum):
     HORIZONTAL = 1
 
 class RecursiveDivisionMaze(MazeGenerationAlgorithm):
-    def __init__(self, screen, rect_array_obj, num_of_rows, num_of_columns, colors, animation_manager):
-        super().__init__(screen, rect_array_obj, num_of_rows, num_of_columns, colors, animation_manager)
-        self.empty_nodes_x = Stack(self.num_of_rows*self.num_of_columns)
-        self.empty_nodes_y = Stack(self.num_of_rows*self.num_of_columns)
+    def __init__(self, screen_manager, rect_array_obj, colors, animation_manager):
+        super().__init__(screen_manager, rect_array_obj, colors, animation_manager)
+        self.skew = None
+        self.empty_nodes_x = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
+        self.empty_nodes_y = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
 
     def recursive_division(self, start_x, start_y, end_x, end_y, skew=None):
         if (
-                start_x not in range(self.num_of_columns + 1) or 
-                end_x not in range(self.num_of_columns + 1) or
-                start_y not in range(self.num_of_rows + 1) or
-                end_y not in range(self.num_of_rows + 1)
+                start_x not in range(self.screen_manager.num_of_columns + 1) or 
+                end_x not in range(self.screen_manager.num_of_columns + 1) or
+                start_y not in range(self.screen_manager.num_of_rows + 1) or
+                end_y not in range(self.screen_manager.num_of_rows + 1)
         ):
             return
 
@@ -189,9 +197,9 @@ class RecursiveDivisionMaze(MazeGenerationAlgorithm):
             self.recursive_division(right_start_x, start_y, end_x, end_y, skew)
 
 
-    def run_recursive_division(self, skew=None):
-        self.maze = Stack(self.num_of_rows*self.num_of_columns)
-        self.empty_nodes_x = Stack(self.num_of_rows*self.num_of_columns)
-        self.empty_nodes_y = Stack(self.num_of_rows*self.num_of_columns)
+    def run_recursive_division(self):
+        self.reset_maze()
+        self.empty_nodes_x = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
+        self.empty_nodes_y = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
 
-        self.recursive_division(0, 0, self.num_of_columns, self.num_of_rows, skew)
+        self.recursive_division(0, 0, self.screen_manager.num_of_columns, self.screen_manager.num_of_rows, self.skew)

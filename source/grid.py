@@ -4,6 +4,46 @@ import time
 
 from animations import *
 
+class ScreenManager:
+    def __init__(self, screen, screen_width, screen_height, resolution_divider):
+        self.screen = screen
+        self.screen_width = screen_width
+        self.screen_height = screen_height
+        self.resolution_divider = resolution_divider
+
+    @property
+    def num_of_rows(self):
+        return self.screen_height//100*self.resolution_divider
+
+    @property
+    def num_of_columns(self):
+        return self.screen_width//100*self.resolution_divider
+
+    @property
+    def row_width(self):
+        return self.screen_height/self.num_of_rows
+
+    @property
+    def column_width(self):
+        return self.screen_width/self.num_of_columns
+
+    @property
+    def row_width_int(self):
+        return self.screen_height//self.num_of_rows
+
+    @property
+    def column_width_int(self):
+        return self.screen_width//self.num_of_columns
+
+    def increment_resolution_divider(self):
+        if self.resolution_divider < 8:
+            self.resolution_divider += 1
+
+    def decrement_resolution_divider(self):
+        if self.resolution_divider > 1:
+            self.resolution_divider -= 1
+
+
 class RectNode:
     def __init__(self, rect, coords):
         self.rect = rect
@@ -16,28 +56,32 @@ class RectNode:
         self.adjacent_nodes = [None, None, None, None]
 
 class RectArray:
-    def __init__(self, screen_width, screen_height, num_of_rows, num_of_columns):
-        self.num_of_rows = num_of_rows
-        self.num_of_columns = num_of_columns
-        self.row_width = screen_height/num_of_rows
-        self.column_width = screen_width/num_of_columns
+    def __init__(self, screen_manager):
+        self.screen_manager = screen_manager
         self.array = self.gen_rect_array()
 
     def gen_rect_array(self):
+        column_width = self.screen_manager.column_width
+        row_width = self.screen_manager.row_width
+
+        if self.screen_manager.resolution_divider > 4:
+            column_width += 1
+            row_width += 1
+
         rect_array = []
 
         pos_x = 0
         pos_y = 0
 
-        for y in range(self.num_of_rows):
+        for y in range(self.screen_manager.num_of_rows):
             rect_array.append([])
-            for x in range(self.num_of_columns):
-                square_pygame_rect = pygame.Rect(pos_x, pos_y, self.column_width, self.row_width)
+            for x in range(self.screen_manager.num_of_columns):
+                square_pygame_rect = pygame.Rect(pos_x, pos_y, column_width, row_width)
                 rect_array[-1].append(RectNode(square_pygame_rect, [y, x]))
-                pos_x += self.column_width
+                pos_x += self.screen_manager.column_width
             else:
                 pos_x = 0
-                pos_y += self.row_width
+                pos_y += self.screen_manager.row_width
 
         rect_array[0][0].is_start_node = True
         rect_array[0][0].weight = 0
@@ -46,10 +90,10 @@ class RectArray:
         return rect_array
 
     def gen_rect_array_with_adjacent_nodes(self):
-        for y in range(self.num_of_rows):
-            for x in range(self.num_of_columns):
+        for y in range(self.screen_manager.num_of_rows):
+            for x in range(self.screen_manager.num_of_columns):
                 # Right
-                if x+1 < self.num_of_columns:
+                if x+1 < self.screen_manager.num_of_columns:
                     if self.array[y][x+1].marked == False:
                         self.array[y][x].adjacent_nodes[0] = [y, x+1]
                 # Up
@@ -61,7 +105,7 @@ class RectArray:
                     if self.array[y][x-1].marked == False:
                         self.array[y][x].adjacent_nodes[2] = [y, x-1]
                 # Down
-                if y+1 < self.num_of_rows:
+                if y+1 < self.screen_manager.num_of_rows:
                     if self.array[y+1][x].marked == False:
                         self.array[y][x].adjacent_nodes[3] = [y+1, x]
 
@@ -75,16 +119,18 @@ class RectArray:
         valid_adjacent_nodes = [i for i in node.adjacent_nodes if i != None] 
         return valid_adjacent_nodes
 
+    def reset_rect_array(self):
+        self.array = self.gen_rect_array()
+        
     def get_start_and_end_node_coords(self):
-        for y in range(self.num_of_rows):
-            for x in range(self.num_of_columns):
+        for y in range(self.screen_manager.num_of_rows):
+            for x in range(self.screen_manager.num_of_columns):
                 if self.array[y][x].is_start_node:
                     start_node_coords = [y, x]
                 elif self.array[y][x].is_end_node:
                     end_node_coords = [y, x]
 
         return start_node_coords, end_node_coords
-
 
     def reset_non_user_weights(self):
         for row in self.array:
@@ -104,134 +150,137 @@ class RectArray:
 
  
 class Grid:
-    def __init__(self, screen, rect_array_obj, screen_width, screen_height, num_of_rows, num_of_columns, colors, animation_manager):
-        self.screen = screen
-        self.screen_width = screen_width
-        self.screen_height = screen_height
-        self.num_of_rows = num_of_rows
-        self.num_of_columns = num_of_columns
-        self.row_width = screen_height/num_of_rows
-        self.column_width = screen_width/num_of_columns
+    def __init__(self, screen_manager, rect_array_obj,  colors, animation_manager):
+        self.screen_manager = screen_manager
         self.colors = colors
         self.rect_array_obj = rect_array_obj
-        self.rect_array = self.rect_array_obj.array
         self.animation_manager = animation_manager
 
     def draw_grid(self, color):
-        pos_x = self.column_width
-        pos_y = self.row_width
+        pos_x = self.screen_manager.column_width
+        pos_y = self.screen_manager.row_width
 
-        for x in range(self.num_of_columns):
-            pygame.draw.line(self.screen, color, (pos_x, 0), (pos_x, self.screen_height))
-            pos_x += self.column_width
+        for x in range(self.screen_manager.num_of_columns):
+            pygame.draw.line(self.screen_manager.screen, color, (pos_x, 0), (pos_x, self.screen_manager.screen_height))
+            pos_x += self.screen_manager.column_width
 
-        for x in range(self.num_of_rows):
-            pygame.draw.line(self.screen, color, (0, pos_y), (self.screen_width, pos_y))
-            pos_y += self.row_width
+        for x in range(self.screen_manager.num_of_rows):
+            pygame.draw.line(self.screen_manager.screen, color, (0, pos_y), (self.screen_manager.screen_width, pos_y))
+            pos_y += self.screen_manager.row_width
 
 
-    def draw_rect_nodes(self, algorithm, start_node_color, end_node_color, marked_node_color, weighted_node_color):
-        for row in self.rect_array:
+    def draw_rect_nodes(self, start_node_color, end_node_color, marked_node_color, weighted_node_color):
+        for row in self.rect_array_obj.array:
             for node in row:
                 if node.is_start_node:
-                    pygame.draw.rect(self.screen, start_node_color, node)
+                    pygame.draw.rect(self.screen_manager.screen, start_node_color, node.rect)
                 elif node.is_end_node:
-                    pygame.draw.rect(self.screen, end_node_color, node)
+                    pygame.draw.rect(self.screen_manager.screen, end_node_color, node.rect)
                 elif node.marked:
-                    pygame.draw.rect(self.screen, marked_node_color, node)
+                    pygame.draw.rect(self.screen_manager.screen, marked_node_color, node.rect)
                 elif node.is_user_weight:
-                    pygame.draw.rect(self.screen, weighted_node_color, node)
+                    pygame.draw.rect(self.screen_manager.screen, weighted_node_color, node.rect)
 
 
-    def mark_rect_node(self, mouse_coords):
-        for row in self.rect_array:
+    def mark_rect_node(self, node):
+        if node.marked == False:
+            node.marked = True
+            self.animation_manager.add_coords_to_animation_dict(node.coords, AnimationTypes.EXPANDING_SQUARE, self.colors['red'], self.colors['black'], 2)
+
+    def unmark_rect_node(self, node):
+        if node.marked:
+            node.marked = False
+            self.animation_manager.add_coords_to_animation_dict(node.coords, AnimationTypes.SHRINKING_SQUARE, self.colors['red'], self.colors['black'], 2)
+
+    def mark_rect_node_at_mouse_pos(self, mouse_coords):
+        for row in self.rect_array_obj.array:
             for node in row:
                 if node.rect.collidepoint(mouse_coords):
-                    if node.marked == False:
-                        self.animation_manager.add_coords_to_animation_dict(node.coords, AnimationTypes.EXPANDING_SQUARE, self.colors['red'], self.colors['black'], 2)
-                        node.marked = True
-
+                    self.mark_rect_node(node)
                     break
 
 
-    def unmark_rect_node(self, mouse_coords):
-        for row in self.rect_array:
+    def unmark_rect_node_at_mouse_pos(self, mouse_coords):
+        for row in self.rect_array_obj.array:
             for node in row:
                 if node.rect.collidepoint(mouse_coords):
-                    if node.marked:
-                        self.animation_manager.add_coords_to_animation_dict(node.coords, AnimationTypes.SHRINKING_SQUARE, self.colors['red'], self.colors['black'], 2)
-                        node.marked = False
-
+                    self.unmark_rect_node(node)
                     break
 
 
-    def mark_weighted_node(self, mouse_coords, weight):
-        for row in self.rect_array:
+    def mark_weighted_node(self, node, weight):
+        if node.is_user_weight == False and node.marked == False:
+            self.animation_manager.add_coords_to_animation_dict(node.coords, AnimationTypes.EXPANDING_SQUARE, self.colors['purple'], self.colors['black'], 2)
+            node.is_user_weight = True
+            node.weight = weight
+
+    def mark_weighted_node_at_mouse_pos(self, mouse_coords, weight):
+        for row in self.rect_array_obj.array:
             for node in row:
                 if node.rect.collidepoint(mouse_coords):
-                    if node.is_user_weight == False and node.marked == False:
-                        self.animation_manager.add_coords_to_animation_dict(node.coords, AnimationTypes.EXPANDING_SQUARE, self.colors['purple'], self.colors['black'], 2)
-                        node.is_user_weight = True
-                        node.weight = weight
-
+                    self.mark_weighted_node(node, weight)
                     break
 
+    def unmark_weighted_node(self, node):
+        if node.is_user_weight:
+            self.animation_manager.add_coords_to_animation_dict(node.coords, AnimationTypes.SHRINKING_SQUARE, self.colors['purple'], self.colors['black'], 2)
+            node.is_user_weight = False
+            node.weight = 1
 
-    def unmark_weighted_node(self, mouse_coords):
-        for row in self.rect_array:
+    def unmark_weighted_node_at_mouse_pos(self, mouse_coords):
+        for row in self.rect_array_obj.array:
             for node in row:
                 if node.rect.collidepoint(mouse_coords):
-                    if node.is_user_weight:
-                        self.animation_manager.add_coords_to_animation_dict(node.coords, AnimationTypes.SHRINKING_SQUARE, self.colors['purple'], self.colors['black'], 2)
-                        node.is_user_weight = False
-                        node.weight = 1
-
+                    self.unmark_weighted_node(node)
                     break
 
-    def mark_start_node(self, mouse_coords):
+    def mark_start_node(self, node):
         original_start_node = None
-        new_start_node = None
-        found_new_start_node = False
 
-        for row in self.rect_array:
-            for node in row:
-                if node.is_start_node:
-                    original_start_node = node
+        for row in self.rect_array_obj.array:
+            for new_node in row:
+                if new_node.is_start_node:
+                    original_start_node = new_node
 
-                if node.rect.collidepoint(mouse_coords) and not node.is_start_node and not node.is_end_node:
-                    node.is_start_node = True
-                    new_start_node = node
-                    found_new_start_node = True
-
-        if found_new_start_node:
+        if not node.is_start_node and not node.is_end_node:
+            node.is_start_node = True
             original_start_node.is_start_node = False
 
             self.animation_manager.add_coords_to_animation_dict(original_start_node.coords, AnimationTypes.SHRINKING_SQUARE, self.colors['blue'], self.colors['black'], 2)
-            self.animation_manager.add_coords_to_animation_dict(new_start_node.coords, AnimationTypes.EXPANDING_SQUARE, self.colors['blue'], self.colors['black'], 2)
+            self.animation_manager.add_coords_to_animation_dict(node.coords, AnimationTypes.EXPANDING_SQUARE, self.colors['blue'], self.colors['black'], 2)
 
-    def mark_end_node(self, mouse_coords):
-        original_end_node = None
-        new_end_node = None
-        found_new_end_node = False
-
-        for row in self.rect_array:
+    def mark_start_node_at_mouse_pos(self, mouse_coords):
+        for row in self.rect_array_obj.array:
             for node in row:
-                if node.is_end_node:
-                    original_end_node = node
+                if node.rect.collidepoint(mouse_coords):
+                    self.mark_start_node(node)
+                    break
 
-                if node.rect.collidepoint(mouse_coords) and not node.is_start_node and not node.is_end_node:
-                    node.is_end_node = True
-                    new_end_node = node
-                    found_new_end_node = True
+    def mark_end_node(self, node):
+        original_end_node = None
 
-        if found_new_end_node:
+        for row in self.rect_array_obj.array:
+            for new_node in row:
+                if new_node.is_end_node:
+                    original_end_node = new_node
+
+        if not node.is_end_node and not node.is_start_node:
+            node.is_end_node = True
             original_end_node.is_end_node = False
 
             self.animation_manager.add_coords_to_animation_dict(original_end_node.coords, AnimationTypes.SHRINKING_SQUARE, self.colors['green'], self.colors['black'], 2)
-            self.animation_manager.add_coords_to_animation_dict(new_end_node.coords, AnimationTypes.EXPANDING_SQUARE, self.colors['green'], self.colors['black'], 2)
+            self.animation_manager.add_coords_to_animation_dict(node.coords, AnimationTypes.EXPANDING_SQUARE, self.colors['green'], self.colors['black'], 2)
+
+
+    def mark_end_node_at_mouse_pos(self, mouse_coords):
+        for row in self.rect_array_obj.array:
+            for node in row:
+                if node.rect.collidepoint(mouse_coords):
+                    self.mark_end_node(node)
+                    break
 
     def reset_marked_nodes(self, animate=True):
-        for row in self.rect_array:
+        for row in self.rect_array_obj.array:
             for node in row:
                 if node.marked:
                     if animate:
@@ -239,7 +288,7 @@ class Grid:
                     node.marked = False
 
     def reset_all_weights(self, animate=True):
-        for row in self.rect_array:
+        for row in self.rect_array_obj.array:
             for node in row:
                 if node.is_user_weight:
                     if animate:
@@ -248,4 +297,18 @@ class Grid:
                     node.weight = 1
 
         start_node_coords, end_node_coords = self.rect_array_obj.get_start_and_end_node_coords()
-        self.rect_array[start_node_coords[0]][start_node_coords[1]].weight = 0
+        self.rect_array_obj.array[start_node_coords[0]][start_node_coords[1]].weight = 0
+
+    def get_board_info(self):
+        start_node_coords, end_node_coords = self.rect_array_obj.get_start_and_end_node_coords()
+        marked_coords = []
+        weighted_coords = []
+
+        for row in self.rect_array_obj.array:
+            for node in row:
+                if node.marked:
+                    marked_coords.append(node.coords)
+                elif node.is_user_weight:
+                    weighted_coords.append([node.coords, node.weight])
+
+        return [start_node_coords, end_node_coords, marked_coords, weighted_coords]

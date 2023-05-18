@@ -26,19 +26,10 @@ class AnimationNode:
         self.rect = pygame.Rect(0, 0, column_width, row_width)
 
 class AnimationManager:
-    def __init__(self, screen, rect_array_obj, screen_width, screen_height, num_of_rows, num_of_columns, resolution_divider):
-        self.screen = screen
-        self.screen_width = screen_width
-        self.screen_height = screen_height
-        self.num_of_rows = num_of_rows
-        self.num_of_columns = num_of_columns
-        self.row_width = screen_height/num_of_rows
-        self.column_width = screen_width/num_of_columns
-        self.row_width_int = screen_height//num_of_rows
-        self.column_width_int = screen_width//num_of_columns
+    def __init__(self, screen_manager, rect_array_obj):
+        self.screen_manager = screen_manager
         self.rect_array_obj = rect_array_obj
         self.start_node_coords, self.end_node_coords = self.rect_array_obj.get_start_and_end_node_coords()
-        self.resolution_divider = resolution_divider
         self.animation_dict = {}
 
     def add_coords_to_animation_dict(self, coords, animation_type, foreground_color, background_color, speed=1):
@@ -46,12 +37,14 @@ class AnimationManager:
             if self.animation_dict[tuple(coords)].type == animation_type:
                 return
 
-        self.animation_dict[tuple(coords)] = AnimationNode(coords, animation_type, foreground_color, background_color, speed, self.column_width, self.row_width, self.row_width_int)
+        self.animation_dict[tuple(coords)] = AnimationNode(coords, animation_type, foreground_color, background_color, speed, self.screen_manager.column_width, self.screen_manager.row_width, self.screen_manager.row_width_int)
 
     def update(self):
+        start_node_coords, end_node_coords = self.rect_array_obj.get_start_and_end_node_coords()
         coords_to_remove = []
-        for coords, node in self.animation_dict.items():
-            if list(coords) == self.start_node_coords or list(coords) == self.end_node_coords:
+
+        for coords, node in list(self.animation_dict.items()):
+            if list(coords) == start_node_coords or list(coords) == end_node_coords:
                 continue
 
             if node.finished:
@@ -60,17 +53,17 @@ class AnimationManager:
 
             node.rect.center = node.center
 
-            node.fraction = round(node.fraction+(self.resolution_divider/100), 2)
+            node.fraction = round(node.fraction+(self.screen_manager.resolution_divider/100), 2)
             if node.fraction > 1:
                 node.fraction = 1
 
             if node.type == AnimationTypes.CIRCLE_TO_SQUARE:
-                pygame.draw.rect(self.screen, node.background_color, node.rect)
+                pygame.draw.rect(self.screen_manager.screen, node.background_color, node.rect)
 
                 lerp_color = pygame.Color.lerp(node.foreground_color[0], node.foreground_color[1], node.fraction)
 
-                if node.width <= self.row_width//2:
-                    pygame.draw.circle(self.screen, lerp_color, node.center, node.width)
+                if node.width <= self.screen_manager.row_width//2:
+                    pygame.draw.circle(self.screen_manager.screen, lerp_color, node.center, node.width)
                     node.width += 1*node.speed
                 else:
                     if node.increment <= 0:
@@ -78,26 +71,26 @@ class AnimationManager:
                     else:
                         node.increment -= 1*node.speed
                     
-                    pygame.draw.rect(self.screen, lerp_color, node.rect, 0, node.increment)
+                    pygame.draw.rect(self.screen_manager.screen, lerp_color, node.rect, 0, node.increment)
 
             elif node.type == AnimationTypes.EXPANDING_SQUARE:
-                pygame.draw.rect(self.screen, node.background_color, node.rect)
-                if node.width <= self.row_width:
+                pygame.draw.rect(self.screen_manager.screen, node.background_color, node.rect)
+                if node.width <= self.screen_manager.row_width:
                     new_rect = pygame.Rect(0, 0, node.width, node.width)
                     new_rect.center = node.center
-                    pygame.draw.rect(self.screen, node.foreground_color, new_rect)
+                    pygame.draw.rect(self.screen_manager.screen, node.foreground_color, new_rect)
 
                     node.width += 1*node.speed
                 else:
                     node.finished = True
-                    pygame.draw.rect(self.screen, node.foreground_color, node.rect)
+                    pygame.draw.rect(self.screen_manager.screen, node.foreground_color, node.rect)
 
             elif node.type == AnimationTypes.SHRINKING_SQUARE:
-                pygame.draw.rect(self.screen, node.background_color, node.rect)
+                pygame.draw.rect(self.screen_manager.screen, node.background_color, node.rect)
                 if node.rect.width - node.width > 0:
                     new_rect = pygame.Rect(0, 0, node.rect.width-node.width, node.rect.height-node.width)
                     new_rect.center = node.center
-                    pygame.draw.rect(self.screen, node.foreground_color, new_rect)
+                    pygame.draw.rect(self.screen_manager.screen, node.foreground_color, new_rect)
 
                     node.width += 1*node.speed
                 else:
@@ -106,5 +99,3 @@ class AnimationManager:
 
         for removing_coord in coords_to_remove:
             self.animation_dict.pop(removing_coord)
-            
-

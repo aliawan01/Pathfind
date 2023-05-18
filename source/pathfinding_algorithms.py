@@ -6,31 +6,43 @@ from animations import *
 from stack import Stack
 from queue_classes import Queue, PriorityQueue
 
+from enum import IntEnum
+
+class PathfindingAlgorithmTypes(IntEnum):
+    DFS = 0,
+    BFS = 1,
+    DIJKASTRA = 2,
+    ASTAR = 3,
+    GREEDY_BFS = 4,
+    BIDIRECTIONAL_BFS = 5
+
+class PathfindingHeuristics(IntEnum):
+    MANHATTAN_DISTANCE = 0,
+    EUCLIDEAN_DISTANCE = 1
+
 class PathfindingAlgorithm:
-    def __init__(self, screen, rect_array_obj, num_of_rows, num_of_columns, colors, animation_manager):
-        self.screen = screen
+    def __init__(self, screen_manager, rect_array_obj, colors, animation_manager):
+        self.screen_manager = screen_manager
+        self.rect_array_obj = rect_array_obj
         self.animation_manager = animation_manager
         self.colors = colors
-        self.num_of_columns = num_of_columns
-        self.num_of_rows = num_of_rows
-        self.rect_array_obj = rect_array_obj
-        self.rect_array = self.rect_array_obj.array
-        self.checked_nodes = Stack(self.num_of_rows*self.num_of_columns)
-        self.path = Stack(self.num_of_rows*self.num_of_columns)
+        self.checked_nodes = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
+        self.path = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
         self.drawn_checked_nodes = False
         self.checked_nodes_pointer = -1
         self.path_pointer = -1
-        self.animated_coords = Stack(self.num_of_rows*self.num_of_columns)
-        self.animated_path_coords = Stack(self.num_of_rows*self.num_of_columns)
-        self.animated_path_coords = Stack(self.num_of_rows*self.num_of_columns)
+        self.animated_coords = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
+        self.animated_checked_coords = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
+        self.animated_path_coords = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
+        self.heuristic = None
         self.reset_checked_nodes = False
         self.reset_path_nodes = False
 
     def reset_animated_checked_coords_stack(self):
-        self.animated_checked_coords = Stack(self.num_of_rows*self.num_of_columns)
+        self.animated_checked_coords = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
 
     def reset_animated_path_coords_stack(self):
-        self.animated_path_coords = Stack(self.num_of_rows*self.num_of_columns)
+        self.animated_path_coords = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
 
     def get_checked_nodes(self):
         if self.checked_nodes == Stack(0):
@@ -92,12 +104,12 @@ class PathfindingAlgorithm:
             coord = self.checked_nodes.stack[x]
 
             if self.animated_checked_coords.exists(coord) == False:
-                if self.rect_array[coord[0]][coord[1]].is_user_weight == False:
+                if self.rect_array_obj.array[coord[0]][coord[1]].is_user_weight == False:
                     self.animation_manager.add_coords_to_animation_dict(coord, AnimationTypes.CIRCLE_TO_SQUARE, (self.colors['blue'], self.colors['neon_blue']), self.colors['black'])
                 self.animated_checked_coords.push(coord)
             else:
-                if self.rect_array[coord[0]][coord[1]].is_user_weight == False:
-                    pygame.draw.rect(self.screen, checked_node_color, self.rect_array[coord[0]][coord[1]])
+                if self.rect_array_obj.array[coord[0]][coord[1]].is_user_weight == False:
+                    pygame.draw.rect(self.screen_manager.screen, checked_node_color, self.rect_array_obj.array[coord[0]][coord[1]])
 
         if self.checked_nodes_pointer == self.checked_nodes.get_size() and self.drawn_checked_nodes == False:
             self.drawn_checked_nodes = True
@@ -110,12 +122,12 @@ class PathfindingAlgorithm:
                     self.animation_manager.add_coords_to_animation_dict(coord, AnimationTypes.EXPANDING_SQUARE, self.colors['orange'], self.colors['white'])
                     self.animated_path_coords.push(coord)
                 else:
-                    pygame.draw.rect(self.screen, path_node_color, self.rect_array[coord[0]][coord[1]]) 
+                    pygame.draw.rect(self.screen_manager.screen, path_node_color, self.rect_array_obj.array[coord[0]][coord[1]]) 
 
 
 class DFS(PathfindingAlgorithm):
-    def __init__(self, screen, rect_array_obj, num_of_rows, num_of_columns, colors, animation_manager):
-        super().__init__(screen, rect_array_obj, num_of_rows, num_of_columns, colors, animation_manager)
+    def __init__(self, screen_manager, rect_array_obj, colors, animation_manager):
+        super().__init__(screen_manager, rect_array_obj, colors, animation_manager)
 
     def run(self):
         self.reset_checked_nodes = False
@@ -124,8 +136,8 @@ class DFS(PathfindingAlgorithm):
         self.reset_path_nodes = False
         self.reset_checked_nodes = False
 
-        self.checked_nodes = Stack(self.num_of_rows*self.num_of_columns)
-        self.path = Stack(self.num_of_rows*self.num_of_columns)
+        self.checked_nodes = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
+        self.path = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
 
         self.checked_nodes_pointer = -1
         self.path_pointer = -1
@@ -161,15 +173,15 @@ class DFS(PathfindingAlgorithm):
 
 
 class BFS(PathfindingAlgorithm):
-    def __init__(self, screen, rect_array_obj, num_of_rows, num_of_columns, colors, animation_manager):
-        super().__init__(screen, rect_array_obj, num_of_rows, num_of_columns, colors, animation_manager)
+    def __init__(self, screen_manager, rect_array_obj, colors, animation_manager):
+        super().__init__(screen_manager, rect_array_obj, colors, animation_manager)
 
     def run(self):
         self.reset_path_nodes = False
         self.reset_checked_nodes = False
 
-        self.checked_nodes = Stack(self.num_of_rows*self.num_of_columns)
-        self.path = Stack(self.num_of_rows*self.num_of_columns)
+        self.checked_nodes = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
+        self.path = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
 
         self.checked_nodes_pointer = -1
         self.path_pointer = -1
@@ -181,8 +193,8 @@ class BFS(PathfindingAlgorithm):
         # Getting the coordinates of the start and end nodes.
         start_node_coords, end_node_coords = self.rect_array_obj.get_start_and_end_node_coords()
 
-        for y in range(self.num_of_rows):
-            for x in range(self.num_of_columns):
+        for y in range(self.screen_manager.num_of_rows):
+            for x in range(self.screen_manager.num_of_columns):
                 parent_child_dict[(y, x)] = None
 
         self.checked_nodes.push(start_node_coords)
@@ -221,15 +233,15 @@ class BFS(PathfindingAlgorithm):
         self.path.reverse()
 
 class Dijkastra(PathfindingAlgorithm):
-    def __init__(self, screen, rect_array_obj, num_of_rows, num_of_columns, colors, animation_manager):
-        super().__init__(screen, rect_array_obj, num_of_rows,  num_of_columns, colors, animation_manager)
+    def __init__(self, screen_manager, rect_array_obj, colors, animation_manager):
+        super().__init__(screen_manager, rect_array_obj,  colors, animation_manager)
 
     def run(self):
         self.reset_path_nodes = False
         self.reset_checked_nodes = False
 
-        self.checked_nodes = Stack(self.num_of_rows*self.num_of_columns)
-        self.path = Stack(self.num_of_rows*self.num_of_columns)
+        self.checked_nodes = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
+        self.path = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
 
         self.checked_nodes_pointer = -1
         self.path_pointer = -1
@@ -241,8 +253,8 @@ class Dijkastra(PathfindingAlgorithm):
         # Getting the coordinates of the start and end nodes.
         start_node_coords, end_node_coords = self.rect_array_obj.get_start_and_end_node_coords()
 
-        for y in range(self.num_of_rows):
-            for x in range(self.num_of_columns):
+        for y in range(self.screen_manager.num_of_rows):
+            for x in range(self.screen_manager.num_of_columns):
                 parent_child_dict[(y, x)] = None
 
         self.checked_nodes.push(start_node_coords)
@@ -293,8 +305,8 @@ class Dijkastra(PathfindingAlgorithm):
 
 
 class AStar(PathfindingAlgorithm):
-    def __init__(self, screen, rect_array_obj, num_of_rows, num_of_columns, colors, animation_manager):
-        super().__init__(screen, rect_array_obj, num_of_rows,  num_of_columns, colors, animation_manager)
+    def __init__(self, screen_manager, rect_array_obj, colors, animation_manager):
+        super().__init__(screen_manager, rect_array_obj,  colors, animation_manager)
         self.heuristic_dict = {}
         frontier = PriorityQueue()
         expanded_nodes = []
@@ -308,8 +320,8 @@ class AStar(PathfindingAlgorithm):
         self.reset_path_nodes = False
         self.reset_checked_nodes = False
 
-        self.checked_nodes = Stack(self.num_of_rows*self.num_of_columns)
-        self.path = Stack(self.num_of_rows*self.num_of_columns)
+        self.checked_nodes = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
+        self.path = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
 
         self.checked_nodes_pointer = -1
         self.path_pointer = -1
@@ -323,9 +335,13 @@ class AStar(PathfindingAlgorithm):
         # Getting the coordinates of the start and end nodes.
         start_node_coords, end_node_coords = self.rect_array_obj.get_start_and_end_node_coords()
 
-        for y in range(self.num_of_rows):
-            for x in range(self.num_of_columns):
-                distance = self.get_manhattan_distance([y, x], end_node_coords)
+        for y in range(self.screen_manager.num_of_rows):
+            for x in range(self.screen_manager.num_of_columns):
+                if self.heuristic == PathfindingHeuristics.MANHATTAN_DISTANCE:
+                    distance = self.get_manhattan_distance([y, x], end_node_coords)
+                else:
+                    distance = self.get_euclidean_distance([y, x], end_node_coords)
+
                 self.heuristic_dict[(y, x)] = distance
                 parent_child_dict[(y, x)] = None
 
@@ -377,16 +393,16 @@ class AStar(PathfindingAlgorithm):
 
 
 class GreedyBFS(PathfindingAlgorithm):
-    def __init__(self, screen, rect_array_obj, num_of_rows, num_of_columns, colors, animation_manager):
-        super().__init__(screen, rect_array_obj, num_of_rows,  num_of_columns, colors, animation_manager)
+    def __init__(self, screen_manager, rect_array_obj, colors, animation_manager):
+        super().__init__(screen_manager, rect_array_obj,  colors, animation_manager)
         self.h_parent_dict = {}
 
     def run(self):
         self.reset_path_nodes = False
         self.reset_checked_nodes = False
 
-        self.checked_nodes = Stack(self.num_of_rows*self.num_of_columns)
-        self.path = Stack(self.num_of_rows*self.num_of_columns)
+        self.checked_nodes = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
+        self.path = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
 
         self.checked_nodes_pointer = -1
         self.path_pointer = -1
@@ -400,9 +416,13 @@ class GreedyBFS(PathfindingAlgorithm):
         # Getting the coordinates of the start and end nodes.
         start_node_coords, end_node_coords = self.rect_array_obj.get_start_and_end_node_coords()
 
-        for y in range(self.num_of_rows):
-            for x in range(self.num_of_columns):
-                distance = self.get_manhattan_distance([y, x], end_node_coords)
+        for y in range(self.screen_manager.num_of_rows):
+            for x in range(self.screen_manager.num_of_columns):
+                if self.heuristic == PathfindingHeuristics.MANHATTAN_DISTANCE:
+                    distance = self.get_manhattan_distance([y, x], end_node_coords)
+                else:
+                    distance = self.get_euclidean_distance([y, x], end_node_coords)
+
                 heuristic_dict[(y, x)] = distance
                 parent_child_dict[(y, x)] = None
 
@@ -444,8 +464,8 @@ class GreedyBFS(PathfindingAlgorithm):
 
 
 class BidirectionalBFS(PathfindingAlgorithm):
-    def __init__(self, screen, rect_array_obj, num_of_rows, num_of_columns, colors, animation_manager):
-        super().__init__(screen, rect_array_obj, num_of_rows,  num_of_columns, colors, animation_manager)
+    def __init__(self, screen_manager, rect_array_obj, colors, animation_manager):
+        super().__init__(screen_manager, rect_array_obj,  colors, animation_manager)
         self.search_a_checked_nodes = Queue()
         self.search_b_checked_nodes = Queue()
 
@@ -460,9 +480,9 @@ class BidirectionalBFS(PathfindingAlgorithm):
 
         self.search_a_checked_nodes = Queue()
         self.search_b_checked_nodes = Queue()
-        self.checked_nodes = Stack(self.num_of_rows*self.num_of_columns)
+        self.checked_nodes = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
 
-        self.path = Stack(self.num_of_rows*self.num_of_columns)
+        self.path = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
 
         self.checked_nodes_pointer = -1
         self.path_pointer = -1
@@ -476,8 +496,8 @@ class BidirectionalBFS(PathfindingAlgorithm):
         # Getting the coordinates of the start and end nodes.
         start_node_coords, end_node_coords = self.rect_array_obj.get_start_and_end_node_coords()
 
-        for y in range(self.num_of_rows):
-            for x in range(self.num_of_columns):
+        for y in range(self.screen_manager.num_of_rows):
+            for x in range(self.screen_manager.num_of_columns):
                 search_a_parent_child_dict[(y, x)] = None
                 search_b_parent_child_dict[(y, x)] = None
 
@@ -512,8 +532,8 @@ class BidirectionalBFS(PathfindingAlgorithm):
         if running == False:
             common_coord = self.find_common_coord()
 
-            path_a = Stack(self.num_of_rows*self.num_of_columns)
-            path_b = Stack(self.num_of_rows*self.num_of_columns)
+            path_a = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
+            path_b = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
 
             search_a_coord = common_coord
             search_b_coord = common_coord
