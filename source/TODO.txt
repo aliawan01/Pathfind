@@ -1,24 +1,25 @@
 TODO:
 - Play music when the user places and deletes nodes, or when a path is being shown.
-- Replace the weights with an image.
 - Be able to tell the user that there isn't any path (we know that there isn't a path
   when the path stack is empty {in other words it is full of None values})
 - Allow the user to specify weights when selecting them (could use a menu in the UI)
   change it in the networking part as well.
-- Fix bug where astar and greedybfs (and sometimes dijakstra) doesn't draw the path even though it reaches the end node.
-- Allowing the user to set colors and change themes from dark to light.
 
 - Turn the queues in queue_classes.py into actual queues
 
 - In the menu add a way to add a vertical skew, horizontal skew, euclidean and manhattan distance
+- Fix bug when the background colour of the checked nodes does not changed when checked nodes are being
+  drawn and we change the theme.
 
-- Find how to fix bidirectional search so that it is faster)
+- Fix bidirectional search so that it is faster
 
-- Being able to set and use different colours.
-- Add the NetworkingEventType.CHANGE_THEME option, once you have finished with the colours.
+- Make and set the game's icon.
+- Replace the weights with an image (could use different colours).
+- Replacing start and end nodes with images (could add different colours).
+- Add the UI
 
 FINISH:
-- Adding colors and changing themes. (also add it to the networking stuff)
+- Adding images and the UI
 
 IDEAS:
 - Fullscreen/rescaling?
@@ -27,3 +28,9 @@ NOTES:
 - Remember to set the if statement for the screen_lock to be on after you
   have finished testing stuff.
 - Remember to remove print statements in the networking after you have finished with it.
+- (Having issues with performance using this) Use pygame.gfxdraw to fix the issue with fuzzy circles in the light
+  theme (gfxdraw will draw an outline of the circle, and we can just draw it on top of the normal filled circles we draw).
+
+BUG FIXES:
+- Fix bug where astar and greedybfs (and sometimes dijakstra) doesn't draw the path even though it reaches the end node.
+- Fix bug where the start and end node animations will not work and the animations for changing colours also are not working.

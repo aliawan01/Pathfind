@@ -1,7 +1,9 @@
 import pygame
+import pygame_gui
 import sys
 
 from animations import *
+from color_manager import *
 from grid import *
 
 from networking import *
@@ -9,18 +11,6 @@ from networking import *
 from pathfinding_algorithms import *
 from maze_generation_algorithms import *
 
-
-colors = {
-    'white': pygame.Color(255, 255, 255),
-    'black': pygame.Color(0, 0, 0),
-    'red': pygame.Color(255, 0, 0),
-    'blue': pygame.Color(0, 0, 255),
-    'green': pygame.Color(0, 255, 0),
-    'orange': pygame.Color(255, 165, 0),
-    'neon_blue': pygame.Color(4, 217, 255),
-    'yellow': pygame.Color(255, 255, 0),
-    'purple': pygame.Color(238, 130, 238)
-}
 
 def set_current_pathfinding_algorithm(pathfinding_algorithm, rect_array, heuristic=None):
     rect_array.reset_rect_array_adjacent_nodes()
@@ -32,35 +22,40 @@ def set_current_pathfinding_algorithm(pathfinding_algorithm, rect_array, heurist
 
     pathfinding_algorithm.heuristic = heuristic
     pathfinding_algorithm.run()
+
     return pathfinding_algorithm
 
 def main():
     pygame.init()
     clock = pygame.time.Clock()
 
-    # screen_width = 1000
-    # screen_height = 800
-    screen_width = 500
-    screen_height = 400
+    screen_width = 1000
+    screen_height = 800
+
+    grid_width = screen_width
+    grid_height = screen_height
+    # grid_height = 600
 
     screen = pygame.display.set_mode((screen_width, screen_height))
     pygame.display.set_caption("Pathfinding Visualizer")
 
-    screen_manager = ScreenManager(screen, screen_width, screen_height, 4)
+    screen_manager = ScreenManager(screen, screen_width, screen_height, grid_width, grid_height, 4)
 
     print("Number of columns:", screen_manager.num_of_columns)
-    print("Number of rows: ", screen_manager.num_of_rows)
+    print("Number of rows:", screen_manager.num_of_rows)
 
     rect_array = RectArray(screen_manager)
     animation_manager = AnimationManager(screen_manager, rect_array)
-    grid = Grid(screen_manager, rect_array, colors, animation_manager)
+    color_manager = ColorManager(screen_manager, rect_array, animation_manager)
 
-    dfs = DFS(screen_manager, rect_array, colors, animation_manager)
-    bfs = BFS(screen_manager, rect_array, colors, animation_manager)
-    dijkastra = Dijkastra(screen_manager, rect_array, colors, animation_manager)
-    astar = AStar(screen_manager, rect_array, colors, animation_manager)
-    greedy_bfs = GreedyBFS(screen_manager, rect_array, colors, animation_manager)
-    bidirectional_bfs = BidirectionalBFS(screen_manager, rect_array, colors, animation_manager)
+    grid = Grid(screen_manager, rect_array, color_manager, animation_manager)
+
+    dfs = DFS(screen_manager, rect_array, color_manager, animation_manager)
+    bfs = BFS(screen_manager, rect_array, color_manager, animation_manager)
+    dijkastra = Dijkastra(screen_manager, rect_array, color_manager, animation_manager)
+    astar = AStar(screen_manager, rect_array, color_manager, animation_manager)
+    greedy_bfs = GreedyBFS(screen_manager, rect_array, color_manager, animation_manager)
+    bidirectional_bfs = BidirectionalBFS(screen_manager, rect_array, color_manager, animation_manager)
 
     pathfinding_algorithms_dict = {
         PathfindingAlgorithmTypes.DFS: dfs,
@@ -71,16 +66,15 @@ def main():
         PathfindingAlgorithmTypes.BIDIRECTIONAL_BFS: bidirectional_bfs
     }
 
-    random_weighted_maze = RandomWeightedMaze(screen_manager, rect_array, colors, animation_manager)
-    random_marked_maze = RandomMarkedMaze(screen_manager, rect_array, colors, animation_manager)
-    recursive_division_maze = RecursiveDivisionMaze(screen_manager, rect_array, colors, animation_manager)
+    random_weighted_maze = RandomWeightedMaze(screen_manager, rect_array, color_manager, animation_manager)
+    random_marked_maze = RandomMarkedMaze(screen_manager, rect_array, color_manager, animation_manager)
+    recursive_division_maze = RecursiveDivisionMaze(screen_manager, rect_array, color_manager, animation_manager)
 
     maze_generation_algorithms_dict = {
         MazeGenerationAlgorithmTypes.RANDOM_WEIGHTED_MAZE: random_weighted_maze,
         MazeGenerationAlgorithmTypes.RANDOM_MARKED_MAZE: random_marked_maze,
         MazeGenerationAlgorithmTypes.RECURSIVE_DIVISION: recursive_division_maze,
     }
-
 
     DRAW_CHECKED_NODES = pygame.USEREVENT + 0
     DRAW_PATH = pygame.USEREVENT + 1
@@ -92,8 +86,8 @@ def main():
         'DRAW_MAZE': DRAW_MAZE
     }
 
-    server = Server(grid)
-    client = Client(screen_manager, grid, rect_array, pathfinding_algorithms_dict, maze_generation_algorithms_dict, animation_manager, events_dict, colors)
+    server = Server(grid, color_manager)
+    client = Client(screen_manager, grid, rect_array, pathfinding_algorithms_dict, maze_generation_algorithms_dict, animation_manager, events_dict, color_manager)
 
     screen_lock = False
 
@@ -110,6 +104,26 @@ def main():
                 sys.exit()
 
             if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_F6:
+                    print("Set light theme!")
+                    color_manager.set_and_animate_light_theme(current_pathfinding_algorithm)
+                    client.create_network_event(NetworkingEventTypes.SEND_THEME)
+
+                if event.key == pygame.K_F7:
+                    print("Set dark theme")
+                    color_manager.set_and_animate_dark_theme(current_pathfinding_algorithm)
+                    client.create_network_event(NetworkingEventTypes.SEND_THEME)
+
+                if event.key == pygame.K_F8:
+                    # color_manager.set_and_animate_node_color(ColorNodeTypes.WEIGHTED_NODE_COLOR, color_manager.colors['purple'])
+                    color_manager.set_and_animate_node_color(ColorNodeTypes.BORDER_COLOR, color_manager.colors['white'])
+                    color_manager.set_and_animate_node_color(ColorNodeTypes.BOARD_COLOR, color_manager.colors['black'])
+                    color_manager.set_and_animate_node_color(ColorNodeTypes.MARKED_NODE_COLOR, color_manager.colors['red'])
+
+                if event.key == pygame.K_F9:
+                    color_manager.set_and_animate_node_color(ColorNodeTypes.WEIGHTED_NODE_COLOR, color_manager.colors['violet'])
+
+
                 if event.key == pygame.K_q:
                     client.create_network_event(NetworkingEventTypes.DISCONNECT_FROM_SERVER)
                     server.shutdown()
@@ -383,16 +397,22 @@ def main():
             grid.unmark_rect_node_at_mouse_pos(mouse_pos)
             client.create_network_event(NetworkingEventTypes.REMOVE_MARKED_NODE, mouse_pos)
 
-        screen.fill(colors['black'])
+
+        screen.fill(color_manager.BOARD_COLOR)
+        new_border_color = animation_manager.update_border_and_board_interpolation()
+
+        if new_border_color != None:
+            color_manager.set_node_color(ColorNodeTypes.BORDER_COLOR, new_border_color)
+
         if current_pathfinding_algorithm != None:
-            current_pathfinding_algorithm.draw(colors['neon_blue'], colors['orange'])
+            current_pathfinding_algorithm.draw()
 
         if current_maze_generation_algorithm != None:
-            current_maze_generation_algorithm.draw(colors['red'])
+            current_maze_generation_algorithm.draw()
 
-        grid.draw_rect_nodes(colors['blue'], colors['green'], colors['red'], colors['purple'])
-        animation_manager.update()
-        grid.draw_grid(colors['white'])
+        grid.draw_rect_nodes()
+        animation_manager.update_coords_animations()
+        grid.draw_grid()
 
         current_pathfinding_algorithm = client.update_current_pathfinding_algorithm(current_pathfinding_algorithm)
         current_maze_generation_algorithm = client.update_current_maze_generation_algorithm(current_maze_generation_algorithm)

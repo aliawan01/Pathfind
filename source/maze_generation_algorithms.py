@@ -15,13 +15,13 @@ class MazeGenerationAlgorithmTypes(IntEnum):
     RECURSIVE_DIVISION = 2
 
 class MazeGenerationAlgorithm:
-    def __init__(self, screen_manager, rect_array_obj, colors, animation_manager):
+    def __init__(self, screen_manager, rect_array_obj, color_manager, animation_manager):
         self.screen_manager = screen_manager
         self.animation_manager = animation_manager
         self.rect_array_obj = rect_array_obj
         self.maze = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
         self.maze_pointer = -1
-        self.colors = colors
+        self.color_manager = color_manager
         self.animated_coords = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
 
     def reset_maze(self):
@@ -40,19 +40,19 @@ class MazeGenerationAlgorithm:
         else:
             return -1
 
-    def draw(self, marked_node_color):
+    def draw(self):
         for x in range(self.maze_pointer):
             coord = self.maze.stack[x]
             if self.animated_coords.exists(coord) == False:
-                self.animation_manager.add_coords_to_animation_dict(coord, AnimationTypes.EXPANDING_SQUARE, self.colors['red'], self.colors['black'])
+                self.animation_manager.add_coords_to_animation_dict(coord, AnimationTypes.EXPANDING_SQUARE, self.color_manager.MARKED_NODE_COLOR, self.color_manager.BOARD_COLOR)
                 self.rect_array_obj.array[coord[0]][coord[1]].marked = True
                 self.animated_coords.push(coord)
             else:
-                pygame.draw.rect(self.screen_manager.screen, marked_node_color, self.rect_array_obj.array[coord[0]][coord[1]])
+                pygame.draw.rect(self.screen_manager.screen, self.color_manager.MARKED_NODE_COLOR, self.rect_array_obj.array[coord[0]][coord[1]])
 
 class RandomWeightedMaze(MazeGenerationAlgorithm):
-    def __init__(self, screen_manager, rect_array_obj, colors, animation_manager):
-        super().__init__(screen_manager, rect_array_obj, colors, animation_manager)
+    def __init__(self, screen_manager, rect_array_obj, color_manager, animation_manager):
+        super().__init__(screen_manager, rect_array_obj, color_manager, animation_manager)
 
     def create_random_weighted_maze(self):
         self.reset_maze()
@@ -65,11 +65,11 @@ class RandomWeightedMaze(MazeGenerationAlgorithm):
                     self.rect_array_obj.array[y][x].is_user_weight = True
                     self.rect_array_obj.array[y][x].weight = weight
                     self.maze.push([[y, x], weight])
-                    self.animation_manager.add_coords_to_animation_dict((y, x), AnimationTypes.EXPANDING_SQUARE, self.colors['purple'], self.colors['black'])
+                    self.animation_manager.add_coords_to_animation_dict((y, x), AnimationTypes.EXPANDING_SQUARE, self.color_manager.WEIGHTED_NODE_COLOR, self.color_manager.BOARD_COLOR)
 
 class RandomMarkedMaze(MazeGenerationAlgorithm):
-    def __init__(self, screen_manager, rect_array_obj, colors, animation_manager):
-        super().__init__(screen_manager, rect_array_obj, colors, animation_manager)
+    def __init__(self, screen_manager, rect_array_obj, color_manager, animation_manager):
+        super().__init__(screen_manager, rect_array_obj, color_manager, animation_manager)
 
     def create_random_marked_maze(self):
         self.reset_maze()
@@ -80,7 +80,7 @@ class RandomMarkedMaze(MazeGenerationAlgorithm):
                 if should_be_marked:
                     self.rect_array_obj.array[y][x].marked = True
                     self.maze.push([y, x])
-                    self.animation_manager.add_coords_to_animation_dict((y, x), AnimationTypes.EXPANDING_SQUARE, self.colors['red'], self.colors['black'])
+                    self.animation_manager.add_coords_to_animation_dict((y, x), AnimationTypes.EXPANDING_SQUARE, self.color_manager.MARKED_NODE_COLOR, self.color_manager.BOARD_COLOR)
 
 
 class RecursiveDivisionSkew(Enum):
@@ -88,8 +88,8 @@ class RecursiveDivisionSkew(Enum):
     HORIZONTAL = 1
 
 class RecursiveDivisionMaze(MazeGenerationAlgorithm):
-    def __init__(self, screen_manager, rect_array_obj, colors, animation_manager):
-        super().__init__(screen_manager, rect_array_obj, colors, animation_manager)
+    def __init__(self, screen_manager, rect_array_obj, color_manager, animation_manager):
+        super().__init__(screen_manager, rect_array_obj, color_manager, animation_manager)
         self.skew = None
         self.empty_nodes_x = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
         self.empty_nodes_y = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)

@@ -5,35 +5,37 @@ import time
 from animations import *
 
 class ScreenManager:
-    def __init__(self, screen, screen_width, screen_height, resolution_divider):
+    def __init__(self, screen, screen_width, screen_height, grid_width, grid_height, resolution_divider):
         self.screen = screen
         self.screen_width = screen_width
         self.screen_height = screen_height
+        self.grid_width = grid_width
+        self.grid_height = grid_height
         self.resolution_divider = resolution_divider
 
     @property
     def num_of_rows(self):
-        return self.screen_height//100*self.resolution_divider
+        return self.grid_height//100*self.resolution_divider
 
     @property
     def num_of_columns(self):
-        return self.screen_width//100*self.resolution_divider
+        return self.grid_width//100*self.resolution_divider
 
     @property
     def row_width(self):
-        return self.screen_height/self.num_of_rows
+        return self.grid_height/self.num_of_rows
 
     @property
     def column_width(self):
-        return self.screen_width/self.num_of_columns
+        return self.grid_width/self.num_of_columns
 
     @property
     def row_width_int(self):
-        return self.screen_height//self.num_of_rows
+        return self.grid_height//self.num_of_rows
 
     @property
     def column_width_int(self):
-        return self.screen_width//self.num_of_columns
+        return self.grid_width//self.num_of_columns
 
     def increment_resolution_divider(self):
         if self.resolution_divider < 8:
@@ -72,6 +74,7 @@ class RectArray:
 
         pos_x = 0
         pos_y = 0
+        # pos_y = self.screen_manager.screen_height - self.screen_manager.grid_height
 
         for y in range(self.screen_manager.num_of_rows):
             rect_array.append([])
@@ -150,47 +153,48 @@ class RectArray:
 
  
 class Grid:
-    def __init__(self, screen_manager, rect_array_obj,  colors, animation_manager):
+    def __init__(self, screen_manager, rect_array_obj,  color_manager, animation_manager):
         self.screen_manager = screen_manager
-        self.colors = colors
+        self.color_manager = color_manager
         self.rect_array_obj = rect_array_obj
         self.animation_manager = animation_manager
 
-    def draw_grid(self, color):
+    def draw_grid(self):
         pos_x = self.screen_manager.column_width
         pos_y = self.screen_manager.row_width
+        # pos_y = (self.screen_manager.screen_height - self.screen_manager.grid_height) + self.screen_manager.row_width
 
         for x in range(self.screen_manager.num_of_columns):
-            pygame.draw.line(self.screen_manager.screen, color, (pos_x, 0), (pos_x, self.screen_manager.screen_height))
+            pygame.draw.line(self.screen_manager.screen, self.color_manager.BORDER_COLOR, (pos_x, 0), (pos_x, self.screen_manager.grid_height))
             pos_x += self.screen_manager.column_width
 
         for x in range(self.screen_manager.num_of_rows):
-            pygame.draw.line(self.screen_manager.screen, color, (0, pos_y), (self.screen_manager.screen_width, pos_y))
+            pygame.draw.line(self.screen_manager.screen, self.color_manager.BORDER_COLOR, (0, pos_y), (self.screen_manager.grid_width, pos_y))
             pos_y += self.screen_manager.row_width
 
 
-    def draw_rect_nodes(self, start_node_color, end_node_color, marked_node_color, weighted_node_color):
+    def draw_rect_nodes(self):
         for row in self.rect_array_obj.array:
             for node in row:
                 if node.is_start_node:
-                    pygame.draw.rect(self.screen_manager.screen, start_node_color, node.rect)
+                    pygame.draw.rect(self.screen_manager.screen, self.color_manager.START_NODE_COLOR, node.rect)
                 elif node.is_end_node:
-                    pygame.draw.rect(self.screen_manager.screen, end_node_color, node.rect)
+                    pygame.draw.rect(self.screen_manager.screen, self.color_manager.END_NODE_COLOR, node.rect)
                 elif node.marked:
-                    pygame.draw.rect(self.screen_manager.screen, marked_node_color, node.rect)
+                    pygame.draw.rect(self.screen_manager.screen, self.color_manager.MARKED_NODE_COLOR, node.rect)
                 elif node.is_user_weight:
-                    pygame.draw.rect(self.screen_manager.screen, weighted_node_color, node.rect)
+                    pygame.draw.rect(self.screen_manager.screen, self.color_manager.WEIGHTED_NODE_COLOR, node.rect)
 
 
     def mark_rect_node(self, node):
         if node.marked == False:
             node.marked = True
-            self.animation_manager.add_coords_to_animation_dict(node.coords, AnimationTypes.EXPANDING_SQUARE, self.colors['red'], self.colors['black'], 2)
+            self.animation_manager.add_coords_to_animation_dict(node.coords, AnimationTypes.EXPANDING_SQUARE, self.color_manager.MARKED_NODE_COLOR, self.color_manager.BOARD_COLOR, 2)
 
     def unmark_rect_node(self, node):
         if node.marked:
             node.marked = False
-            self.animation_manager.add_coords_to_animation_dict(node.coords, AnimationTypes.SHRINKING_SQUARE, self.colors['red'], self.colors['black'], 2)
+            self.animation_manager.add_coords_to_animation_dict(node.coords, AnimationTypes.SHRINKING_SQUARE, self.color_manager.MARKED_NODE_COLOR, self.color_manager.BOARD_COLOR, 2)
 
     def mark_rect_node_at_mouse_pos(self, mouse_coords):
         for row in self.rect_array_obj.array:
@@ -210,7 +214,7 @@ class Grid:
 
     def mark_weighted_node(self, node, weight):
         if node.is_user_weight == False and node.marked == False:
-            self.animation_manager.add_coords_to_animation_dict(node.coords, AnimationTypes.EXPANDING_SQUARE, self.colors['purple'], self.colors['black'], 2)
+            self.animation_manager.add_coords_to_animation_dict(node.coords, AnimationTypes.EXPANDING_SQUARE, self.color_manager.WEIGHTED_NODE_COLOR, self.color_manager.BOARD_COLOR, 2)
             node.is_user_weight = True
             node.weight = weight
 
@@ -223,7 +227,7 @@ class Grid:
 
     def unmark_weighted_node(self, node):
         if node.is_user_weight:
-            self.animation_manager.add_coords_to_animation_dict(node.coords, AnimationTypes.SHRINKING_SQUARE, self.colors['purple'], self.colors['black'], 2)
+            self.animation_manager.add_coords_to_animation_dict(node.coords, AnimationTypes.SHRINKING_SQUARE, self.color_manager.WEIGHTED_NODE_COLOR, self.color_manager.BOARD_COLOR, 2)
             node.is_user_weight = False
             node.weight = 1
 
@@ -246,8 +250,8 @@ class Grid:
             node.is_start_node = True
             original_start_node.is_start_node = False
 
-            self.animation_manager.add_coords_to_animation_dict(original_start_node.coords, AnimationTypes.SHRINKING_SQUARE, self.colors['blue'], self.colors['black'], 2)
-            self.animation_manager.add_coords_to_animation_dict(node.coords, AnimationTypes.EXPANDING_SQUARE, self.colors['blue'], self.colors['black'], 2)
+            self.animation_manager.add_coords_to_animation_dict(original_start_node.coords, AnimationTypes.SHRINKING_SQUARE, self.color_manager.START_NODE_COLOR, self.color_manager.BOARD_COLOR, 2)
+            self.animation_manager.add_coords_to_animation_dict(node.coords, AnimationTypes.EXPANDING_SQUARE, self.color_manager.START_NODE_COLOR, self.color_manager.BOARD_COLOR, 2)
 
     def mark_start_node_at_mouse_pos(self, mouse_coords):
         for row in self.rect_array_obj.array:
@@ -268,8 +272,8 @@ class Grid:
             node.is_end_node = True
             original_end_node.is_end_node = False
 
-            self.animation_manager.add_coords_to_animation_dict(original_end_node.coords, AnimationTypes.SHRINKING_SQUARE, self.colors['green'], self.colors['black'], 2)
-            self.animation_manager.add_coords_to_animation_dict(node.coords, AnimationTypes.EXPANDING_SQUARE, self.colors['green'], self.colors['black'], 2)
+            self.animation_manager.add_coords_to_animation_dict(original_end_node.coords, AnimationTypes.SHRINKING_SQUARE, self.color_manager.END_NODE_COLOR, self.color_manager.BOARD_COLOR, 2)
+            self.animation_manager.add_coords_to_animation_dict(node.coords, AnimationTypes.EXPANDING_SQUARE, self.color_manager.END_NODE_COLOR, self.color_manager.BOARD_COLOR, 2)
 
 
     def mark_end_node_at_mouse_pos(self, mouse_coords):
@@ -284,7 +288,7 @@ class Grid:
             for node in row:
                 if node.marked:
                     if animate:
-                        self.animation_manager.add_coords_to_animation_dict(node.coords, AnimationTypes.SHRINKING_SQUARE, self.colors['red'], self.colors['black'])
+                        self.animation_manager.add_coords_to_animation_dict(node.coords, AnimationTypes.SHRINKING_SQUARE, self.color_manager.MARKED_NODE_COLOR, self.color_manager.BOARD_COLOR)
                     node.marked = False
 
     def reset_all_weights(self, animate=True):
@@ -292,7 +296,7 @@ class Grid:
             for node in row:
                 if node.is_user_weight:
                     if animate:
-                        self.animation_manager.add_coords_to_animation_dict(node.coords, AnimationTypes.SHRINKING_SQUARE, self.colors['purple'], self.colors['black'])
+                        self.animation_manager.add_coords_to_animation_dict(node.coords, AnimationTypes.SHRINKING_SQUARE, self.color_manager.WEIGHTED_NODE_COLOR, self.color_manager.BOARD_COLOR)
                     node.is_user_weight = False
                     node.weight = 1
 

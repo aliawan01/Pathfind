@@ -11,6 +11,9 @@ class AnimationTypes(Enum):
     EXPANDING_SQUARE = 0
     SHRINKING_SQUARE = 1
     CIRCLE_TO_SQUARE = 2
+    LINEAR_COLOR_INTERPOLATION = 3
+    BOARD_LINEAR_INTERPOLATION = 4
+    BORDER_LINEAR_INTERPOLATION = 5
 
 class AnimationNode:
     def __init__(self, coords, animation_type, foreground_color, background_color, speed, column_width, row_width, row_width_int):
@@ -31,6 +34,7 @@ class AnimationManager:
         self.rect_array_obj = rect_array_obj
         self.start_node_coords, self.end_node_coords = self.rect_array_obj.get_start_and_end_node_coords()
         self.animation_dict = {}
+        self.board_and_border_interpolation_dict = {AnimationTypes.BOARD_LINEAR_INTERPOLATION: None, AnimationTypes.BORDER_LINEAR_INTERPOLATION: None}
 
     def add_coords_to_animation_dict(self, coords, animation_type, foreground_color, background_color, speed=1):
         if tuple(coords) in self.animation_dict.keys():
@@ -39,7 +43,35 @@ class AnimationManager:
 
         self.animation_dict[tuple(coords)] = AnimationNode(coords, animation_type, foreground_color, background_color, speed, self.screen_manager.column_width, self.screen_manager.row_width, self.screen_manager.row_width_int)
 
-    def update(self):
+    def interpolate_board_or_border(self, interpolation_type, initial_color, final_color, speed=1):
+        if self.board_and_border_interpolation_dict[interpolation_type] == None:
+            self.board_and_border_interpolation_dict[interpolation_type] = [initial_color, final_color, 0]
+
+    def update_border_and_board_interpolation(self):
+        events_to_remove = []
+
+        for event, info in self.board_and_border_interpolation_dict.items():
+            if info != None:
+                fraction = info[2]
+                fraction = round(fraction + (self.screen_manager.resolution_divider / 100), 2)
+
+                initial_color = info[0]
+                final_color = info[1]
+
+                if fraction > 1:
+                    events_to_remove.append(event)
+                else:
+                    self.board_and_border_interpolation_dict[event][2] = fraction
+                    lerp_color = pygame.Color.lerp(initial_color, final_color, fraction)
+                    if event == AnimationTypes.BOARD_LINEAR_INTERPOLATION:
+                        self.screen_manager.screen.fill(lerp_color)
+                    else:
+                        return lerp_color
+
+            for event_to_remove in events_to_remove:
+                self.board_and_border_interpolation_dict[event_to_remove] = None
+
+    def update_coords_animations(self):
         start_node_coords, end_node_coords = self.rect_array_obj.get_start_and_end_node_coords()
         coords_to_remove = []
 
@@ -94,6 +126,14 @@ class AnimationManager:
 
                     node.width += 1*node.speed
                 else:
+                    node.finished = True
+
+            elif node.type == AnimationTypes.LINEAR_COLOR_INTERPOLATION:
+                lerp_color = pygame.Color.lerp(node.foreground_color[0], node.foreground_color[1], node.fraction)
+
+                pygame.draw.rect(self.screen_manager.screen, lerp_color, node.rect)
+
+                if node.fraction >= 1:
                     node.finished = True
 
 

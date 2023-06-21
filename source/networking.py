@@ -8,6 +8,7 @@ import json
 from pathfinding_algorithms import PathfindingAlgorithmTypes, PathfindingHeuristics
 from maze_generation_algorithms import MazeGenerationAlgorithmTypes
 from animations import AnimationTypes
+from color_manager import *
 
 from enum import IntEnum
 
@@ -21,19 +22,18 @@ class NetworkingEventTypes(IntEnum):
     DECREMENT_RESOLUTION_DIVIDER = 6,
     RUN_PATHFINDING_ALGORITHM = 7,
     RUN_MAZE_GENERATION_ALGORITHM = 8,
-    CHANGE_THEME = 9,
-    CLEAR_GRID = 10,
-    CLEAR_PATH = 11,
-    CLEAR_CHECKED_NODES = 12,
-    CLEAR_MARKED_NODES = 13,
-    CLEAR_WEIGHTED_NODES = 14,
-    SET_START_NODE = 15,
-    SET_END_NODE = 16,
-    SEND_GRID_UPON_CONNECTION = 17
-
+    CLEAR_GRID = 9,
+    CLEAR_PATH = 10,
+    CLEAR_CHECKED_NODES = 11,
+    CLEAR_MARKED_NODES = 12,
+    CLEAR_WEIGHTED_NODES = 13,
+    SET_START_NODE = 14,
+    SET_END_NODE = 15,
+    SEND_GRID_UPON_CONNECTION = 16,
+    SEND_THEME = 17
 
 class Client:
-    def __init__(self, screen_manager, grid, rect_array_obj, pathfinding_algorithms_dict, maze_generation_algorithms_dict, animation_manager, events_dict, colors):
+    def __init__(self, screen_manager, grid, rect_array_obj, pathfinding_algorithms_dict, maze_generation_algorithms_dict, animation_manager, events_dict, color_manager):
         self.grid = grid
         self.screen_manager = screen_manager
         self.rect_array_obj = rect_array_obj
@@ -43,7 +43,7 @@ class Client:
         self.connected_to_server = False
         self.pathfinding_algorithms_dict = pathfinding_algorithms_dict
         self.animation_manager = animation_manager
-        self.colors = colors
+        self.color_manager: ColorManager = color_manager
         self.events_dict = events_dict
 
         self.changed_current_pathfinding_algorithm = False
@@ -110,10 +110,6 @@ class Client:
                     # args = maze_generation_algorithm, coords in the maze with weights
                     command = {NetworkingEventTypes.RUN_MAZE_GENERATION_ALGORITHM: args}
 
-                case NetworkingEventTypes.CHANGE_THEME:
-                    # args = light/dark
-                    command = {NetworkingEventTypes.CHANGE_THEME: args}
-
                 case NetworkingEventTypes.CLEAR_GRID:
                     command = {NetworkingEventTypes.CLEAR_GRID: None}
 
@@ -140,6 +136,15 @@ class Client:
                 case NetworkingEventTypes.SEND_GRID_UPON_CONNECTION:
                     # args = start node coords, end node coords, marked nodes, weighted nodes
                     command = {NetworkingEventTypes.SEND_GRID_UPON_CONNECTION: args}
+
+                case NetworkingEventTypes.SEND_THEME:
+                    # command = theme keys, theme values
+                    theme_dict = self.color_manager.get_theme_colors_dict()
+
+                    theme_keys = list(theme_dict.keys())
+                    theme_values = list(theme_dict.values())
+
+                    command = {NetworkingEventTypes.SEND_THEME: [theme_keys, theme_values]}
 
             print("[SOME CLIENT]: Created and sent event: ", command)
             self.client_socket.sendall(json.dumps(command).encode())
@@ -283,7 +288,7 @@ class Client:
                             for coord, weight in args[1]:
                                 self.rect_array_obj.array[coord[0]][coord[1]].is_user_weight = True
                                 self.rect_array_obj.array[coord[0]][coord[1]].weight = weight
-                                self.animation_manager.add_coords_to_animation_dict((coord[0], coord[1]), AnimationTypes.EXPANDING_SQUARE, self.colors['purple'], self.colors['black'])
+                                self.animation_manager.add_coords_to_animation_dict((coord[0], coord[1]), AnimationTypes.EXPANDING_SQUARE, self.color_manager.WEIGHTED_NODE_COLOR, self.color_manager.BOARD_COLOR)
 
                         elif maze_generation_algorithm_type == MazeGenerationAlgorithmTypes.RECURSIVE_DIVISION:
                             self.current_maze_generation_algorithm = self.maze_generation_algorithms_dict[maze_generation_algorithm_type]
@@ -299,11 +304,7 @@ class Client:
                         elif maze_generation_algorithm_type == MazeGenerationAlgorithmTypes.RANDOM_MARKED_MAZE:
                             for y, x in args[1]:
                                 self.rect_array_obj.array[y][x].marked = True
-                                self.animation_manager.add_coords_to_animation_dict((y, x), AnimationTypes.EXPANDING_SQUARE, self.colors['red'], self.colors['black'])
-
-                    case NetworkingEventTypes.CHANGE_THEME:
-                        # TODO(ali): Add the ability to change the theme and colours of individual nodes
-                        pass
+                                self.animation_manager.add_coords_to_animation_dict((y, x), AnimationTypes.EXPANDING_SQUARE, self.color_manager.MARKED_NODE_COLOR, self.color_manager.BOARD_COLOR)
 
                     case NetworkingEventTypes.CLEAR_GRID:
                         self.grid.reset_marked_nodes()
@@ -366,9 +367,20 @@ class Client:
                         for coord, weight in weighted_nodes_coords:
                             self.grid.mark_weighted_node(self.rect_array_obj.array[coord[0]][coord[1]], weight)
 
+                    case NetworkingEventTypes.SEND_THEME:
+                        theme_keys = args[0]
+                        theme_values = args[1]
+
+                        theme_colors_dict = {}
+                        for i in range(len(theme_keys)):
+                            theme_colors_dict[ColorNodeTypes(theme_keys[i])] = tuple(theme_values[i])
+
+                        self.color_manager.set_and_animate_theme_colors_dict(theme_colors_dict, self.current_pathfinding_algorithm)
+
 class Server:
-    def __init__(self, grid):
+    def __init__(self, grid, color_manager):
         self.grid = grid
+        self.color_manager = color_manager
         self.ip_address = "127.0.0.1"
         self.port = 5000
         self.connected_clients_dict = {}
@@ -417,8 +429,16 @@ class Server:
 
             if len(self.connected_clients_dict) > 1:
                 board_info = self.grid.get_board_info()
-                command = {NetworkingEventTypes.SEND_GRID_UPON_CONNECTION: board_info}
-                client_socket.sendall(json.dumps(command).encode())
+                theme_dict = self.color_manager.get_theme_colors_dict()
+
+                theme_keys = list(theme_dict.keys())
+                theme_values = list(theme_dict.values())
+
+                grid_command = {NetworkingEventTypes.SEND_GRID_UPON_CONNECTION: board_info}
+                theme_command = {NetworkingEventTypes.SEND_THEME: [theme_keys, theme_values]}
+
+                client_socket.sendall(json.dumps(grid_command).encode())
+                client_socket.sendall(json.dumps(theme_command).encode())
 
             threading.Thread(target=self.handle_client, args=(client_socket, client_address), daemon=True).start()
 
@@ -448,6 +468,3 @@ class Server:
             self.server_socket.close()
             self.server_socket = None
             print("[SERVER] Shutting down server...")
-
-
-
