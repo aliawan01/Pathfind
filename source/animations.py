@@ -6,7 +6,6 @@ from enum import Enum
 from stack import Stack
 from queue_classes import Queue, PriorityQueue
 
-
 class AnimationTypes(Enum):
     EXPANDING_SQUARE = 0
     SHRINKING_SQUARE = 1
@@ -15,13 +14,16 @@ class AnimationTypes(Enum):
     BOARD_LINEAR_INTERPOLATION = 4
     BORDER_LINEAR_INTERPOLATION = 5
 
+class AnimationBackgroundTypes(Enum):
+    THEME_BACKGROUND = 0
+
 class AnimationNode:
-    def __init__(self, coords, animation_type, foreground_color, background_color, speed, column_width, row_width, row_width_int):
+    def __init__(self, coords, animation_type, foreground_color, background_color, speed, column_width, row_width, row_width_int, grid_height_offset):
         self.type = animation_type
         self.background_color = background_color
         self.foreground_color = foreground_color
         self.speed = speed
-        self.center = ((row_width*coords[1])+(row_width//2), (row_width*coords[0])+(row_width//2))
+        self.center = ((row_width*coords[1])+(row_width//2), (row_width*coords[0])+(row_width//2)+grid_height_offset)
         self.fraction = 0
         self.increment = row_width_int//2
         self.finished = False
@@ -41,7 +43,7 @@ class AnimationManager:
             if self.animation_dict[tuple(coords)].type == animation_type:
                 return
 
-        self.animation_dict[tuple(coords)] = AnimationNode(coords, animation_type, foreground_color, background_color, speed, self.screen_manager.column_width, self.screen_manager.row_width, self.screen_manager.row_width_int)
+        self.animation_dict[tuple(coords)] = AnimationNode(coords, animation_type, foreground_color, background_color, speed, self.screen_manager.column_width, self.screen_manager.row_width, self.screen_manager.row_width_int, self.screen_manager.grid_height_offset)
 
     def interpolate_board_or_border(self, interpolation_type, initial_color, final_color, speed=1):
         if self.board_and_border_interpolation_dict[interpolation_type] == None:
@@ -49,6 +51,8 @@ class AnimationManager:
 
     def update_border_and_board_interpolation(self):
         events_to_remove = []
+        background_color = None
+        border_color = None
 
         for event, info in self.board_and_border_interpolation_dict.items():
             if info != None:
@@ -65,13 +69,16 @@ class AnimationManager:
                     lerp_color = pygame.Color.lerp(initial_color, final_color, fraction)
                     if event == AnimationTypes.BOARD_LINEAR_INTERPOLATION:
                         self.screen_manager.screen.fill(lerp_color)
+                        background_color = lerp_color
                     else:
-                        return lerp_color
+                        border_color = lerp_color
 
             for event_to_remove in events_to_remove:
                 self.board_and_border_interpolation_dict[event_to_remove] = None
 
-    def update_coords_animations(self):
+        return {'BACKGROUND_COLOR': background_color, 'BORDER_COLOR': border_color}
+
+    def update_coords_animations(self, background_color):
         start_node_coords, end_node_coords = self.rect_array_obj.get_start_and_end_node_coords()
         coords_to_remove = []
 
@@ -89,8 +96,13 @@ class AnimationManager:
             if node.fraction > 1:
                 node.fraction = 1
 
+            if node.background_color == AnimationBackgroundTypes.THEME_BACKGROUND:
+                node_background_color = background_color
+            else:
+                node_background_color = node.background_color
+
             if node.type == AnimationTypes.CIRCLE_TO_SQUARE:
-                pygame.draw.rect(self.screen_manager.screen, node.background_color, node.rect)
+                pygame.draw.rect(self.screen_manager.screen, node_background_color, node.rect)
 
                 lerp_color = pygame.Color.lerp(node.foreground_color[0], node.foreground_color[1], node.fraction)
 
@@ -106,7 +118,7 @@ class AnimationManager:
                     pygame.draw.rect(self.screen_manager.screen, lerp_color, node.rect, 0, node.increment)
 
             elif node.type == AnimationTypes.EXPANDING_SQUARE:
-                pygame.draw.rect(self.screen_manager.screen, node.background_color, node.rect)
+                pygame.draw.rect(self.screen_manager.screen, node_background_color, node.rect)
                 if node.width <= self.screen_manager.row_width:
                     new_rect = pygame.Rect(0, 0, node.width, node.width)
                     new_rect.center = node.center
@@ -118,7 +130,7 @@ class AnimationManager:
                     pygame.draw.rect(self.screen_manager.screen, node.foreground_color, node.rect)
 
             elif node.type == AnimationTypes.SHRINKING_SQUARE:
-                pygame.draw.rect(self.screen_manager.screen, node.background_color, node.rect)
+                pygame.draw.rect(self.screen_manager.screen, node_background_color, node.rect)
                 if node.rect.width - node.width > 0:
                     new_rect = pygame.Rect(0, 0, node.rect.width-node.width, node.rect.height-node.width)
                     new_rect.center = node.center

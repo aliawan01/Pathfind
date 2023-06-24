@@ -60,7 +60,7 @@ class PathfindingAlgorithm:
         self.checked_nodes_pointer = -1
         if self.reset_checked_nodes == False:
             for coord in self.checked_nodes:
-                self.animation_manager.add_coords_to_animation_dict(coord, AnimationTypes.SHRINKING_SQUARE, self.color_manager.CHECKED_NODE_FOREGROUND_COLOR, self.color_manager.BOARD_COLOR)
+                self.animation_manager.add_coords_to_animation_dict(coord, AnimationTypes.SHRINKING_SQUARE, self.color_manager.CHECKED_NODE_FOREGROUND_COLOR, AnimationBackgroundTypes.THEME_BACKGROUND)
 
         self.reset_checked_nodes = True
         self.checked_nodes = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
@@ -76,7 +76,7 @@ class PathfindingAlgorithm:
         self.path_pointer = -1
         if self.reset_path_nodes == False:
             for coord in self.path:
-                self.animation_manager.add_coords_to_animation_dict(coord, AnimationTypes.SHRINKING_SQUARE, self.color_manager.PATH_NODE_FOREGROUND_COLOR, self.color_manager.BOARD_COLOR)
+                self.animation_manager.add_coords_to_animation_dict(coord, AnimationTypes.SHRINKING_SQUARE, self.color_manager.PATH_NODE_FOREGROUND_COLOR, AnimationBackgroundTypes.THEME_BACKGROUND)
 
         self.reset_path_nodes = True
         self.path = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
@@ -107,7 +107,7 @@ class PathfindingAlgorithm:
 
             if self.animated_checked_coords.exists(coord) == False:
                 if self.rect_array_obj.array[coord[0]][coord[1]].is_user_weight == False:
-                    self.animation_manager.add_coords_to_animation_dict(coord, AnimationTypes.CIRCLE_TO_SQUARE, (self.color_manager.CHECKED_NODE_BACKGROUND_COLOR, self.color_manager.CHECKED_NODE_FOREGROUND_COLOR), self.color_manager.BOARD_COLOR)
+                    self.animation_manager.add_coords_to_animation_dict(coord, AnimationTypes.CIRCLE_TO_SQUARE, (self.color_manager.CHECKED_NODE_BACKGROUND_COLOR, self.color_manager.CHECKED_NODE_FOREGROUND_COLOR), AnimationBackgroundTypes.THEME_BACKGROUND)
                 self.animated_checked_coords.push(coord)
             else:
                 if self.rect_array_obj.array[coord[0]][coord[1]].is_user_weight == False:

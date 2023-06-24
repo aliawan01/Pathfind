@@ -33,8 +33,8 @@ def main():
     screen_height = 800
 
     grid_width = screen_width
-    grid_height = screen_height
-    # grid_height = 600
+    # grid_height = screen_height
+    grid_height = 600
 
     screen = pygame.display.set_mode((screen_width, screen_height))
     pygame.display.set_caption("Pathfinding Visualizer")
@@ -134,8 +134,8 @@ def main():
                 #            after you've finished testing the algorithms.
                 # if screen_lock == False:
                 if event.mod == pygame.KMOD_LSHIFT and event.key == pygame.K_EQUALS:
-                    client.create_network_event(NetworkingEventTypes.INCREMENT_RESOLUTION_DIVIDER)
                     screen_manager.increment_resolution_divider()
+                    client.create_network_event(NetworkingEventTypes.SET_RESOLUTION_DIVIDER, screen_manager.resolution_divider)
                     rect_array.reset_rect_array()
 
                     if current_pathfinding_algorithm != None:
@@ -146,8 +146,8 @@ def main():
                         current_maze_generation_algorithm.reset_maze_pointer()
 
                 if event.key == pygame.K_MINUS:
-                    client.create_network_event(NetworkingEventTypes.DECREMENT_RESOLUTION_DIVIDER)
                     screen_manager.decrement_resolution_divider()
+                    client.create_network_event(NetworkingEventTypes.SET_RESOLUTION_DIVIDER, screen_manager.resolution_divider)
                     rect_array.reset_rect_array()
 
                     if current_pathfinding_algorithm != None:
@@ -397,12 +397,8 @@ def main():
             grid.unmark_rect_node_at_mouse_pos(mouse_pos)
             client.create_network_event(NetworkingEventTypes.REMOVE_MARKED_NODE, mouse_pos)
 
-
         screen.fill(color_manager.BOARD_COLOR)
-        new_border_color = animation_manager.update_border_and_board_interpolation()
-
-        if new_border_color != None:
-            color_manager.set_node_color(ColorNodeTypes.BORDER_COLOR, new_border_color)
+        border_or_background_color = animation_manager.update_border_and_board_interpolation()
 
         if current_pathfinding_algorithm != None:
             current_pathfinding_algorithm.draw()
@@ -411,7 +407,15 @@ def main():
             current_maze_generation_algorithm.draw()
 
         grid.draw_rect_nodes()
-        animation_manager.update_coords_animations()
+
+        if border_or_background_color['BACKGROUND_COLOR'] != None:
+            animation_manager.update_coords_animations(border_or_background_color['BACKGROUND_COLOR'])
+        else:
+            animation_manager.update_coords_animations(color_manager.BOARD_COLOR)
+
+        if border_or_background_color['BORDER_COLOR'] != None:
+            color_manager.set_node_color(ColorNodeTypes.BORDER_COLOR, border_or_background_color['BORDER_COLOR'])
+
         grid.draw_grid()
 
         current_pathfinding_algorithm = client.update_current_pathfinding_algorithm(current_pathfinding_algorithm)

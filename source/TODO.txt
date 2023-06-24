@@ -8,8 +8,8 @@ TODO:
 - Turn the queues in queue_classes.py into actual queues
 
 - In the menu add a way to add a vertical skew, horizontal skew, euclidean and manhattan distance
-- Fix bug when the background colour of the checked nodes does not changed when checked nodes are being
-  drawn and we change the theme.
+ - Add the grid_height_offset thing to the networking so that the grid is the same on all clients (could be useful
+   if we allow the client to resize the ui?)
 
 - Fix bidirectional search so that it is faster
 

@@ -44,7 +44,7 @@ class MazeGenerationAlgorithm:
         for x in range(self.maze_pointer):
             coord = self.maze.stack[x]
             if self.animated_coords.exists(coord) == False:
-                self.animation_manager.add_coords_to_animation_dict(coord, AnimationTypes.EXPANDING_SQUARE, self.color_manager.MARKED_NODE_COLOR, self.color_manager.BOARD_COLOR)
+                self.animation_manager.add_coords_to_animation_dict(coord, AnimationTypes.EXPANDING_SQUARE, self.color_manager.MARKED_NODE_COLOR, AnimationBackgroundTypes.THEME_BACKGROUND)
                 self.rect_array_obj.array[coord[0]][coord[1]].marked = True
                 self.animated_coords.push(coord)
             else:
@@ -65,7 +65,7 @@ class RandomWeightedMaze(MazeGenerationAlgorithm):
                     self.rect_array_obj.array[y][x].is_user_weight = True
                     self.rect_array_obj.array[y][x].weight = weight
                     self.maze.push([[y, x], weight])
-                    self.animation_manager.add_coords_to_animation_dict((y, x), AnimationTypes.EXPANDING_SQUARE, self.color_manager.WEIGHTED_NODE_COLOR, self.color_manager.BOARD_COLOR)
+                    self.animation_manager.add_coords_to_animation_dict((y, x), AnimationTypes.EXPANDING_SQUARE, self.color_manager.WEIGHTED_NODE_COLOR, AnimationBackgroundTypes.THEME_BACKGROUND)
 
 class RandomMarkedMaze(MazeGenerationAlgorithm):
     def __init__(self, screen_manager, rect_array_obj, color_manager, animation_manager):
@@ -80,7 +80,7 @@ class RandomMarkedMaze(MazeGenerationAlgorithm):
                 if should_be_marked:
                     self.rect_array_obj.array[y][x].marked = True
                     self.maze.push([y, x])
-                    self.animation_manager.add_coords_to_animation_dict((y, x), AnimationTypes.EXPANDING_SQUARE, self.color_manager.MARKED_NODE_COLOR, self.color_manager.BOARD_COLOR)
+                    self.animation_manager.add_coords_to_animation_dict((y, x), AnimationTypes.EXPANDING_SQUARE, self.color_manager.MARKED_NODE_COLOR, AnimationBackgroundTypes.THEME_BACKGROUND)
 
 
 class RecursiveDivisionSkew(Enum):

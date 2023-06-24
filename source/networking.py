@@ -18,19 +18,18 @@ class NetworkingEventTypes(IntEnum):
     REMOVE_MARKED_NODE = 2,
     ADD_WEIGHTED_NODE = 3,
     REMOVE_WEIGHTED_NODE = 4,
-    INCREMENT_RESOLUTION_DIVIDER = 5,
-    DECREMENT_RESOLUTION_DIVIDER = 6,
-    RUN_PATHFINDING_ALGORITHM = 7,
-    RUN_MAZE_GENERATION_ALGORITHM = 8,
-    CLEAR_GRID = 9,
-    CLEAR_PATH = 10,
-    CLEAR_CHECKED_NODES = 11,
-    CLEAR_MARKED_NODES = 12,
-    CLEAR_WEIGHTED_NODES = 13,
-    SET_START_NODE = 14,
-    SET_END_NODE = 15,
-    SEND_GRID_UPON_CONNECTION = 16,
-    SEND_THEME = 17
+    SET_RESOLUTION_DIVIDER = 5,
+    RUN_PATHFINDING_ALGORITHM = 6,
+    RUN_MAZE_GENERATION_ALGORITHM = 7,
+    CLEAR_GRID = 8,
+    CLEAR_PATH = 9,
+    CLEAR_CHECKED_NODES = 10,
+    CLEAR_MARKED_NODES = 11,
+    CLEAR_WEIGHTED_NODES = 12,
+    SET_START_NODE = 13,
+    SET_END_NODE = 14,
+    SEND_GRID_UPON_CONNECTION = 15,
+    SEND_THEME = 16
 
 class Client:
     def __init__(self, screen_manager, grid, rect_array_obj, pathfinding_algorithms_dict, maze_generation_algorithms_dict, animation_manager, events_dict, color_manager):
@@ -93,11 +92,8 @@ class Client:
                     # args = mouse pos
                     command = {NetworkingEventTypes.REMOVE_WEIGHTED_NODE: args}
 
-                case NetworkingEventTypes.INCREMENT_RESOLUTION_DIVIDER:
-                    command = {NetworkingEventTypes.INCREMENT_RESOLUTION_DIVIDER: None}
-
-                case NetworkingEventTypes.DECREMENT_RESOLUTION_DIVIDER:
-                    command = {NetworkingEventTypes.DECREMENT_RESOLUTION_DIVIDER: None}
+                case NetworkingEventTypes.SET_RESOLUTION_DIVIDER:
+                    command = {NetworkingEventTypes.SET_RESOLUTION_DIVIDER: args}
 
                 case NetworkingEventTypes.RUN_PATHFINDING_ALGORITHM:
                     # args = pathfinding algorithm, heuristic(None if the algorithm doesn't use heuristics)
@@ -134,7 +130,7 @@ class Client:
                     command = {NetworkingEventTypes.SET_END_NODE: args}
 
                 case NetworkingEventTypes.SEND_GRID_UPON_CONNECTION:
-                    # args = start node coords, end node coords, marked nodes, weighted nodes
+                    # args = start node coords, end node coords, marked nodes, weighted nodes, resolution divider
                     command = {NetworkingEventTypes.SEND_GRID_UPON_CONNECTION: args}
 
                 case NetworkingEventTypes.SEND_THEME:
@@ -178,7 +174,7 @@ class Client:
     def handle_server_events(self):
         while self.connected_to_server:
             try:
-                server_events = self.client_socket.recv(10000).decode()
+                server_events = self.client_socket.recv(50000).decode()
             except BrokenPipeError:
                 self.connected_to_server = False
                 self.client_socket.shutdown(socket.SHUT_RDWR)
@@ -222,27 +218,17 @@ class Client:
                         mouse_pos = args[0]
                         self.grid.unmark_weighted_node_at_mouse_pos(mouse_pos)
 
-                    case NetworkingEventTypes.INCREMENT_RESOLUTION_DIVIDER:
-                        self.screen_manager.increment_resolution_divider()
-                        self.rect_array_obj.reset_rect_array()
+                    case NetworkingEventTypes.SET_RESOLUTION_DIVIDER:
+                        if args[0] != self.screen_manager.set_resolution_divider:
+                            self.screen_manager.set_resolution_divider(args[0])
+                            self.rect_array_obj.reset_rect_array()
 
-                        if self.current_pathfinding_algorithm != None:
-                            self.current_pathfinding_algorithm.reset_checked_nodes_pointer()
-                            self.current_pathfinding_algorithm.reset_path_pointer()
+                            if self.current_pathfinding_algorithm != None:
+                                self.current_pathfinding_algorithm.reset_checked_nodes_pointer()
+                                self.current_pathfinding_algorithm.reset_path_pointer()
 
-                        if self.current_maze_generation_algorithm != None:
-                            self.current_maze_generation_algorithm.reset_maze_pointer()
-
-                    case NetworkingEventTypes.DECREMENT_RESOLUTION_DIVIDER:
-                        self.screen_manager.decrement_resolution_divider()
-                        self.rect_array_obj.reset_rect_array()
-
-                        if self.current_pathfinding_algorithm != None:
-                            self.current_pathfinding_algorithm.reset_checked_nodes_pointer()
-                            self.current_pathfinding_algorithm.reset_path_pointer()
-
-                        if self.current_maze_generation_algorithm != None:
-                            self.current_maze_generation_algorithm.reset_maze_pointer()
+                            if self.current_maze_generation_algorithm != None:
+                                self.current_maze_generation_algorithm.reset_maze_pointer()
 
                     case NetworkingEventTypes.RUN_PATHFINDING_ALGORITHM:
                         pathfinding_algorithm_type = PathfindingAlgorithmTypes(args[0])
@@ -288,7 +274,7 @@ class Client:
                             for coord, weight in args[1]:
                                 self.rect_array_obj.array[coord[0]][coord[1]].is_user_weight = True
                                 self.rect_array_obj.array[coord[0]][coord[1]].weight = weight
-                                self.animation_manager.add_coords_to_animation_dict((coord[0], coord[1]), AnimationTypes.EXPANDING_SQUARE, self.color_manager.WEIGHTED_NODE_COLOR, self.color_manager.BOARD_COLOR)
+                                self.animation_manager.add_coords_to_animation_dict((coord[0], coord[1]), AnimationTypes.EXPANDING_SQUARE, self.color_manager.WEIGHTED_NODE_COLOR, AnimationBackgroundTypes.THEME_BACKGROUND)
 
                         elif maze_generation_algorithm_type == MazeGenerationAlgorithmTypes.RECURSIVE_DIVISION:
                             self.current_maze_generation_algorithm = self.maze_generation_algorithms_dict[maze_generation_algorithm_type]
@@ -304,7 +290,7 @@ class Client:
                         elif maze_generation_algorithm_type == MazeGenerationAlgorithmTypes.RANDOM_MARKED_MAZE:
                             for y, x in args[1]:
                                 self.rect_array_obj.array[y][x].marked = True
-                                self.animation_manager.add_coords_to_animation_dict((y, x), AnimationTypes.EXPANDING_SQUARE, self.color_manager.MARKED_NODE_COLOR, self.color_manager.BOARD_COLOR)
+                                self.animation_manager.add_coords_to_animation_dict((y, x), AnimationTypes.EXPANDING_SQUARE, self.color_manager.MARKED_NODE_COLOR, AnimationBackgroundTypes.THEME_BACKGROUND)
 
                     case NetworkingEventTypes.CLEAR_GRID:
                         self.grid.reset_marked_nodes()
@@ -347,6 +333,10 @@ class Client:
                         end_node_coord = args[1]
                         marked_nodes_coords = args[2]
                         weighted_nodes_coords = args[3]
+                        resolution_divider = args[4]
+
+                        self.screen_manager.set_resolution_divider(resolution_divider)
+                        self.rect_array_obj.reset_rect_array()
 
                         self.grid.mark_start_node(self.rect_array_obj.array[start_node_coord[0]][start_node_coord[1]])
                         self.grid.mark_end_node(self.rect_array_obj.array[end_node_coord[0]][end_node_coord[1]])
@@ -393,7 +383,7 @@ class Server:
 
         while self.server_running:
             try:
-                client_info = client_socket.recv(10000).decode()
+                client_info = client_socket.recv(50000).decode()
             except BrokenPipeError:
                 return
 
