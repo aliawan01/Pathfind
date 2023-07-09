@@ -37,6 +37,7 @@ class PathfindingAlgorithm:
         self.heuristic = None
         self.reset_checked_nodes = False
         self.reset_path_nodes = False
+        self.type = type
 
     def reset_animated_checked_coords_stack(self):
         self.animated_checked_coords = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
@@ -59,7 +60,7 @@ class PathfindingAlgorithm:
     def reset_checked_nodes_pointer(self):
         self.checked_nodes_pointer = -1
         if self.reset_checked_nodes == False:
-            for coord in self.checked_nodes:
+            for coord in self.checked_nodes.gen_copy_without_empty_values():
                 self.animation_manager.add_coords_to_animation_dict(coord, AnimationTypes.SHRINKING_SQUARE, self.color_manager.CHECKED_NODE_FOREGROUND_COLOR, AnimationBackgroundTypes.THEME_BACKGROUND)
 
         self.reset_checked_nodes = True
@@ -75,7 +76,7 @@ class PathfindingAlgorithm:
     def reset_path_pointer(self):
         self.path_pointer = -1
         if self.reset_path_nodes == False:
-            for coord in self.path:
+            for coord in self.path.gen_copy_without_empty_values():
                 self.animation_manager.add_coords_to_animation_dict(coord, AnimationTypes.SHRINKING_SQUARE, self.color_manager.PATH_NODE_FOREGROUND_COLOR, AnimationBackgroundTypes.THEME_BACKGROUND)
 
         self.reset_path_nodes = True
@@ -130,6 +131,7 @@ class PathfindingAlgorithm:
 class DFS(PathfindingAlgorithm):
     def __init__(self, screen_manager, rect_array_obj, color_manager, animation_manager):
         super().__init__(screen_manager, rect_array_obj, color_manager, animation_manager)
+        self.type = PathfindingAlgorithmTypes.DFS
 
     def run(self):
         self.reset_checked_nodes = False
@@ -177,6 +179,7 @@ class DFS(PathfindingAlgorithm):
 class BFS(PathfindingAlgorithm):
     def __init__(self, screen_manager, rect_array_obj, color_manager, animation_manager):
         super().__init__(screen_manager, rect_array_obj, color_manager, animation_manager)
+        self.type = PathfindingAlgorithmTypes.BFS
 
     def run(self):
         self.reset_path_nodes = False
@@ -237,6 +240,7 @@ class BFS(PathfindingAlgorithm):
 class Dijkastra(PathfindingAlgorithm):
     def __init__(self, screen_manager, rect_array_obj, color_manager, animation_manager):
         super().__init__(screen_manager, rect_array_obj,  color_manager, animation_manager)
+        self.type = PathfindingAlgorithmTypes.DIJKASTRA
 
     def run(self):
         self.reset_path_nodes = False
@@ -309,6 +313,7 @@ class Dijkastra(PathfindingAlgorithm):
 class AStar(PathfindingAlgorithm):
     def __init__(self, screen_manager, rect_array_obj, color_manager, animation_manager):
         super().__init__(screen_manager, rect_array_obj,  color_manager, animation_manager)
+        self.type = PathfindingAlgorithmTypes.ASTAR
         self.heuristic_dict = {}
         frontier = PriorityQueue()
         expanded_nodes = []
@@ -397,6 +402,7 @@ class AStar(PathfindingAlgorithm):
 class GreedyBFS(PathfindingAlgorithm):
     def __init__(self, screen_manager, rect_array_obj, color_manager, animation_manager):
         super().__init__(screen_manager, rect_array_obj,  color_manager, animation_manager)
+        self.type = PathfindingAlgorithmTypes.GREEDY_BFS
         self.h_parent_dict = {}
 
     def run(self):
@@ -468,6 +474,7 @@ class GreedyBFS(PathfindingAlgorithm):
 class BidirectionalBFS(PathfindingAlgorithm):
     def __init__(self, screen_manager, rect_array_obj, color_manager, animation_manager):
         super().__init__(screen_manager, rect_array_obj,  color_manager, animation_manager)
+        self.type = PathfindingAlgorithmTypes.BIDIRECTIONAL_BFS
         self.search_a_checked_nodes = Queue()
         self.search_b_checked_nodes = Queue()
 

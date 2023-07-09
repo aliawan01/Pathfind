@@ -183,4 +183,3 @@ class ColorManager:
                     self.animation_manager.add_coords_to_animation_dict(end_node_coords, AnimationTypes.LINEAR_COLOR_INTERPOLATION, (self.END_NODE_COLOR, pygame.Color(color)), self.theme_colors[ColorNodeTypes.BOARD_COLOR])
 
             self.theme_colors[node_type] = color
-

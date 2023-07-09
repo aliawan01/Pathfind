@@ -1,17 +1,48 @@
+TODO UI:
+- Menu for algorithms -> Selecting between manhattan distance and euclidean distance, setting speed of the algorithms.
+- Run algorithm
+- Menu for mazes -> vertical/horizontal skew for recursive division.
+- Resetting nodes (path nodes, all marked nodes, checked nodes etc.)
+- Keyboard shortcuts?
+- Theme -> Selecting themes and making your own theme (UIColorPickerDialogue)
+- Changing betweeen marked node and weighted node (being able to specify the weight of the weighted node)
+- Messages (e.g. if there is no path)
+- Legend for the meaning of different icons.
+- Getting started/help guide.
+- Networking
+- Zooming in and out of the grid.
+- Find out how long it takes for the algorithm to solve it and show it in the UI.
+- Could make a button which when clicked will change the text in other buttons and menus to show shortcuts
+  (e.g. 'r' to run the pathfinding algorithms).
+
+FIX:
+- Fix bug with networking where the recursive division maze crashes with the following message
+    (also crashes without networking, when running recursive division with minimum speed):
+  `Process finished with exit code -1073741819 (0xC0000005)`,
+  * Could be a problem with using pygame.time.set_timer() for every frame?
+  * Extra information: Could be that the game crashes when we try to place a node when the recursive division is running
+    could be fixed by experimenting with enabling screen lock? (seem to see this message before the game crashes:
+    `[CLIENT RECEIVED EVENT]: Received an event -> {"1": [[169, 151]]}`),
+    UPDATE: Seemed to have reduced the chances of it crashing by changing the .recv value in networking to 100000.
+- Recursive division crashes if the animations go too fast?
+- Allow the user to just close the window and it will shut down it's connection to the server as well
+  (if it is already implemented it doesn't seem to be working properly).
+- Menu for clearing different kinds of nodes.
+
+
 TODO:
 - Play music when the user places and deletes nodes, or when a path is being shown.
 - Be able to tell the user that there isn't any path (we know that there isn't a path
   when the path stack is empty {in other words it is full of None values})
 - Allow the user to specify weights when selecting them (could use a menu in the UI)
   change it in the networking part as well.
-
 - Turn the queues in queue_classes.py into actual queues
-
-- In the menu add a way to add a vertical skew, horizontal skew, euclidean and manhattan distance
  - Add the grid_height_offset thing to the networking so that the grid is the same on all clients (could be useful
    if we allow the client to resize the ui?)
-
+- Screen lock for when the client is using the UI since it will mark nodes on the grid otherwise.
 - Fix bidirectional search so that it is faster
+- Remove print statements.
+- Creating network events when doing things in the GameUIManager.
 
 - Make and set the game's icon.
 - Replace the weights with an image (could use different colours).
@@ -23,6 +54,9 @@ FINISH:
 
 IDEAS:
 - Fullscreen/rescaling?
+- Could add the spinning cube as an animation option.
+- Could add print statements to debug the threading problem with the rect_array not being updated after changing
+  the resolution divider in networking.
 
 NOTES:
 - Remember to set the if statement for the screen_lock to be on after you
@@ -34,3 +68,4 @@ NOTES:
 BUG FIXES:
 - Fix bug where astar and greedybfs (and sometimes dijakstra) doesn't draw the path even though it reaches the end node.
 - Fix bug where the start and end node animations will not work and the animations for changing colours also are not working.
+- Fix bug with not different classes not being able to access the rect_array new coordinates immediately after resizing the grid.

@@ -23,6 +23,8 @@ class MazeGenerationAlgorithm:
         self.maze_pointer = -1
         self.color_manager = color_manager
         self.animated_coords = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
+        self.skew = None
+        self.type = None
 
     def reset_maze(self):
         self.maze = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
@@ -53,6 +55,7 @@ class MazeGenerationAlgorithm:
 class RandomWeightedMaze(MazeGenerationAlgorithm):
     def __init__(self, screen_manager, rect_array_obj, color_manager, animation_manager):
         super().__init__(screen_manager, rect_array_obj, color_manager, animation_manager)
+        self.type = MazeGenerationAlgorithmTypes.RANDOM_WEIGHTED_MAZE
 
     def create_random_weighted_maze(self):
         self.reset_maze()
@@ -70,6 +73,7 @@ class RandomWeightedMaze(MazeGenerationAlgorithm):
 class RandomMarkedMaze(MazeGenerationAlgorithm):
     def __init__(self, screen_manager, rect_array_obj, color_manager, animation_manager):
         super().__init__(screen_manager, rect_array_obj, color_manager, animation_manager)
+        self.type = MazeGenerationAlgorithmTypes.RANDOM_MARKED_MAZE
 
     def create_random_marked_maze(self):
         self.reset_maze()
@@ -83,16 +87,16 @@ class RandomMarkedMaze(MazeGenerationAlgorithm):
                     self.animation_manager.add_coords_to_animation_dict((y, x), AnimationTypes.EXPANDING_SQUARE, self.color_manager.MARKED_NODE_COLOR, AnimationBackgroundTypes.THEME_BACKGROUND)
 
 
-class RecursiveDivisionSkew(Enum):
+class RecursiveDivisionSkew(IntEnum):
     VERTICAL = 0
     HORIZONTAL = 1
 
 class RecursiveDivisionMaze(MazeGenerationAlgorithm):
     def __init__(self, screen_manager, rect_array_obj, color_manager, animation_manager):
         super().__init__(screen_manager, rect_array_obj, color_manager, animation_manager)
-        self.skew = None
         self.empty_nodes_x = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
         self.empty_nodes_y = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
+        self.type = MazeGenerationAlgorithmTypes.RECURSIVE_DIVISION
 
     def recursive_division(self, start_x, start_y, end_x, end_y, skew=None):
         if (

@@ -52,11 +52,23 @@ class Stack:
         return counter
 
     def remove_empty_values(self):
-        items_to_remove_indexes = []
         for i in range(len(self.stack)):
             if self.stack[i] == None:
                 self.stack = self.stack[:i]
                 break
+
+    def gen_copy_without_empty_values(self):
+        stack_copy = self.stack.copy()
+        items_to_remove_indexes = []
+        for i in range(len(stack_copy)):
+            if stack_copy[i] == None:
+                items_to_remove_indexes.append(i)
+
+        for index in items_to_remove_indexes[::-1]:
+            stack_copy.pop(index)
+
+        return stack_copy
+
 
     def reverse(self):
         self.remove_empty_values()
