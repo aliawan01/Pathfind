@@ -3,8 +3,10 @@ from pygame.locals import *
 
 from animations import *
 from grid import *
+from copy import deepcopy
 
 from enum import IntEnum
+import json
 
 class ColorNodeTypes(IntEnum):
     BORDER_COLOR = 0,
@@ -37,92 +39,75 @@ class ColorManager:
             'purple': (238, 130, 238),
             'violet': (200, 116, 252),
             'crimson': (148, 31, 54),
-            'light_green': (62, 222, 134)
+            'light_green': (62, 222, 134),
+            'bright_yellow': (255, 252, 0)
         }
 
-        self.dark_theme_colors = {
-            ColorNodeTypes.BORDER_COLOR: self.colors['white'],
-            ColorNodeTypes.BOARD_COLOR: self.colors['black'],
-            ColorNodeTypes.MARKED_NODE_COLOR: self.colors['red'],
-            ColorNodeTypes.WEIGHTED_NODE_COLOR: self.colors['purple'],
-            ColorNodeTypes.PATH_NODE_FOREGROUND_COLOR: self.colors['orange'],
-            ColorNodeTypes.PATH_NODE_BACKGROUND_COLOR: self.colors['white'],
-            ColorNodeTypes.CHECKED_NODE_FOREGROUND_COLOR: self.colors['neon_blue'],
-            ColorNodeTypes.CHECKED_NODE_BACKGROUND_COLOR: self.colors['blue'],
-            ColorNodeTypes.START_NODE_COLOR: self.colors['blue'],
-            ColorNodeTypes.END_NODE_COLOR: self.colors['green']
-        }
-
-        self.light_theme_colors = {
-            ColorNodeTypes.BORDER_COLOR: self.colors['black'],
-            ColorNodeTypes.BOARD_COLOR: self.colors['white'],
-            ColorNodeTypes.MARKED_NODE_COLOR: self.colors['crimson'],
-            ColorNodeTypes.WEIGHTED_NODE_COLOR: self.colors['violet'],
-            ColorNodeTypes.PATH_NODE_FOREGROUND_COLOR: self.colors['orange'],
-            ColorNodeTypes.PATH_NODE_BACKGROUND_COLOR: self.colors['white'],
-            ColorNodeTypes.CHECKED_NODE_FOREGROUND_COLOR: self.colors['neon_blue'],
-            ColorNodeTypes.CHECKED_NODE_BACKGROUND_COLOR: self.colors['blue'],
-            ColorNodeTypes.START_NODE_COLOR: self.colors['blue'],
-            ColorNodeTypes.END_NODE_COLOR: self.colors['light_green']
-        }
-
+        self.themes_list = []
         self.theme_colors = {}
+        self.load_themes_into_themes_list()
         self.set_dark_theme()
+
+    def get_theme_color(self, type):
+        return pygame.Color(self.theme_colors[type])
 
     @property
     def BORDER_COLOR(self):
-        return pygame.Color(self.theme_colors[ColorNodeTypes.BORDER_COLOR])
+        return self.get_theme_color(ColorNodeTypes.BORDER_COLOR)
 
     @property
     def BOARD_COLOR(self):
-        return pygame.Color(self.theme_colors[ColorNodeTypes.BOARD_COLOR])
+        return self.get_theme_color(ColorNodeTypes.BOARD_COLOR)
 
     @property
     def MARKED_NODE_COLOR(self):
-        return pygame.Color(self.theme_colors[ColorNodeTypes.MARKED_NODE_COLOR])
+        return self.get_theme_color(ColorNodeTypes.MARKED_NODE_COLOR)
 
     @property
     def WEIGHTED_NODE_COLOR(self):
-        return pygame.Color(self.theme_colors[ColorNodeTypes.WEIGHTED_NODE_COLOR])
+        return self.get_theme_color(ColorNodeTypes.WEIGHTED_NODE_COLOR)
 
     @property
     def PATH_NODE_FOREGROUND_COLOR(self):
-        return pygame.Color(self.theme_colors[ColorNodeTypes.PATH_NODE_FOREGROUND_COLOR])
+        return self.get_theme_color(ColorNodeTypes.PATH_NODE_FOREGROUND_COLOR)
 
     @property
     def PATH_NODE_BACKGROUND_COLOR(self):
-        return pygame.Color(self.theme_colors[ColorNodeTypes.PATH_NODE_BACKGROUND_COLOR])
+        return self.get_theme_color(ColorNodeTypes.PATH_NODE_BACKGROUND_COLOR)
 
     @property
     def CHECKED_NODE_FOREGROUND_COLOR(self):
-        return pygame.Color(self.theme_colors[ColorNodeTypes.CHECKED_NODE_FOREGROUND_COLOR])
+        return self.get_theme_color(ColorNodeTypes.CHECKED_NODE_FOREGROUND_COLOR)
 
     @property
     def CHECKED_NODE_BACKGROUND_COLOR(self):
-        return pygame.Color(self.theme_colors[ColorNodeTypes.CHECKED_NODE_BACKGROUND_COLOR])
+        return self.get_theme_color(ColorNodeTypes.CHECKED_NODE_BACKGROUND_COLOR)
 
     @property
     def START_NODE_COLOR(self):
-        return pygame.Color(self.theme_colors[ColorNodeTypes.START_NODE_COLOR])
+        return self.get_theme_color(ColorNodeTypes.START_NODE_COLOR)
 
     @property
     def END_NODE_COLOR(self):
-        return pygame.Color(self.theme_colors[ColorNodeTypes.END_NODE_COLOR])
+        return self.get_theme_color(ColorNodeTypes.END_NODE_COLOR)
 
     def set_dark_theme(self):
-        self.theme_colors = self.dark_theme_colors.copy()
+        self.theme_colors = self.get_theme_from_themes_list("Dark Theme")
 
     def set_and_animate_dark_theme(self, current_pathfinding_algorithm):
-        self.set_and_animate_theme_colors_dict(self.dark_theme_colors, current_pathfinding_algorithm)
+        self.set_and_animate_theme_colors_dict(self.get_theme_from_themes_list("Dark Theme"), current_pathfinding_algorithm)
 
     def set_light_theme(self):
-        self.theme_colors = self.light_theme_colors.copy()
+        self.theme_colors = self.get_theme_from_themes_list("Light Theme")
 
     def set_and_animate_light_theme(self, current_pathfinding_algorithm):
-        self.set_and_animate_theme_colors_dict(self.light_theme_colors, current_pathfinding_algorithm)
+        self.set_and_animate_theme_colors_dict(self.get_theme_from_themes_list("Light Theme"), current_pathfinding_algorithm)
+
+    def extract_rgb_color_from_pygame_color(self, color):
+        return (color[0], color[1], color[2])
 
     def set_node_color(self, node_type, color):
-        self.theme_colors[node_type] = (color[0], color[1], color[2])
+        self.theme_colors[node_type] = self.extract_rgb_color_from_pygame_color(color)
 
     def set_theme_colors_dict(self, new_theme_colors_dict):
         self.theme_colors = new_theme_colors_dict.copy()
@@ -130,7 +115,7 @@ class ColorManager:
     def get_theme_colors_dict(self):
         return self.theme_colors
 
-    def set_and_animate_theme_colors_dict(self, new_theme_colors_dict, current_pathfinding_algorithm):
+    def set_and_animate_theme_colors_dict(self, new_theme_colors_dict, current_pathfinding_algorithm=None):
         new_theme_colors_dict_copy = new_theme_colors_dict.copy()
         changed_color_node_types = []
 
@@ -183,3 +168,85 @@ class ColorManager:
                     self.animation_manager.add_coords_to_animation_dict(end_node_coords, AnimationTypes.LINEAR_COLOR_INTERPOLATION, (self.END_NODE_COLOR, pygame.Color(color)), self.theme_colors[ColorNodeTypes.BOARD_COLOR])
 
             self.theme_colors[node_type] = color
+
+    def load_themes_into_themes_list(self):
+        with open('data/themes/themes.json', 'r') as file:
+            self.themes_list = json.loads(file.read())
+            for theme_dict in self.themes_list:
+                old_colors_dict = theme_dict['colors']
+                new_colors_dict = {
+                    0: old_colors_dict["0"],
+                    1: old_colors_dict["1"],
+                    2: old_colors_dict["2"],
+                    3: old_colors_dict["3"],
+                    4: old_colors_dict["4"],
+                    5: old_colors_dict["5"],
+                    6: old_colors_dict["6"],
+                    7: old_colors_dict["7"],
+                    8: old_colors_dict["8"],
+                    9: old_colors_dict["9"]
+                }
+
+                for color_node_type, color in new_colors_dict.items():
+                    if type(color) == list:
+                        new_colors_dict[color_node_type] = tuple(color)
+                    else:
+                        if color in self.colors.keys():
+                            new_colors_dict[color_node_type] = self.colors[color]
+                        else:
+                            new_colors_dict[color_node_type] = self.colors["bright_yellow"]
+
+                theme_dict['colors'] = new_colors_dict
+
+    def save_themes_list(self):
+        with open('data/themes/themes.json', 'w') as file:
+            file.write(json.dumps(self.themes_list))
+
+    def save_theme_to_themes_list(self, name, colors_dict):
+        for theme in self.themes_list:
+            if theme['name'] == name:
+                theme['colors'] = colors_dict
+                break
+        else:
+            self.themes_list.append({"name": name, "custom_theme": True, "colors": colors_dict})
+
+        self.save_themes_list()
+
+    def delete_custom_theme_from_themes_list(self, name):
+        removal_index = None
+        for i in range(len(self.themes_list)):
+            if self.themes_list[i]['name'] == name and self.themes_list[i]['custom_theme']:
+                removal_index = i
+                break
+
+        if removal_index != None:
+            self.themes_list.pop(removal_index)
+            self.save_themes_list()
+
+    def do_custom_themes_exists(self):
+        for theme in self.themes_list:
+            if theme['custom_theme']:
+                return True
+
+        return False
+
+    def check_custom_theme_exists(self, name):
+        for theme in self.themes_list:
+            if theme['name'] == name and theme['custom_theme']:
+                return True
+
+        return False
+
+    def get_theme_from_themes_list(self, name):
+        for theme in self.themes_list:
+            if theme['name'] == name:
+                return deepcopy(theme['colors'])
+        else:
+            return None
+
+    def get_all_theme_names_from_themes_list(self):
+        theme_names = []
+        for theme in self.themes_list:
+            theme_names.append(theme['name'])
+
+        return theme_names

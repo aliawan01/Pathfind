@@ -1,6 +1,7 @@
 import pygame
 import pygame_gui
 import sys
+import faulthandler
 
 from animations import *
 from color_manager import *
@@ -91,7 +92,7 @@ def main():
     server = Server(grid, color_manager)
     client = Client(screen_manager, grid, rect_array, pathfinding_algorithms_dict, maze_generation_algorithms_dict, animation_manager, events_dict, color_manager)
 
-    ui_manager = GameUIManager(screen_manager, rect_array, grid, client, pathfinding_algorithms_dict, maze_generation_algorithms_dict, events_dict)
+    ui_manager = GameUIManager(screen_manager, rect_array, color_manager, grid, client, pathfinding_algorithms_dict, maze_generation_algorithms_dict, events_dict)
     screen_lock = False
 
     mark_spray = False
@@ -144,6 +145,18 @@ def main():
 
             if event.type == pygame_gui.UI_TEXT_ENTRY_FINISHED:
                 ui_manager.handle_ui_text_entry_finished_event(event)
+
+            if event.type == pygame_gui.UI_WINDOW_CLOSE:
+                ui_manager.handle_ui_window_closed_event(event)
+
+            if event.type == pygame_gui.UI_COLOUR_PICKER_COLOUR_PICKED:
+                ui_manager.handle_ui_color_picker_color_picked_event(event)
+
+            if event.type == pygame_gui.UI_SELECTION_LIST_NEW_SELECTION:
+                ui_manager.handle_ui_selection_list_new_selection(event)
+
+            if event.type == pygame_gui.UI_SELECTION_LIST_DROPPED_SELECTION:
+                ui_manager.handle_ui_selection_list_dropped_selection(event)
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_F6:
@@ -213,17 +226,17 @@ def main():
                     client.create_network_event(NetworkingEventTypes.CLEAR_GRID)
 
                 # # NOTE(ali): Clearing marked nodes
-                if event.key == pygame.K_F3:
-                    if current_maze_generation_algorithm != None:
-                        current_maze_generation_algorithm.reset_maze_pointer()
-
-                    grid.reset_marked_nodes()
-                    client.create_network_event(NetworkingEventTypes.CLEAR_MARKED_NODES)
-
-                # NOTE(ali): Clearing weighted nodes
-                if event.key == pygame.K_F4:
-                    grid.reset_all_weights()
-                    client.create_network_event(NetworkingEventTypes.CLEAR_WEIGHTED_NODES)
+                # if event.key == pygame.K_F3:
+                #     if current_maze_generation_algorithm != None:
+                #         current_maze_generation_algorithm.reset_maze_pointer()
+                #
+                #     grid.reset_marked_nodes()
+                #     client.create_network_event(NetworkingEventTypes.CLEAR_MARKED_NODES)
+                #
+                # # NOTE(ali): Clearing weighted nodes
+                # if event.key == pygame.K_F4:
+                #     grid.reset_all_weights()
+                #     client.create_network_event(NetworkingEventTypes.CLEAR_WEIGHTED_NODES)
                 #
                 # # NOTE(ali): Clearing checked nodes
                 # if event.key == pygame.K_F3:
@@ -524,4 +537,5 @@ def main():
 
 
 if __name__ == '__main__':
+    faulthandler.enable()
     main()

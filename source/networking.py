@@ -390,10 +390,10 @@ class Client:
                             self.current_maze_generation_algorithm.reset_maze_pointer()
 
                         for coord in marked_nodes_coords:
-                            self.grid.mark_rect_node(self.rect_array_obj.array[coord[0]][coord[1]])
+                            self.grid.mark_node(CursorNodeTypes.MARKED_NODE, self.rect_array_obj.array[coord[0]][coord[1]], None)
 
                         for coord, weight in weighted_nodes_coords:
-                            self.grid.mark_weighted_node(self.rect_array_obj.array[coord[0]][coord[1]], weight)
+                            self.grid.mark_weighted_node(CursorNodeTypes.WEIGHTED_NODE, self.rect_array_obj.array[coord[0]][coord[1]], weight)
 
                     case NetworkingEventTypes.SEND_THEME:
                         theme_keys = args[0]

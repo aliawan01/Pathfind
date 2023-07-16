@@ -73,11 +73,14 @@ class PathfindingAlgorithm:
         else:
             return -1
 
-    def reset_path_pointer(self):
+    def reset_path_pointer(self, background_color=AnimationBackgroundTypes.THEME_BACKGROUND):
         self.path_pointer = -1
         if self.reset_path_nodes == False:
             for coord in self.path.gen_copy_without_empty_values():
-                self.animation_manager.add_coords_to_animation_dict(coord, AnimationTypes.SHRINKING_SQUARE, self.color_manager.PATH_NODE_FOREGROUND_COLOR, AnimationBackgroundTypes.THEME_BACKGROUND)
+                if coord not in self.checked_nodes.gen_copy_without_empty_values():
+                    self.animation_manager.add_coords_to_animation_dict(coord, AnimationTypes.SHRINKING_SQUARE, self.color_manager.PATH_NODE_FOREGROUND_COLOR, AnimationBackgroundTypes.THEME_BACKGROUND)
+                else:
+                    self.animation_manager.add_coords_to_animation_dict(coord, AnimationTypes.SHRINKING_SQUARE, self.color_manager.PATH_NODE_FOREGROUND_COLOR, background_color)
 
         self.reset_path_nodes = True
         self.path = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
