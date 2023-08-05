@@ -40,9 +40,11 @@ class Client:
         self.maze_generation_algorithms_dict = maze_generation_algorithms_dict
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.connected_to_server = False
+        self.server_connection_broken = False
+        self.received_new_theme = False
         self.pathfinding_algorithms_dict = pathfinding_algorithms_dict
         self.animation_manager = animation_manager
-        self.color_manager = color_manager
+        self.color_manager: ColorManager = color_manager
         self.events_dict = events_dict
 
         self.changed_resolution_divider = False
@@ -61,14 +63,13 @@ class Client:
 
     def connect_to_server(self, server_ip_address, port):
         if self.connected_to_server == False:
-            if self.client_socket == None:
-                self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
+            self.server_connection_broken = False
             try:
-                self.client_socket.connect((server_ip_address, port))
-            except ConnectionRefusedError:
+                self.client_socket = socket.create_connection((server_ip_address, port), 5)
+                self.client_socket.settimeout(None)
+            except:
                 print(f"[CLIENT] Unable to connect to server with ip address: {server_ip_address} on port: {port}")
-                return
+                return False
 
             print(f"[CLIENT] Connected to server with ip address: {server_ip_address} on port: {port}")
             self.connected_to_server = True
@@ -135,13 +136,14 @@ class Client:
                     command = {NetworkingEventTypes.SEND_GRID_UPON_CONNECTION: args}
 
                 case NetworkingEventTypes.SEND_THEME:
-                    # command = theme keys, theme values
+                    # command = theme name, theme keys, theme values
+                    theme_name = self.color_manager.current_theme_name
                     theme_dict = self.color_manager.get_theme_colors_dict()
 
                     theme_keys = list(theme_dict.keys())
                     theme_values = list(theme_dict.values())
 
-                    command = {NetworkingEventTypes.SEND_THEME: [theme_keys, theme_values]}
+                    command = {NetworkingEventTypes.SEND_THEME: [theme_name, theme_keys, theme_values]}
 
                 case NetworkingEventTypes.SET_PATHFINDING_ALGORITHM_SPEED:
                     # args = pathfinding algorithm speed
@@ -216,7 +218,8 @@ class Client:
         while self.connected_to_server:
             try:
                 server_events = self.client_socket.recv(100000).decode()
-            except BrokenPipeError:
+            except (BrokenPipeError, ConnectionResetError):
+                self.server_connection_broken = True
                 self.connected_to_server = False
                 self.client_socket.shutdown(socket.SHUT_RDWR)
                 self.client_socket.close()
@@ -236,6 +239,7 @@ class Client:
 
                 match NetworkingEventTypes(int(event_type)):
                     case NetworkingEventTypes.DISCONNECT_FROM_SERVER:
+                        self.server_connection_broken = True
                         self.connected_to_server = False
                         self.client_socket.shutdown(socket.SHUT_RDWR)
                         self.client_socket.close()
@@ -396,14 +400,20 @@ class Client:
                             self.grid.mark_weighted_node(CursorNodeTypes.WEIGHTED_NODE, self.rect_array_obj.array[coord[0]][coord[1]], weight)
 
                     case NetworkingEventTypes.SEND_THEME:
-                        theme_keys = args[0]
-                        theme_values = args[1]
+                        theme_name = args[0]
+                        theme_keys = args[1]
+                        theme_values = args[2]
+
+                        if self.color_manager.current_theme_name != theme_name:
+                            self.received_new_theme = True
 
                         theme_colors_dict = {}
                         for i in range(len(theme_keys)):
-                            theme_colors_dict[ColorNodeTypes(theme_keys[i])] = tuple(theme_values[i])
+                            theme_colors_dict[theme_keys[i]] = tuple(theme_values[i])
 
+                        self.color_manager.current_theme_name = theme_name
                         self.color_manager.set_and_animate_theme_colors_dict(theme_colors_dict, self.current_pathfinding_algorithm)
+                        self.color_manager.save_theme_to_themes_list(theme_name, theme_colors_dict)
 
                     case NetworkingEventTypes.SET_PATHFINDING_ALGORITHM_SPEED:
                         if args[0] != self.pathfinding_algorithm_speed:
@@ -419,22 +429,29 @@ class Server:
     def __init__(self, grid, color_manager):
         self.grid = grid
         self.color_manager = color_manager
-        self.ip_address = "127.0.0.1"
-        self.port = 5000
         self.connected_clients_dict = {}
         self.server_running = False
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.pathfinding_algorithm_speed = 25
         self.recursive_division_speed = 15
 
+    def get_number_of_currently_connected_clients(self):
+        return len(self.connected_clients_dict.values())
+
     def handle_client(self, client_socket, client_address):
         print(f"[SERVER] Currently connected clients: {self.connected_clients_dict}")
-        print(f"[SERVER] Length of currently connected clients: {len(self.connected_clients_dict.values())}")
+        print(f"[SERVER] Length of currently connected clients: {self.get_number_of_currently_connected_clients()}")
 
         while self.server_running:
             try:
                 client_info = client_socket.recv(100000).decode()
             except BrokenPipeError:
+                return
+            except ConnectionResetError:
+                self.connected_clients_dict.pop(client_address)
+                print(f"[SERVER] Client disconnected: {client_address}")
+                print(f"[SERVER] Currently connected clients: {self.connected_clients_dict}")
+                print(f"[SERVER] Length of currently connected clients: {self.get_number_of_currently_connected_clients()}")
                 return
 
             if client_info == '':
@@ -482,28 +499,29 @@ class Server:
                 board_info.append(self.pathfinding_algorithm_speed)
                 board_info.append(self.recursive_division_speed)
 
+                theme_name = self.color_manager.current_theme_name
                 theme_dict = self.color_manager.get_theme_colors_dict()
 
                 theme_keys = list(theme_dict.keys())
                 theme_values = list(theme_dict.values())
 
                 grid_command = {NetworkingEventTypes.SEND_GRID_UPON_CONNECTION: board_info}
-                theme_command = {NetworkingEventTypes.SEND_THEME: [theme_keys, theme_values]}
+                theme_command = {NetworkingEventTypes.SEND_THEME: [theme_name, theme_keys, theme_values]}
 
                 client_socket.sendall(json.dumps(grid_command).encode())
                 client_socket.sendall(json.dumps(theme_command).encode())
 
             threading.Thread(target=self.handle_client, args=(client_socket, client_address), daemon=True).start()
 
-    def run_server(self):
+    def run_server(self, ip_address, port):
         if self.server_running == False:
-            print(f"[SERVER] Running on ip address: {self.ip_address}, port: {self.port}")
+            print(f"[SERVER] Running on ip address: {ip_address}, port: {port}")
             self.server_running = True
             if self.server_socket == None:
                 self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
             self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-            self.server_socket.bind((self.ip_address, self.port))
+            self.server_socket.bind((ip_address, port))
             self.server_socket.listen(10)
             threading.Thread(target=self.client_server_loop, daemon=True).start()
 

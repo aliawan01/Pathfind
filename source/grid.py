@@ -180,17 +180,18 @@ class Grid:
         self.color_manager = color_manager
         self.rect_array_obj = rect_array_obj
         self.animation_manager = animation_manager
+        self.line_width = 1
 
     def draw_grid(self):
         pos_x = self.screen_manager.column_width
         pos_y = self.screen_manager.grid_height_offset
 
         for x in range(self.screen_manager.num_of_columns):
-            pygame.draw.line(self.screen_manager.screen, self.color_manager.BORDER_COLOR, (pos_x, self.screen_manager.grid_height_offset), (pos_x, self.screen_manager.screen_height))
+            pygame.draw.line(self.screen_manager.screen, self.color_manager.BORDER_COLOR, (pos_x, self.screen_manager.grid_height_offset), (pos_x, self.screen_manager.screen_height), width=self.line_width)
             pos_x += self.screen_manager.column_width
 
         for x in range(self.screen_manager.num_of_rows):
-            pygame.draw.line(self.screen_manager.screen, self.color_manager.BORDER_COLOR, (0, pos_y), (self.screen_manager.grid_width, pos_y))
+            pygame.draw.line(self.screen_manager.screen, self.color_manager.BORDER_COLOR, (0, pos_y), (self.screen_manager.grid_width, pos_y), width=self.line_width)
             pos_y += self.screen_manager.row_width
 
     def draw_rect_nodes(self):
@@ -207,9 +208,14 @@ class Grid:
 
     def mark_node(self, node_type, node, weight):
         if node_type == CursorNodeTypes.MARKED_NODE:
-            if node.marked == False:
+            if node.marked == False and node.is_user_weight == False:
                 node.marked = True
                 self.animation_manager.add_coords_to_animation_dict(node.coords, AnimationTypes.EXPANDING_SQUARE, self.color_manager.MARKED_NODE_COLOR, AnimationBackgroundTypes.THEME_BACKGROUND, 2)
+
+            elif node.marked == False and node.is_user_weight:
+                node.marked = True
+                node.is_user_weight = False
+                self.animation_manager.add_coords_to_animation_dict(node.coords, AnimationTypes.EXPANDING_SQUARE, self.color_manager.MARKED_NODE_COLOR, self.color_manager.WEIGHTED_NODE_COLOR, 2)
 
         elif node_type == CursorNodeTypes.WEIGHTED_NODE:
             if node.is_user_weight == False and node.marked == False:

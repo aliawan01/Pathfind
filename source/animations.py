@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
 
-from enum import Enum
+from enum import Enum, IntEnum
 
 from stack import Stack
 from queue_classes import Queue, PriorityQueue
@@ -30,6 +30,12 @@ class AnimationNode:
         self.width = 0
         self.rect = pygame.Rect(0, 0, column_width, row_width)
 
+class UIAnimationNode:
+    def __init__(self, initial_colour, final_colour):
+        self.initial_colour = initial_colour
+        self.final_colour = final_colour
+        self.fraction = 0
+
 class AnimationManager:
     def __init__(self, screen_manager, rect_array_obj):
         self.screen_manager = screen_manager
@@ -37,6 +43,7 @@ class AnimationManager:
         self.start_node_coords, self.end_node_coords = self.rect_array_obj.get_start_and_end_node_coords()
         self.animation_dict = {}
         self.board_and_border_interpolation_dict = {AnimationTypes.BOARD_LINEAR_INTERPOLATION: None, AnimationTypes.BORDER_LINEAR_INTERPOLATION: None}
+        self.ui_element_interpolation_dict = {}
 
     def add_coords_to_animation_dict(self, coords, animation_type, foreground_color, background_color, speed=1):
         if tuple(coords) in self.animation_dict.keys():
@@ -151,3 +158,26 @@ class AnimationManager:
 
         for removing_coord in coords_to_remove:
             self.animation_dict.pop(removing_coord)
+
+    def add_ui_element_to_ui_element_interpolation_dict(self, ui_element_type, initial_colour, final_colour):
+        if ui_element_type not in self.ui_element_interpolation_dict.keys():
+            self.ui_element_interpolation_dict[ui_element_type] = UIAnimationNode(initial_colour, final_colour)
+
+    def update_ui_element_interpolation_dict(self):
+        ui_elements_to_remove = []
+        ui_colors_to_return = []
+
+        for ui_element_type, node in self.ui_element_interpolation_dict.items():
+            node.fraction = round(node.fraction + (self.screen_manager.resolution_divider/100), 2)
+
+            if node.fraction > 1:
+                ui_elements_to_remove.append(ui_element_type)
+            else:
+                lerp_colour = node.initial_colour.lerp(node.final_colour, node.fraction)
+                ui_colors_to_return.append({ui_element_type: lerp_colour})
+
+
+        for ui_element in ui_elements_to_remove:
+            self.ui_element_interpolation_dict.pop(ui_element)
+
+        return ui_colors_to_return

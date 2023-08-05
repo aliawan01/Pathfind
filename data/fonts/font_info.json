@@ -1,0 +1,7 @@
+{
+    "Roboto": {
+        "regular": "data/fonts/Roboto/Roboto-Medium.ttf",
+        "bold": "data/fonts/Roboto/Roboto-Bold.ttf",
+        "italic": "data/fonts/Roboto/Roboto-MediumItalic.ttf"
+    }
+}

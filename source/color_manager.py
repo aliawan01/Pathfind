@@ -21,12 +21,34 @@ class ColorNodeTypes(IntEnum):
     START_NODE_COLOR = 8,
     END_NODE_COLOR = 9
 
+class ColorUITypes(IntEnum):
+    UI_BACKGROUND_COLOR = 10,
+    UI_HOVERED_BACKGROUND_COLOR = 11,
+    UI_DISABLED_BACKGROUND_COLOR = 12,
+    UI_PRESSED_BACKGROUND_COLOR = 13,
+    UI_BORDER_COLOR = 14,
+    UI_HOVERED_BORDER_COLOR = 15,
+    UI_DISABLED_BORDER_COLOR = 16,
+    UI_PRESSED_BORDER_COLOR = 17,
+    UI_SELECTED_COLOR = 18,
+    UI_WINDOW_BACKGROUND_COLOR = 19,
+    UI_TEXT_ENTRY_LINE_BORDER_COLOR = 20,
+    UI_TEXT_COLOR = 21,
+    UI_TEXT_HOVERED_COLOR = 22,
+    UI_TEXT_PRESSED_COLOR = 23,
+    UI_TEXT_SELECTED_FOREGROUND_COLOR = 24,
+    UI_TEXT_SELECTED_BACKGROUND_COLOR = 25,
+    UI_TEXT_DISABLED_COLOR = 26,
+    UI_TITLE_BACKGROUND_COLOR = 27,
+    UI_TITLE_BORDER_COLOR = 28,
+    UI_TITLE_TEXT_COLOR = 29
 
 class ColorManager:
     def __init__(self, screen_manager, rect_array_obj, animation_manager):
         self.screen_manager = screen_manager
         self.rect_array_obj = rect_array_obj
-        self.animation_manager = animation_manager
+        self.animation_manager: AnimationManager = animation_manager
+        self.current_theme_name = 'Dark Theme'
         self.colors = {
             'white': (255, 255, 255),
             'black': (0, 0, 0),
@@ -90,6 +112,86 @@ class ColorManager:
     @property
     def END_NODE_COLOR(self):
         return self.get_theme_color(ColorNodeTypes.END_NODE_COLOR)
+
+    @property
+    def UI_BACKGROUND_COLOR(self):
+        return self.get_theme_color(ColorUITypes.UI_BACKGROUND_COLOR)
+
+    @property
+    def UI_HOVERED_BACKGROUND_COLOR(self):
+        return self.get_theme_color(ColorUITypes.UI_HOVERED_BACKGROUND_COLOR)
+
+    @property
+    def UI_DISABLED_BACKGROUND_COLOR(self):
+        return self.get_theme_color(ColorUITypes.UI_DISABLED_BACKGROUND_COLOR)
+
+    @property
+    def UI_PRESSED_BACKGROUND_COLOR(self):
+        return self.get_theme_color(ColorUITypes.UI_PRESSED_BACKGROUND_COLOR)
+
+    @property
+    def UI_BORDER_COLOR(self):
+        return self.get_theme_color(ColorUITypes.UI_BORDER_COLOR)
+
+    @property
+    def UI_HOVERED_BORDER_COLOR(self):
+        return self.get_theme_color(ColorUITypes.UI_HOVERED_BORDER_COLOR)
+
+    @property
+    def UI_DISABLED_BORDER_COLOR(self):
+        return self.get_theme_color(ColorUITypes.UI_DISABLED_BORDER_COLOR)
+
+    @property
+    def UI_PRESSED_BORDER_COLOR(self):
+        return self.get_theme_color(ColorUITypes.UI_PRESSED_BORDER_COLOR)
+
+    @property
+    def UI_SELECTED_COLOR(self):
+        return self.get_theme_color(ColorUITypes.UI_SELECTED_COLOR)
+
+    @property
+    def UI_WINDOW_BACKGROUND_COLOR(self):
+        return self.get_theme_color(ColorUITypes.UI_WINDOW_BACKGROUND_COLOR)
+
+    @property
+    def UI_TEXT_ENTRY_LINE_BORDER_COLOR(self):
+        return self.get_theme_color(ColorUITypes.UI_TEXT_ENTRY_LINE_BORDER_COLOR)
+
+    @property
+    def UI_TEXT_COLOR(self):
+        return self.get_theme_color(ColorUITypes.UI_TEXT_COLOR)
+
+    @property
+    def UI_TEXT_HOVERED_COLOR(self):
+        return self.get_theme_color(ColorUITypes.UI_TEXT_HOVERED_COLOR)
+
+    @property
+    def UI_TEXT_PRESSED_COLOR(self):
+        return self.get_theme_color(ColorUITypes.UI_TEXT_PRESSED_COLOR)
+
+    @property
+    def UI_TEXT_SELECTED_FOREGROUND_COLOR(self):
+        return self.get_theme_color(ColorUITypes.UI_TEXT_SELECTED_FOREGROUND_COLOR)
+
+    @property
+    def UI_TEXT_SELECTED_BACKGROUND_COLOR(self):
+        return self.get_theme_color(ColorUITypes.UI_TEXT_SELECTED_BACKGROUND_COLOR)
+
+    @property
+    def UI_TEXT_DISABLED_COLOR(self):
+        return self.get_theme_color(ColorUITypes.UI_TEXT_DISABLED_COLOR)
+
+    @property
+    def UI_TITLE_BACKGROUND_COLOR(self):
+        return self.get_theme_color(ColorUITypes.UI_TITLE_BACKGROUND_COLOR)
+
+    @property
+    def UI_TITLE_BORDER_COLOR(self):
+        return self.get_theme_color(ColorUITypes.UI_TITLE_BORDER_COLOR)
+
+    @property
+    def UI_TITLE_TEXT_COLOR(self):
+        return self.get_theme_color(ColorUITypes.UI_TITLE_TEXT_COLOR)
 
     def set_dark_theme(self):
         self.theme_colors = self.get_theme_from_themes_list("Dark Theme")
@@ -167,6 +269,66 @@ class ColorManager:
                     start_node_coords, end_node_coords = self.rect_array_obj.get_start_and_end_node_coords()
                     self.animation_manager.add_coords_to_animation_dict(end_node_coords, AnimationTypes.LINEAR_COLOR_INTERPOLATION, (self.END_NODE_COLOR, pygame.Color(color)), self.theme_colors[ColorNodeTypes.BOARD_COLOR])
 
+                case ColorUITypes.UI_BACKGROUND_COLOR:
+                    self.animation_manager.add_ui_element_to_ui_element_interpolation_dict(ColorUITypes.UI_BACKGROUND_COLOR, self.UI_BACKGROUND_COLOR, color)
+
+                case ColorUITypes.UI_HOVERED_BACKGROUND_COLOR:
+                    self.animation_manager.add_ui_element_to_ui_element_interpolation_dict(ColorUITypes.UI_HOVERED_BACKGROUND_COLOR, self.UI_HOVERED_BACKGROUND_COLOR, color)
+
+                case ColorUITypes.UI_DISABLED_BACKGROUND_COLOR:
+                    self.animation_manager.add_ui_element_to_ui_element_interpolation_dict(ColorUITypes.UI_DISABLED_BACKGROUND_COLOR, self.UI_DISABLED_BACKGROUND_COLOR, color)
+
+                case ColorUITypes.UI_PRESSED_BACKGROUND_COLOR:
+                    self.animation_manager.add_ui_element_to_ui_element_interpolation_dict(ColorUITypes.UI_PRESSED_BACKGROUND_COLOR, self.UI_PRESSED_BACKGROUND_COLOR, color)
+
+                case ColorUITypes.UI_BORDER_COLOR:
+                    self.animation_manager.add_ui_element_to_ui_element_interpolation_dict(ColorUITypes.UI_BORDER_COLOR, self.UI_BORDER_COLOR, color)
+
+                case ColorUITypes.UI_HOVERED_BORDER_COLOR:
+                    self.animation_manager.add_ui_element_to_ui_element_interpolation_dict(ColorUITypes.UI_HOVERED_BORDER_COLOR, self.UI_HOVERED_BORDER_COLOR, color)
+
+                case ColorUITypes.UI_DISABLED_BORDER_COLOR:
+                    self.animation_manager.add_ui_element_to_ui_element_interpolation_dict(ColorUITypes.UI_DISABLED_BORDER_COLOR, self.UI_DISABLED_BORDER_COLOR, color)
+
+                case ColorUITypes.UI_PRESSED_BORDER_COLOR:
+                    self.animation_manager.add_ui_element_to_ui_element_interpolation_dict(ColorUITypes.UI_PRESSED_BORDER_COLOR, self.UI_PRESSED_BORDER_COLOR, color)
+
+                case ColorUITypes.UI_SELECTED_COLOR:
+                    self.animation_manager.add_ui_element_to_ui_element_interpolation_dict(ColorUITypes.UI_SELECTED_COLOR, self.UI_SELECTED_COLOR, color)
+
+                case ColorUITypes.UI_WINDOW_BACKGROUND_COLOR:
+                    self.animation_manager.add_ui_element_to_ui_element_interpolation_dict(ColorUITypes.UI_WINDOW_BACKGROUND_COLOR, self.UI_WINDOW_BACKGROUND_COLOR, color)
+
+                case ColorUITypes.UI_TEXT_ENTRY_LINE_BORDER_COLOR:
+                    self.animation_manager.add_ui_element_to_ui_element_interpolation_dict(ColorUITypes.UI_TEXT_ENTRY_LINE_BORDER_COLOR, self.UI_TEXT_ENTRY_LINE_BORDER_COLOR, color)
+
+                case ColorUITypes.UI_TEXT_COLOR:
+                    self.animation_manager.add_ui_element_to_ui_element_interpolation_dict(ColorUITypes.UI_TEXT_COLOR, self.UI_TEXT_COLOR, color)
+
+                case ColorUITypes.UI_TEXT_HOVERED_COLOR:
+                    self.animation_manager.add_ui_element_to_ui_element_interpolation_dict(ColorUITypes.UI_TEXT_HOVERED_COLOR, self.UI_TEXT_HOVERED_COLOR, color)
+
+                case ColorUITypes.UI_TEXT_PRESSED_COLOR:
+                    self.animation_manager.add_ui_element_to_ui_element_interpolation_dict(ColorUITypes.UI_TEXT_PRESSED_COLOR, self.UI_TEXT_PRESSED_COLOR, color)
+
+                case ColorUITypes.UI_TEXT_SELECTED_FOREGROUND_COLOR:
+                    self.animation_manager.add_ui_element_to_ui_element_interpolation_dict(ColorUITypes.UI_TEXT_SELECTED_FOREGROUND_COLOR, self.UI_TEXT_SELECTED_FOREGROUND_COLOR, color)
+
+                case ColorUITypes.UI_TEXT_SELECTED_BACKGROUND_COLOR:
+                    self.animation_manager.add_ui_element_to_ui_element_interpolation_dict(ColorUITypes.UI_TEXT_SELECTED_BACKGROUND_COLOR, self.UI_TEXT_SELECTED_BACKGROUND_COLOR, color)
+
+                case ColorUITypes.UI_TEXT_DISABLED_COLOR:
+                    self.animation_manager.add_ui_element_to_ui_element_interpolation_dict(ColorUITypes.UI_TEXT_DISABLED_COLOR, self.UI_TEXT_DISABLED_COLOR, color)
+
+                case ColorUITypes.UI_TITLE_BACKGROUND_COLOR:
+                    self.animation_manager.add_ui_element_to_ui_element_interpolation_dict(ColorUITypes.UI_TITLE_BACKGROUND_COLOR, self.UI_TITLE_BACKGROUND_COLOR, color)
+
+                case ColorUITypes.UI_TITLE_BORDER_COLOR:
+                    self.animation_manager.add_ui_element_to_ui_element_interpolation_dict(ColorUITypes.UI_TITLE_BORDER_COLOR, self.UI_TITLE_BORDER_COLOR, color)
+
+                case ColorUITypes.UI_TITLE_TEXT_COLOR:
+                    self.animation_manager.add_ui_element_to_ui_element_interpolation_dict(ColorUITypes.UI_TITLE_TEXT_COLOR, self.UI_TITLE_TEXT_COLOR, color)
+
             self.theme_colors[node_type] = color
 
     def load_themes_into_themes_list(self):
@@ -174,18 +336,10 @@ class ColorManager:
             self.themes_list = json.loads(file.read())
             for theme_dict in self.themes_list:
                 old_colors_dict = theme_dict['colors']
-                new_colors_dict = {
-                    0: old_colors_dict["0"],
-                    1: old_colors_dict["1"],
-                    2: old_colors_dict["2"],
-                    3: old_colors_dict["3"],
-                    4: old_colors_dict["4"],
-                    5: old_colors_dict["5"],
-                    6: old_colors_dict["6"],
-                    7: old_colors_dict["7"],
-                    8: old_colors_dict["8"],
-                    9: old_colors_dict["9"]
-                }
+
+                new_colors_dict = {}
+                for i in range(30):
+                    new_colors_dict[i] = old_colors_dict[str(i)]
 
                 for color_node_type, color in new_colors_dict.items():
                     if type(color) == list:
@@ -250,3 +404,11 @@ class ColorManager:
             theme_names.append(theme['name'])
 
         return theme_names
+
+    def get_all_custom_theme_names_from_themes_list(self):
+        custom_theme_names = []
+        for theme in self.themes_list:
+            if theme['custom_theme']:
+                custom_theme_names.append(theme['name'])
+
+        return custom_theme_names

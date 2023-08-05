@@ -79,9 +79,9 @@ def main():
         MazeGenerationAlgorithmTypes.RECURSIVE_DIVISION: recursive_division_maze,
     }
 
-    DRAW_CHECKED_NODES = pygame.USEREVENT + 5
-    DRAW_PATH = pygame.USEREVENT + 6
-    DRAW_MAZE = pygame.USEREVENT + 7
+    DRAW_CHECKED_NODES = pygame.event.custom_type()
+    DRAW_PATH = pygame.event.custom_type()
+    DRAW_MAZE = pygame.event.custom_type()
 
     events_dict = {
         'DRAW_CHECKED_NODES': DRAW_CHECKED_NODES,
@@ -92,7 +92,7 @@ def main():
     server = Server(grid, color_manager)
     client = Client(screen_manager, grid, rect_array, pathfinding_algorithms_dict, maze_generation_algorithms_dict, animation_manager, events_dict, color_manager)
 
-    ui_manager = GameUIManager(screen_manager, rect_array, color_manager, grid, client, pathfinding_algorithms_dict, maze_generation_algorithms_dict, events_dict)
+    ui_manager = GameUIManager(screen_manager, rect_array, color_manager, animation_manager, grid, client, server, pathfinding_algorithms_dict, maze_generation_algorithms_dict, events_dict)
     screen_lock = False
 
     mark_spray = False
@@ -168,15 +168,6 @@ def main():
                     print("Set dark theme")
                     color_manager.set_and_animate_dark_theme(current_pathfinding_algorithm)
                     client.create_network_event(NetworkingEventTypes.SEND_THEME)
-
-                if event.key == pygame.K_F8:
-                    # color_manager.set_and_animate_node_color(ColorNodeTypes.WEIGHTED_NODE_COLOR, color_manager.colors['purple'])
-                    color_manager.set_and_animate_node_color(ColorNodeTypes.BORDER_COLOR, color_manager.colors['white'])
-                    color_manager.set_and_animate_node_color(ColorNodeTypes.BOARD_COLOR, color_manager.colors['black'])
-                    color_manager.set_and_animate_node_color(ColorNodeTypes.MARKED_NODE_COLOR, color_manager.colors['red'])
-
-                if event.key == pygame.K_F9:
-                    color_manager.set_and_animate_node_color(ColorNodeTypes.WEIGHTED_NODE_COLOR, color_manager.colors['violet'])
 
                 if event.key == pygame.K_q:
                     client.create_network_event(NetworkingEventTypes.DISCONNECT_FROM_SERVER)
@@ -399,7 +390,7 @@ def main():
                     client.connect_to_server("127.0.0.1", 5000)
 
                 if event.key == pygame.K_F1:
-                    server.run_server()
+                    server.run_server("127.0.0.1", 5000)
                     client.connect_to_server("127.0.0.1", 5000)
 
             if screen_lock == False:
@@ -488,6 +479,7 @@ def main():
             color_manager.set_node_color(ColorNodeTypes.BORDER_COLOR, border_or_background_color['BORDER_COLOR'])
 
         grid.draw_grid()
+        ui_manager.handle_ui_colour_animations()
 
         pathfinding_algorithm_speed = ui_manager.get_pathfinding_algorithm_speed()
         recursive_division_speed = ui_manager.get_recursive_division_speed()
@@ -525,9 +517,10 @@ def main():
             ui_manager.update_screen_lock(screen_lock)
 
         server.get_pathfinding_algorithm_speed_and_recursive_division_speed(pathfinding_algorithm_speed, recursive_division_speed)
+        ui_manager.update_networking_server_connection_broken()
+        ui_manager.update_client_received_new_theme()
 
         ui_manager.draw()
-        # pygame.draw.rect(screen, color_manager.colors['green'], my_rect)
         pygame.draw.aaline(screen, color_manager.colors['green'], (top_left[0] + centerx, top_left[1] + centery), (top_right[0] + centerx, top_right[1] + centery))
         pygame.draw.aaline(screen, color_manager.colors['green'], (top_right[0] + centerx, top_right[1] + centery), (bottom_right[0] + centerx, bottom_right[1] + centery))
         pygame.draw.aaline(screen, color_manager.colors['green'], (bottom_right[0] + centerx, bottom_right[1] + centery), (bottom_left[0] + centerx, bottom_left[1] + centery))
