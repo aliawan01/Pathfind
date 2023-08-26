@@ -39,9 +39,7 @@ class ColorUITypes(IntEnum):
     UI_TEXT_SELECTED_FOREGROUND_COLOR = 24,
     UI_TEXT_SELECTED_BACKGROUND_COLOR = 25,
     UI_TEXT_DISABLED_COLOR = 26,
-    UI_TITLE_BACKGROUND_COLOR = 27,
-    UI_TITLE_BORDER_COLOR = 28,
-    UI_TITLE_TEXT_COLOR = 29
+    UI_TITLE_TEXT_COLOR = 27
 
 class ColorManager:
     def __init__(self, screen_manager, rect_array_obj, animation_manager):
@@ -182,14 +180,6 @@ class ColorManager:
         return self.get_theme_color(ColorUITypes.UI_TEXT_DISABLED_COLOR)
 
     @property
-    def UI_TITLE_BACKGROUND_COLOR(self):
-        return self.get_theme_color(ColorUITypes.UI_TITLE_BACKGROUND_COLOR)
-
-    @property
-    def UI_TITLE_BORDER_COLOR(self):
-        return self.get_theme_color(ColorUITypes.UI_TITLE_BORDER_COLOR)
-
-    @property
     def UI_TITLE_TEXT_COLOR(self):
         return self.get_theme_color(ColorUITypes.UI_TITLE_TEXT_COLOR)
 
@@ -320,12 +310,6 @@ class ColorManager:
                 case ColorUITypes.UI_TEXT_DISABLED_COLOR:
                     self.animation_manager.add_ui_element_to_ui_element_interpolation_dict(ColorUITypes.UI_TEXT_DISABLED_COLOR, self.UI_TEXT_DISABLED_COLOR, color)
 
-                case ColorUITypes.UI_TITLE_BACKGROUND_COLOR:
-                    self.animation_manager.add_ui_element_to_ui_element_interpolation_dict(ColorUITypes.UI_TITLE_BACKGROUND_COLOR, self.UI_TITLE_BACKGROUND_COLOR, color)
-
-                case ColorUITypes.UI_TITLE_BORDER_COLOR:
-                    self.animation_manager.add_ui_element_to_ui_element_interpolation_dict(ColorUITypes.UI_TITLE_BORDER_COLOR, self.UI_TITLE_BORDER_COLOR, color)
-
                 case ColorUITypes.UI_TITLE_TEXT_COLOR:
                     self.animation_manager.add_ui_element_to_ui_element_interpolation_dict(ColorUITypes.UI_TITLE_TEXT_COLOR, self.UI_TITLE_TEXT_COLOR, color)
 
@@ -338,7 +322,7 @@ class ColorManager:
                 old_colors_dict = theme_dict['colors']
 
                 new_colors_dict = {}
-                for i in range(30):
+                for i in range(len(ColorNodeTypes) + len(ColorUITypes)):
                     new_colors_dict[i] = old_colors_dict[str(i)]
 
                 for color_node_type, color in new_colors_dict.items():

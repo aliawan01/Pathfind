@@ -25,9 +25,10 @@ class ThemeWindowStages(IntEnum):
     CUSTOM_THEME_DELETE_SCREEN = 6
 
 class ThemeWindow(pygame_gui.elements.UIWindow):
-    def __init__(self, manager, color_manager):
+    def __init__(self, manager, color_manager, font_manager):
         self.manager = manager
         self.color_manager = color_manager
+        self.font_manager = font_manager
         self.window_width = 710
         self.window_height = 650
         self.window_running = False
@@ -73,8 +74,6 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
             ColorUITypes.UI_TEXT_SELECTED_FOREGROUND_COLOR: 'UI Selected Text Foreground',
             ColorUITypes.UI_TEXT_SELECTED_BACKGROUND_COLOR: 'UI Selected Text Background',
             ColorUITypes.UI_TEXT_DISABLED_COLOR: 'UI Disabled Text',
-            ColorUITypes.UI_TITLE_BACKGROUND_COLOR: 'UI Title Background',
-            ColorUITypes.UI_TITLE_BORDER_COLOR: 'UI Title Border',
             ColorUITypes.UI_TITLE_TEXT_COLOR: 'UI Title Text'
         }
 
@@ -117,7 +116,7 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
         self.next_page_button.disable()
 
         self.welcome_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((70, 5), (self.window_width - 180, 50)),
-                                                              html_text="Custom Theme Creation Menu",
+                                                              html_text=f"<font name={self.font_manager.current_font_name} pixel_size={self.font_manager.ui_title_font_size_value}><var>Custom Theme Creation Menu</var></font>",
                                                               object_id="#text_box_title",
                                                               container=self,
                                                               manager=self.manager)
@@ -158,7 +157,7 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
         self.next_page_button.enable()
 
         self.color_selection_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((70, 5), (self.window_width - 180, 50)),
-                                                                      html_text="Color Selection",
+                                                                      html_text=f"<font name={self.font_manager.current_font_name} pixel_size={self.font_manager.ui_title_font_size_value}><var>Color Selection</var></font>",
                                                                       object_id="#text_box_title",
                                                                       container=self,
                                                                       manager=self.manager)
@@ -243,7 +242,7 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
         self.stage = ThemeWindowStages.CUSTOM_THEME_CREATION_FINISH_SCREEN
         self.next_page_button.disable()
         self.finish_screen_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((70, 5), (self.window_width - 180, 50)),
-                                                                    html_text="Create Theme",
+                                                                    html_text=f"<font name={self.font_manager.current_font_name} pixel_size={self.font_manager.ui_title_font_size_value}><var>Create Theme</var></font>",
                                                                     object_id="#text_box_title",
                                                                     container=self,
                                                                     manager=self.manager)
@@ -294,7 +293,7 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
         self.custom_theme_editing_previous_page_button.disable()
 
         self.custom_theme_editing_welcome_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((70, 5), (self.window_width - 180, 50)),
-                                                                                   html_text="Custom Theme Editing Menu",
+                                                                                   html_text=f"<font name={self.font_manager.current_font_name} pixel_size={self.font_manager.ui_title_font_size_value}><var>Custom Theme Editing Menu</var></font>",
                                                                                    object_id="#text_box_title",
                                                                                    container=self,
                                                                                    manager=self.manager)
@@ -329,7 +328,7 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
         self.stage = ThemeWindowStages.CUSTOM_THEME_EDITING_COLOR_SELECTION_SCREEN
         self.custom_theme_editing_previous_page_button.enable()
         self.custom_theme_editing_color_selection_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((70, 5), (self.window_width - 180, 50)),
-                                                                                           html_text="Edit Color Selection",
+                                                                                           html_text=f"<font name={self.font_manager.current_font_name} pixel_size={self.font_manager.ui_title_font_size_value}><var>Edit Color Selection</var></font>",
                                                                                            object_id="#text_box_title",
                                                                                            container=self,
                                                                                            manager=self.manager)
@@ -410,7 +409,7 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
 
         self.custom_theme_editing_next_page_button.disable()
         self.custom_theme_editing_finish_screen_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((70, 5), (self.window_width - 180, 50)),
-                                                                                         html_text="Finish Editing Custom Theme",
+                                                                                         html_text=f"<font name={self.font_manager.current_font_name} pixel_size={self.font_manager.ui_title_font_size_value}><var>Finish Editing Custom Theme</var></font>",
                                                                                          object_id="#text_box_title",
                                                                                          container=self,
                                                                                          manager=self.manager)
@@ -448,7 +447,7 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
         self.set_blocking(True)
 
         self.custom_theme_deletion_title_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((10, 5), (self.window_width-50, 40)),
-                                                                                  html_text="Custom Theme Deletion",
+                                                                                  html_text=f"<font name={self.font_manager.current_font_name} pixel_size={self.font_manager.ui_title_font_size_value}><var>Custom Theme Deletion</var></font>",
                                                                                   object_id="#text_box_title",
                                                                                   container=self,
                                                                                   manager=self.manager)
@@ -673,10 +672,11 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
         self.window_running = False
 
 class UINetworkingManager(pygame_gui.elements.UIWindow):
-    def __init__(self, manager, client, server):
+    def __init__(self, manager, client, server, font_manager):
         self.manager = manager
         self.client = client
         self.server = server
+        self.font_manager = font_manager
         self.window_width = 650
         self.window_height = 600
         self.window_running = False
@@ -762,7 +762,7 @@ class UINetworkingManager(pygame_gui.elements.UIWindow):
 
         self.set_blocking(True)
         self.networking_connect_to_server_welcome_title_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((10, 5), (self.window_width - 50, 50)),
-                                                                                                 html_text="Connect To Server Screen",
+                                                                                                 html_text=f"<font name={self.font_manager.current_font_name} pixel_size={self.font_manager.ui_title_font_size_value}><var>Connect To Server Screen</var></font>",
                                                                                                  object_id="#text_box_title",
                                                                                                  container=self,
                                                                                                  manager=self.manager)
@@ -872,9 +872,10 @@ class TutorialWindowStages(IntEnum):
     TUTORIAL_WELCOME_SCREEN = 0
 
 class TutorialWindow(pygame_gui.elements.UIWindow):
-    def __init__(self, manager, color_manager):
+    def __init__(self, manager, color_manager, font_manager):
         self.manager = manager
         self.color_manager = color_manager
+        self.font_manager = font_manager
         self.window_width = 650
         self.window_height = 600
         self.window_running = False
@@ -897,20 +898,18 @@ class TutorialWindow(pygame_gui.elements.UIWindow):
                                                                      container=self,
                                                                      manager=self.manager)
 
-            self.next_page_button = pygame_gui.elements.UIButton(
-                relative_rect=pygame.Rect((self.window_width - 90, 5), (50, 30)),
-                text='->',
-                container=self,
-                manager=self.manager)
+            self.next_page_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((self.window_width - 90, 5), (50, 30)),
+                                                                 text='->',
+                                                                 container=self,
+                                                                 manager=self.manager)
 
         self.previous_page_button.disable()
 
-        self.welcome_text_box = pygame_gui.elements.UITextBox(
-            relative_rect=pygame.Rect((70, 5), (self.window_width - 180, 80)),
-            html_text="Welcome to the Tutorial page (more information will be coming soon)!",
-            object_id="#text_box_title",
-            container=self,
-            manager=self.manager)
+        self.welcome_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((70, 5), (self.window_width - 180, 80)),
+                                                              html_text=f"<font name={self.font_manager.current_font_name} pixel_size={self.font_manager.ui_title_font_size_value}><var>Tutorial</var></font>",
+                                                              object_id="#text_box_title",
+                                                              container=self,
+                                                              manager=self.manager)
 
     def clean_tutorial_welcome_screen(self):
         self.stage = None
@@ -920,22 +919,223 @@ class TutorialWindow(pygame_gui.elements.UIWindow):
         print("[TUTORIAL WINDOW] Shutdown Tutorial Window")
         self.window_running = False
 
-class GameSettingsWindow(pygame_gui.elements.UIWindow):
-    def __init__(self, manager, theme_manager, theme_json_data, grid):
+class FontManager:
+    def __init__(self, manager, theme_manager, theme_json_data):
+        self.manager = manager
+        self.theme_manager = theme_manager
+        self.theme_json_data = theme_json_data
+        self.current_font_name = 'Roboto'
+        self.ui_normal_font_size_value = 15
+        self.ui_title_font_size_value = 20
+
+        with open('data/fonts/font_info.json') as file:
+            self.font_json_data = json.loads(file.read())
+
+    def save_font_json_data(self):
+        with open('data/fonts/font_info.json', 'w') as file:
+            file.write(json.dumps(self.font_json_data))
+
+    def load_ui_fonts(self):
+        self.fonts_to_remove = []
+
+        for font_name in self.font_json_data:
+            if (
+                    os.path.isfile(self.font_json_data[font_name]['regular']) and
+                    os.path.isfile(self.font_json_data[font_name]['bold']) and
+                    os.path.isfile(self.font_json_data[font_name]['title'])
+            ):
+                self.manager.add_font_paths(font_name, self.font_json_data[font_name]['regular'], self.font_json_data[font_name]['bold'], self.font_json_data[font_name]['title'])
+                fonts_to_preload_dict = []
+                for font_size in range(5, 36):
+                    fonts_to_preload_dict.append({"name": font_name, "point_size": font_size, "style": "regular"})
+                    fonts_to_preload_dict.append({"name": font_name, "point_size": font_size, "style": "bold"})
+                    fonts_to_preload_dict.append({"name": font_name, "point_size": font_size, "style": "italic"})
+
+                self.manager.preload_fonts(fonts_to_preload_dict)
+            else:
+                self.fonts_to_remove.append(font_name)
+
+        if len(self.fonts_to_remove) > 0:
+            for font in self.fonts_to_remove:
+                print(f"[FONT MANAGER] Deleted font with name '{font}'")
+                del self.font_json_data[font]
+            else:
+                self.save_font_json_data()
+
+    def add_ui_font(self, font_name, normal_font_regular_weight_file_path, normal_font_bold_weight_file_path, title_font_regular_weight_file_path):
+        if font_name not in self.get_ui_font_names():
+            self.font_json_data[font_name] = {
+                "custom_font": True,
+                "regular": normal_font_regular_weight_file_path,
+                "bold": normal_font_bold_weight_file_path,
+                "title": title_font_regular_weight_file_path
+            }
+            self.save_font_json_data()
+
+            self.manager.add_font_paths(font_name, normal_font_regular_weight_file_path, normal_font_bold_weight_file_path, title_font_regular_weight_file_path)
+            preload_font_dict = []
+            for font_size in range(5, 36):
+                preload_font_dict.append({"name": font_name, "point_size": font_size, "style": "regular"})
+                preload_font_dict.append({"name": font_name, "point_size": font_size, "style": "bold"})
+                preload_font_dict.append({"name": font_name, "point_size": font_size, "style": "italic"})
+
+            self.manager.preload_fonts(preload_font_dict)
+        else:
+            print(f"[FONT MANAGER: ADD UI FONT] Error a font already exists with the name '{font_name}'")
+
+    def delete_custom_ui_font(self, font_name):
+        if font_name in self.get_custom_ui_font_names():
+            if font_name == self.current_font_name:
+                self.current_font_name = "Roboto"
+                self.set_current_font("Roboto")
+
+            self.font_json_data.pop(font_name)
+            self.save_font_json_data()
+        else:
+            print(f"[FONT MANAGER: DELETE_UI_FONT] Error no custom font exists with the name '{font_name}'")
+
+
+    def set_current_font(self, font_name):
+        if font_name in self.get_ui_font_names():
+            self.current_font_name = font_name
+            for ui_element in self.theme_json_data:
+                if 'font' in self.theme_json_data[ui_element]:
+                    if 'normal_font' in self.theme_json_data[ui_element]['font']:
+                        self.theme_json_data[ui_element]['font']['name'] = font_name
+            else:
+                self.theme_manager.update_theming(json.dumps(self.theme_json_data))
+        else:
+            print(f"[FONT MANAGER: SET_CURRENT_FONT] Error no font exists with the name '{font_name}'")
+            return False
+
+    def set_normal_font_size(self, font_size):
+        for ui_element in self.theme_json_data:
+            if 'font' in self.theme_json_data[ui_element]:
+                if 'normal_font' in self.theme_json_data[ui_element]['font']:
+                    self.theme_json_data[ui_element]['font']['size'] = font_size
+        else:
+            self.ui_normal_font_size_value = font_size
+            self.theme_manager.update_theming(json.dumps(self.theme_json_data))
+
+    def get_ui_font_names(self):
+        return list(self.font_json_data.keys())
+
+    def get_custom_ui_font_names(self):
+        custom_font_names = []
+        for font in self.font_json_data:
+            if self.font_json_data[font]['custom_font']:
+                custom_font_names.append(font)
+
+        return custom_font_names
+
+    def custom_ui_fonts_exist(self):
+        for font_name in self.font_json_data:
+            if self.font_json_data[font_name]['custom_font']:
+                return True
+        else:
+            return False
+
+
+class SettingsWindowStages(IntEnum):
+    SETTINGS_WINDOW_SETTINGS_SCREEN = 0,
+    SETTINGS_WINDOW_CUSTOM_FONT_CREATION_SCREEN = 1,
+    SETTINGS_WINDOW_CUSTOM_FONT_DELETION_SCREEN = 2
+
+class SettingsWindow(pygame_gui.elements.UIWindow):
+    def __init__(self, manager, theme_manager, theme_json_data, grid, font_manager):
         self.manager = manager
         self.theme_manager = theme_manager
         self.theme_json_data = theme_json_data
         self.grid = grid
+        self.font_manager: FontManager = font_manager
         self.window_width = 650
         self.window_height = 600
         self.window_running = False
-        self.ui_element_shape = 'Rounded Rectangle'
-        self.ui_corner_roundness_value = 4
-        self.ui_border_width_value = 2
-        self.ui_normal_font_size_value = 15
-        self.ui_title_font_size_value = 20
+        self.changed_ui_border_width = False
+        self.custom_font_label_name_for_file_path_dialog = None
+        self.custom_normal_font_regular_weight_file_path_string = None
+        self.custom_normal_font_bold_weight_file_path_string = None
+        self.custom_title_font_regular_weight_file_path_string = None
+        self.custom_fonts_to_delete_names = []
+        self.stage = None
+        self.load_user_settings()
+
+    def load_user_settings(self):
+        with open('data/settings/user_settings.json') as file:
+            self.user_settings_json_data = json.loads(file.read())
+
+        self.ui_element_shape = self.user_settings_json_data['ui_element_shape']
+        self.ui_corner_roundness_value = self.user_settings_json_data['ui_corner_roundness_value']
+        if self.ui_element_shape == 'Rectangle':
+            self.theme_json_data['#ui_element_shape']['misc']['shape'] = 'rectangle'
+            self.theme_json_data['horizontal_slider.#right_button']['misc']['shape'] = 'rectangle'
+            self.theme_json_data['horizontal_slider.#left_button']['misc']['shape'] = 'rectangle'
+        else:
+            self.theme_json_data['#ui_element_shape']['misc']['shape'] = 'rounded_rectangle'
+            self.handle_settings_window_ui_corner_roundness_changed()
+
+        self.theme_manager.update_theming(json.dumps(self.theme_json_data))
+        self.ui_border_width_value = self.user_settings_json_data['ui_border_width_value']
+        self.grid.line_width = self.user_settings_json_data['grid_width']
+        self.font_manager.set_normal_font_size(self.user_settings_json_data['ui_normal_font_size_value'])
+        self.font_manager.ui_title_font_size_value = self.user_settings_json_data['ui_title_font_size_value']
+        successfully_changed_current_font = self.font_manager.set_current_font(self.user_settings_json_data['current_font_name'])
+        if successfully_changed_current_font == False:
+            self.user_settings_json_data['current_font_name'] = "Roboto"
+            self.save_user_settings()
+
+    def save_user_settings(self):
+        with open('data/settings/user_settings.json', 'w') as file:
+            file.write(json.dumps(self.user_settings_json_data))
+
+    def handle_settings_window_border_width_changed(self):
+        print("ui_border_width_value:", self.ui_border_width_value)
+        self.theme_json_data['#ui_element_shape']['misc']['border_width'] = str(self.ui_border_width_value)
+        self.theme_json_data['drop_down_menu']['misc']['border_width'] = str(self.ui_border_width_value)
+        self.theme_json_data['text_entry_line']['misc']['border_width'] = str(self.ui_border_width_value)
+        if self.ui_border_width_value < 3:
+            self.theme_json_data['horizontal_slider.#sliding_button']['misc']['border_width'] = str(self.ui_border_width_value)
+
+        self.theme_manager.update_theming(json.dumps(self.theme_json_data))
+        self.changed_ui_border_width = True
+
+        self.ui_element_shape_drop_down_menu.kill()
+        self.ui_element_shape_drop_down_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((30, 100), (160, 40)),
+                                                                                  options_list=['Rounded Rectangle', 'Rectangle'],
+                                                                                  starting_option=self.ui_element_shape,
+                                                                                  container=self,
+                                                                                  manager=self.manager)
+
+        self.ui_font_drop_down_menu.kill()
+
+        font_name_list = self.font_manager.get_ui_font_names()
+        font_name_list.append('Create Custom Font')
+        if self.font_manager.custom_ui_fonts_exist():
+            font_name_list.append('Delete Custom Font')
+
+        self.ui_font_drop_down_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((30, 380), (160, 40)),
+                                                                         options_list=font_name_list,
+                                                                         starting_option=self.font_manager.current_font_name,
+                                                                         container=self,
+                                                                         manager=self.manager)
+
+    def handle_settings_window_ui_corner_roundness_changed(self):
+        self.theme_json_data['#ui_element_shape']['misc']['shape_corner_radius'] = str(self.ui_corner_roundness_value)
+        self.theme_json_data['horizontal_slider.#sliding_button']['misc']['shape_corner_radius'] = str(self.ui_corner_roundness_value // 2)
+        self.theme_json_data['selection_list.@selection_list_item']['misc']['shape_corner_radius'] = str(self.ui_corner_roundness_value)
+        self.theme_json_data['#colour_picker_dialog.colour_channel_editor.horizontal_slider.#sliding_button']['misc']['shape_corner_radius'] = str(self.ui_corner_roundness_value // 2)
+        self.theme_json_data['#colour_picker_dialog.colour_channel_editor.text_entry_line']['misc']['shape_corner_radius'] = str(self.ui_corner_roundness_value)
+        self.theme_json_data['vertical_scroll_bar.#top_button']['misc']['shape_corner_radius'] = str(self.ui_corner_roundness_value // 2)
+        self.theme_json_data['vertical_scroll_bar.#bottom_button']['misc']['shape_corner_radius'] = str(self.ui_corner_roundness_value // 2)
+        self.theme_json_data['horizontal_slider.#right_button']['misc']['shape'] = 'rounded_rectangle'
+        self.theme_json_data['horizontal_slider.#left_button']['misc']['shape'] = 'rounded_rectangle'
+        self.theme_json_data['horizontal_slider.#left_button']['misc']['shape_corner_radius'] = str(self.ui_corner_roundness_value // 2)
+        self.theme_json_data['horizontal_slider.#right_button']['misc']['shape_corner_radius'] = str(self.ui_corner_roundness_value // 2)
+        self.theme_manager.update_theming(json.dumps(self.theme_json_data))
 
     def build_settings_window(self):
+        self.stage = SettingsWindowStages.SETTINGS_WINDOW_SETTINGS_SCREEN
+
         if self.window_running == False:
             print("[SETTINGS WINDOW] Set self.window_running to True")
 
@@ -947,7 +1147,8 @@ class GameSettingsWindow(pygame_gui.elements.UIWindow):
             self.set_blocking(True)
 
         self.welcome_to_settings_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((70, -5), (self.window_width - 180, 80)),
-                                                                          html_text="<font face='Roboto' pixel_size=10>Settings</font>",
+                                                                          html_text=f"<font name={self.font_manager.current_font_name} pixel_size={self.font_manager.ui_title_font_size_value}><var>Settings</var></font>",
+                                                                          object_id="#text_box_title",
                                                                           container=self,
                                                                           manager=self.manager)
         """
@@ -955,11 +1156,12 @@ class GameSettingsWindow(pygame_gui.elements.UIWindow):
         - Shape (rectangle or rounded rectangle?) (DONE)
         - Roundness (if rounded rectangle) (DONE)
         - Grid width (DONE)
-        - Border Width (BUGS)
-        - Normal font size
-        - Title font size
-        - Localisation for different languages?
-        - Font (user can pick between Roboto, Fira mono and their own custom fonts only if it in a supported language e.g. English and French).
+        - Border Width (DONE)
+        - Normal font size (DONE MOSTLY - Need to fix errors with the text not fitting in the rects of the UI elements)
+        - Title font size (DONE)
+        - Font (DONE)
+        - Reset button (DONE)
+        - Save Button (DONE)
         """
 
         self.ui_element_shape_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((30, 60), (160, 40)),
@@ -1014,7 +1216,7 @@ class GameSettingsWindow(pygame_gui.elements.UIWindow):
                                                                      manager=self.manager)
 
         self.ui_normal_font_size_slider = pygame_gui.elements.UIHorizontalSlider(relative_rect=pygame.Rect((30, 300), (210, 27)),
-                                                                                 start_value=self.ui_normal_font_size_value,
+                                                                                 start_value=self.font_manager.ui_normal_font_size_value,
                                                                                  value_range=(5, 22),
                                                                                  container=self,
                                                                                  manager=self.manager)
@@ -1025,74 +1227,352 @@ class GameSettingsWindow(pygame_gui.elements.UIWindow):
                                                                      manager=self.manager)
 
         self.ui_title_font_size_slider = pygame_gui.elements.UIHorizontalSlider(relative_rect=pygame.Rect((260, 300), (210, 27)),
-                                                                                 start_value=self.ui_title_font_size_value,
-                                                                                 value_range=(5, 35),
-                                                                                 container=self,
-                                                                                 manager=self.manager)
+                                                                                start_value=self.font_manager.ui_title_font_size_value,
+                                                                                value_range=(5, 35),
+                                                                                container=self,
+                                                                                manager=self.manager)
+
+        self.ui_font_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((30, 340), (160, 40)),
+                                                         text="UI Font",
+                                                         container=self,
+                                                         manager=self.manager)
+
+        font_name_list = self.font_manager.get_ui_font_names()
+        font_name_list.append('Create Custom Font')
+        if self.font_manager.custom_ui_fonts_exist():
+            font_name_list.append('Delete Custom Font')
+
+        self.ui_font_drop_down_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((30, 380), (160, 40)),
+                                                                         options_list=font_name_list,
+                                                                         starting_option=self.font_manager.current_font_name,
+                                                                         container=self,
+                                                                         manager=self.manager)
+
+        self.ui_reset_settings_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((80, 450), (200, 50)),
+                                                                     text='Reset',
+                                                                     container=self,
+                                                                     manager=self.manager)
+
+        self.ui_save_settings_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((300, 450), (200, 50)),
+                                                                    text='Save',
+                                                                    container=self,
+                                                                    manager=self.manager)
+
+        self.handle_settings_window_border_width_changed()
+
+    def clean_settings_window(self):
+        self.stage = None
+        self.welcome_to_settings_text_box.kill()
+        self.ui_element_shape_label.kill()
+        self.ui_element_shape_drop_down_menu.kill()
+        self.ui_corner_roundness_label.kill()
+        self.ui_corner_roundness_slider.kill()
+        self.grid_width_label.kill()
+        self.grid_width_slider.kill()
+        self.ui_border_width_label.kill()
+        self.ui_border_width_slider.kill()
+        self.ui_normal_font_size_label.kill()
+        self.ui_normal_font_size_slider.kill()
+        self.ui_title_font_size_label.kill()
+        self.ui_title_font_size_slider.kill()
+        self.ui_font_label.kill()
+        self.ui_font_drop_down_menu.kill()
+        self.ui_reset_settings_button.kill()
+        self.ui_save_settings_button.kill()
+
+    def build_custom_font_creation_window(self):
+        self.stage = SettingsWindowStages.SETTINGS_WINDOW_CUSTOM_FONT_CREATION_SCREEN
+
+        self.welcome_to_font_creation_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((70, -5), (self.window_width - 180, 80)),
+                                                                               html_text=f"<font name={self.font_manager.current_font_name} pixel_size={self.font_manager.ui_title_font_size_value}><var>Custom Font Creation</var></font>",
+                                                                               object_id="#text_box_title",
+                                                                               container=self,
+                                                                               manager=self.manager)
+
+        self.previous_page_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((5, 5), (50, 30)),
+                                                                 text='<-',
+                                                                 container=self,
+                                                                 manager=self.manager)
+
+        self.custom_font_name_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((190, 70), (200, 40)),
+                                                                  text='Custom Font Name',
+                                                                  container=self,
+                                                                  manager=self.manager)
+
+        self.custom_font_name_text_entry_line = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((210, 110), (170, 50)),
+                                                                                    container=self,
+                                                                                    manager=self.manager)
+
+        self.custom_font_ui_elements_dict = {'Normal Font File Path (Regular Weight)': None,
+                                             'Normal Font File Path (Bold Weight)': None,
+                                             'Title Font File Path (Regular Weight)': None
+                                            }
+
+        distance_x = 130
+        distance_y = 170
+        for custom_font_label_name in self.custom_font_ui_elements_dict:
+            self.custom_font_ui_elements_dict[custom_font_label_name] = [pygame_gui.elements.UILabel(relative_rect=pygame.Rect((distance_x, distance_y), (300, 40)),
+                                                                                                     text=custom_font_label_name,
+                                                                                                     container=self,
+                                                                                                     manager=self.manager),
+                                                                         pygame_gui.elements.UIButton(relative_rect=pygame.Rect((distance_x, distance_y+40), (100, 40)),
+                                                                                                      text='Find File',
+                                                                                                      container=self,
+                                                                                                      manager=self.manager),
+                                                                         pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((distance_x+120, distance_y+40), (280, 40)),
+                                                                                                             container=self,
+                                                                                                             manager=self.manager)]
+            distance_y += 100
+
+        self.custom_font_create_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((210, 470), (200, 50)),
+                                                                      text='Create Custom Font',
+                                                                      container=self,
+                                                                      manager=self.manager)
+
+    def clean_custom_font_creation_window(self):
+        self.stage = None
+        self.welcome_to_font_creation_text_box.kill()
+        self.previous_page_button.kill()
+        self.custom_font_name_label.kill()
+        self.custom_font_name_text_entry_line.kill()
+        for ui_element_list in self.custom_font_ui_elements_dict.values():
+            for ui_element in ui_element_list:
+                ui_element.kill()
+
+        self.custom_font_ui_elements_dict = None
+        self.custom_font_create_button.kill()
+
+    def build_custom_font_deletion_window(self):
+        self.stage = SettingsWindowStages.SETTINGS_WINDOW_CUSTOM_FONT_DELETION_SCREEN
+
+        self.welcome_to_font_deletion_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((70, -5), (self.window_width - 180, 80)),
+                                                                               html_text=f"<font name={self.font_manager.current_font_name} pixel_size={self.font_manager.ui_title_font_size_value}><var>Custom Font Deletion</var></font>",
+                                                                               object_id="#text_box_title",
+                                                                               container=self,
+                                                                               manager=self.manager)
+
+        self.previous_page_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((5, 5), (50, 30)),
+                                                                 text='<-',
+                                                                 container=self,
+                                                                 manager=self.manager)
+
+        self.custom_fonts_to_delete_names = []
+        self.custom_font_selection_list = pygame_gui.elements.UISelectionList(relative_rect=pygame.Rect((180, 120), ((250, 250))),
+                                                                              item_list=self.font_manager.get_custom_ui_font_names(),
+                                                                              allow_multi_select=True,
+                                                                              container=self,
+                                                                              manager=self.manager)
+
+        self.custom_font_delete_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((205, 390), (200, 50)),
+                                                                      text='Delete',
+                                                                      container=self,
+                                                                      manager=self.manager)
+
+    def clean_custom_font_deletion_window(self):
+        self.stage = None
+        self.welcome_to_font_deletion_text_box.kill()
+        self.previous_page_button.kill()
+        self.custom_font_selection_list.kill()
+        self.custom_font_delete_button.kill()
+
+    def handle_settings_window_ui_button_pressed_event(self, event):
+        if self.window_running:
+            if self.stage == SettingsWindowStages.SETTINGS_WINDOW_SETTINGS_SCREEN:
+                if event.ui_element == self.ui_save_settings_button:
+                    print("[SETTINGS WINDOW] Saved current settings")
+                    self.user_settings_json_data['ui_element_shape'] = self.ui_element_shape
+                    self.user_settings_json_data['ui_corner_roundness_value'] = self.ui_corner_roundness_value
+                    self.user_settings_json_data['ui_border_width_value'] = self.ui_border_width_value
+                    self.user_settings_json_data['grid_width'] = self.grid.line_width
+                    self.user_settings_json_data['ui_normal_font_size_value'] = self.font_manager.ui_normal_font_size_value
+                    self.user_settings_json_data['ui_title_font_size_value'] = self.font_manager.ui_title_font_size_value
+                    self.user_settings_json_data['current_font_name'] = self.font_manager.current_font_name
+                    self.save_user_settings()
+
+                elif event.ui_element == self.ui_reset_settings_button:
+                    print("[SETTINGS WINDOW] Reset user settings")
+
+                    with open('data/settings/user_settings.json', 'w') as file:
+                        with open('data/settings/default_user_settings.json') as default_user_settings_file:
+                            file.write(default_user_settings_file.read())
+
+                    self.load_user_settings()
+                    self.clean_settings_window()
+                    self.build_settings_window()
+
+            if self.stage == SettingsWindowStages.SETTINGS_WINDOW_CUSTOM_FONT_CREATION_SCREEN:
+                if event.ui_element == self.previous_page_button:
+                    self.clean_custom_font_creation_window()
+                    self.build_settings_window()
+
+                elif event.ui_element == self.custom_font_create_button:
+                    custom_font_name = self.custom_font_name_text_entry_line.get_text()
+                    if custom_font_name == '' or custom_font_name == 'A custom font already exists with this name.':
+                        self.custom_font_name_text_entry_line.set_text("Please pick a valid custom font name.")
+                        return
+
+                    exit = False
+                    if self.custom_normal_font_regular_weight_file_path_string == None:
+                        self.custom_font_ui_elements_dict[list(self.custom_font_ui_elements_dict)[0]][2].set_text("Please pick a valid font file")
+                        exit = True
+
+                    if self.custom_normal_font_bold_weight_file_path_string == None:
+                        self.custom_font_ui_elements_dict[list(self.custom_font_ui_elements_dict)[1]][2].set_text("Please pick a valid font file")
+                        exit = True
+
+                    if self.custom_title_font_regular_weight_file_path_string == None:
+                        self.custom_font_ui_elements_dict[list(self.custom_font_ui_elements_dict)[2]][2].set_text("Please pick a valid font file")
+                        exit = True
+
+                    if exit:
+                        return
+
+                    self.font_manager.add_ui_font(custom_font_name, self.custom_normal_font_regular_weight_file_path_string, self.custom_normal_font_bold_weight_file_path_string, self.custom_title_font_regular_weight_file_path_string)
+                    self.font_manager.set_current_font(custom_font_name)
+
+                    self.custom_normal_font_regular_weight_file_path_string = None
+                    self.custom_normal_font_bold_weight_file_path_string = None
+                    self.custom_title_font_regular_weight_file_path_string = None
+                    self.clean_custom_font_creation_window()
+                    self.build_settings_window()
+                else:
+                    for custom_font_label_name in self.custom_font_ui_elements_dict:
+                        for ui_element in self.custom_font_ui_elements_dict[custom_font_label_name]:
+                            if event.ui_element == ui_element:
+                                self.custom_font_label_name_for_file_path_dialog = custom_font_label_name
+                                self.custom_font_file_path_dialog = pygame_gui.windows.UIFileDialog(rect=pygame.Rect((200, 100), (600, 500)),
+                                                                                                    window_title="Find File",
+                                                                                                    initial_file_path=os.path.expanduser('~'),
+                                                                                                    object_id='#custom_file_display_list',
+                                                                                                    manager=self.manager)
+                                return
+
+            if self.stage == SettingsWindowStages.SETTINGS_WINDOW_CUSTOM_FONT_DELETION_SCREEN:
+                if event.ui_element == self.previous_page_button:
+                    self.clean_custom_font_deletion_window()
+                    self.build_settings_window()
+
+                elif event.ui_element == self.custom_font_delete_button:
+                    if self.font_manager.current_font_name in self.custom_fonts_to_delete_names:
+                        self.font_manager.set_current_font("Roboto")
+
+                    for font in self.custom_fonts_to_delete_names:
+                        self.font_manager.delete_custom_ui_font(font)
+
+                    self.custom_fonts_to_delete_names = []
+                    self.clean_custom_font_deletion_window()
+                    self.build_settings_window()
 
     def handle_settings_window_ui_drop_down_menu_changed_event(self, event):
         if self.window_running:
-            if event.ui_element == self.ui_element_shape_drop_down_menu:
-                match event.text:
-                    case 'Rectangle':
-                        self.ui_element_shape = 'Rectangle'
-                        self.ui_corner_roundness_slider.disable()
-                        self.theme_json_data['#ui_element_shape']['misc']['shape'] = 'rectangle'
-                        self.theme_json_data['horizontal_slider.#right_button']['misc']['shape'] = 'rectangle'
-                        self.theme_json_data['horizontal_slider.#left_button']['misc']['shape'] = 'rectangle'
-                        self.theme_manager.update_theming(json.dumps(self.theme_json_data))
-                    case 'Rounded Rectangle':
-                        self.ui_element_shape = 'Rounded Rectangle'
-                        self.ui_corner_roundness_slider.enable()
-                        self.theme_json_data['#ui_element_shape']['misc']['shape'] = 'rounded_rectangle'
-                        self.theme_manager.update_theming(json.dumps(self.theme_json_data))
+            if self.stage == SettingsWindowStages.SETTINGS_WINDOW_SETTINGS_SCREEN:
+                if event.ui_element == self.ui_element_shape_drop_down_menu:
+                    match event.text:
+                        case 'Rectangle':
+                            self.ui_element_shape = 'Rectangle'
+                            self.ui_corner_roundness_slider.disable()
+                            self.theme_json_data['#ui_element_shape']['misc']['shape'] = 'rectangle'
+                            self.theme_json_data['horizontal_slider.#right_button']['misc']['shape'] = 'rectangle'
+                            self.theme_json_data['horizontal_slider.#left_button']['misc']['shape'] = 'rectangle'
+                            self.theme_manager.update_theming(json.dumps(self.theme_json_data))
+                        case 'Rounded Rectangle':
+                            self.ui_element_shape = 'Rounded Rectangle'
+                            self.ui_corner_roundness_slider.enable()
+                            self.theme_json_data['#ui_element_shape']['misc']['shape'] = 'rounded_rectangle'
+                            self.theme_manager.update_theming(json.dumps(self.theme_json_data))
+
+                if event.ui_element == self.ui_font_drop_down_menu:
+                    match event.text:
+                        case 'Create Custom Font':
+                            self.clean_settings_window()
+                            self.build_custom_font_creation_window()
+                        case 'Delete Custom Font':
+                            self.clean_settings_window()
+                            self.build_custom_font_deletion_window()
+                        case _:
+                            self.font_manager.set_current_font(event.text)
+                            self.welcome_to_settings_text_box.kill()
+                            self.welcome_to_settings_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((70, -5), (self.window_width - 180, 70)),
+                                                                                              html_text=f"<font name={self.font_manager.current_font_name} pixel_size={self.font_manager.ui_title_font_size_value}><var>Settings</var></font>",
+                                                                                              object_id="#text_box_title",
+                                                                                              container=self,
+                                                                                              manager=self.manager)
 
     def handle_settings_window_ui_horizontal_slider_moved_event(self, event):
         if self.window_running:
-            if event.ui_element == self.ui_corner_roundness_slider:
-                self.ui_corner_roundness_value = event.value
-                self.theme_json_data['#ui_element_shape']['misc']['shape_corner_radius'] = str(self.ui_corner_roundness_value)
-                self.theme_json_data['horizontal_slider.#right_button']['misc']['shape'] = 'rounded_rectangle'
-                self.theme_json_data['horizontal_slider.#left_button']['misc']['shape'] = 'rounded_rectangle'
-                self.theme_json_data['horizontal_slider.#sliding_button']['misc']['shape_corner_radius'] = str(self.ui_corner_roundness_value // 2)
-                self.theme_json_data['selection_list.@selection_list_item']['misc']['shape_corner_radius'] = str(self.ui_corner_roundness_value)
-                self.theme_json_data['#colour_picker_dialog.colour_channel_editor.horizontal_slider.#sliding_button']['misc']['shape_corner_radius'] = str(self.ui_corner_roundness_value // 2)
-                self.theme_json_data['#colour_picker_dialog.colour_channel_editor.text_entry_line']['misc']['shape_corner_radius'] = str(self.ui_corner_roundness_value)
-                self.theme_json_data['vertical_scroll_bar.#top_button']['misc']['shape_corner_radius'] = str(self.ui_corner_roundness_value // 2)
-                self.theme_json_data['vertical_scroll_bar.#bottom_button']['misc']['shape_corner_radius'] = str(self.ui_corner_roundness_value // 2)
-                self.theme_json_data['horizontal_slider.#left_button']['misc']['shape_corner_radius'] = str(self.ui_corner_roundness_value // 2)
-                self.theme_json_data['horizontal_slider.#right_button']['misc']['shape_corner_radius'] = str(self.ui_corner_roundness_value // 2)
-                self.theme_manager.update_theming(json.dumps(self.theme_json_data))
+            if self.stage == SettingsWindowStages.SETTINGS_WINDOW_SETTINGS_SCREEN:
+                if event.ui_element == self.ui_corner_roundness_slider:
+                    self.ui_corner_roundness_value = event.value
+                    self.handle_settings_window_ui_corner_roundness_changed()
 
-            elif event.ui_element == self.grid_width_slider:
-                self.grid.line_width = event.value
+                elif event.ui_element == self.grid_width_slider:
+                    self.grid.line_width = event.value
 
-            elif event.ui_element == self.ui_border_width_slider:
-                self.ui_border_width_value = event.value
-                self.theme_json_data['#ui_element_shape']['misc']['border_width'] = str(self.ui_border_width_value)
-                self.theme_manager.update_theming(json.dumps(self.theme_json_data))
+                elif event.ui_element == self.ui_border_width_slider:
+                    if self.ui_border_width_value != event.value:
+                        self.ui_border_width_value = event.value
+                        self.handle_settings_window_border_width_changed()
 
-            elif event.ui_element == self.ui_normal_font_size_slider:
-                for ui_element in self.theme_json_data:
-                    if ui_element not in ['load_normal_font', 'load_title_font'] and 'font' in self.theme_json_data[ui_element]:
-                        if 'size' in self.theme_json_data[ui_element]['font']:
-                            if int(self.theme_json_data[ui_element]['font']['size']) == self.ui_normal_font_size_value:
-                                self.theme_json_data[ui_element]['font']['size'] = event.value
-                else:
-                    self.ui_normal_font_size_value = event.value
-                    self.theme_manager.update_theming(json.dumps(self.theme_json_data))
+                elif event.ui_element == self.ui_normal_font_size_slider:
+                    self.font_manager.set_normal_font_size(event.value)
 
-            elif event.ui_element == self.ui_normal_font_size_slider:
-                self.ui_normal_font_size_value = event.value
-                self.theme_json_data['load_normal_font']['font']['size'] = str(self.ui_normal_font_size_value)
-                self.theme_manager.update_theming(json.dumps(self.theme_json_data))
+                elif event.ui_element == self.ui_title_font_size_slider:
+                    self.font_manager.ui_title_font_size_value = event.value
+                    self.welcome_to_settings_text_box.kill()
+                    self.welcome_to_settings_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((70, -5), (self.window_width - 180, 70)),
+                                                                                      html_text=f"<font name={self.font_manager.current_font_name} pixel_size={self.font_manager.ui_title_font_size_value}><var>Settings</var></font>",
+                                                                                      object_id="#text_box_title",
+                                                                                      container=self,
+                                                                                      manager=self.manager)
 
-            elif event.ui_element == self.ui_title_font_size_slider:
-                self.ui_title_font_size_value = event.value
-                self.theme_json_data['load_title_font']['font']['size'] = str(self.ui_title_font_size_value)
-                self.theme_manager.update_theming(json.dumps(self.theme_json_data))
-                self.welcome_to_settings_text_box.rebuild()
+    def handle_settings_window_ui_file_dialog_path_picked_event(self, event):
+        if self.window_running:
+            if self.stage == SettingsWindowStages.SETTINGS_WINDOW_CUSTOM_FONT_CREATION_SCREEN:
+                if event.ui_element == self.custom_font_file_path_dialog:
+                    if len(event.text) > 3 and event.text[-3:] in ['ttf', 'otf']:
+                        match self.custom_font_label_name_for_file_path_dialog:
+                            case 'Normal Font File Path (Regular Weight)':
+                                self.custom_normal_font_regular_weight_file_path_string = event.text
+                            case 'Normal Font File Path (Bold Weight)':
+                                self.custom_normal_font_bold_weight_file_path_string = event.text
+                            case 'Title Font File Path (Regular Weight)':
+                                self.custom_title_font_regular_weight_file_path_string = event.text
 
+                        self.custom_font_ui_elements_dict[self.custom_font_label_name_for_file_path_dialog][2].set_text(event.text)
+                    else:
+                        match self.custom_font_label_name_for_file_path_dialog:
+                            case 'Normal Font File Path (Regular Weight)':
+                                self.custom_normal_font_regular_weight_file_path_string = None
+                            case 'Normal Font File Path (Bold Weight)':
+                                self.custom_normal_font_bold_weight_file_path_string = None
+                            case 'Title Font File Path (Regular Weight)':
+                                self.custom_title_font_regular_weight_file_path_string = None
+
+                        self.custom_font_ui_elements_dict[self.custom_font_label_name_for_file_path_dialog][2].set_text("Invalid font file type (must be .ttf or .otf)")
+
+                    self.custom_font_label_name_for_file_path_dialog = None
+                    print("[CURRENT FILE PATHS]:", self.custom_normal_font_regular_weight_file_path_string, self.custom_normal_font_bold_weight_file_path_string, self.custom_title_font_regular_weight_file_path_string)
+
+    def handle_settings_window_ui_text_entry_finished_event(self, event):
+        if self.window_running:
+            if self.stage == SettingsWindowStages.SETTINGS_WINDOW_CUSTOM_FONT_CREATION_SCREEN:
+                if event.ui_element == self.custom_font_name_text_entry_line:
+                    if event.text in self.font_manager.get_ui_font_names():
+                        self.custom_font_name_text_entry_line.set_text("A custom font already exists with this name.")
+
+    def handle_settings_window_ui_selection_list_new_selection(self, event):
+        if self.window_running:
+            if self.stage == SettingsWindowStages.SETTINGS_WINDOW_CUSTOM_FONT_DELETION_SCREEN:
+                if event.ui_element == self.custom_font_selection_list:
+                    self.custom_fonts_to_delete_names.append(event.text)
+                    print(self.custom_fonts_to_delete_names)
+
+    def handle_settings_window_ui_selection_list_dropped_selection(self, event):
+        if self.window_running:
+            if self.stage == SettingsWindowStages.SETTINGS_WINDOW_CUSTOM_FONT_DELETION_SCREEN:
+                if event.ui_element == self.custom_font_selection_list:
+                    self.custom_fonts_to_delete_names.remove(event.text)
+                    print(self.custom_fonts_to_delete_names)
 
     def shutdown(self):
         print("[SETTINGS WINDOW] Shutdown Settings Window")
@@ -1113,13 +1593,16 @@ class GameUIManager:
         self.events_dict = events_dict
         self.screen_lock = False
 
-        self.manager = pygame_gui.UIManager((screen_manager.screen_width, screen_manager.screen_height), 'data/ui_themes/ui_theme.json')
-        self.load_ui_fonts()
-
+        self.manager = pygame_gui.UIManager((screen_manager.screen_width, screen_manager.screen_height))
         self.theme_manager = self.manager.get_theme()
+
         with open("data/ui_themes/ui_theme.json", "r") as file:
             file_data = file.read()
             self.theme_json_data = json.loads(file_data)
+
+        self.font_manager = FontManager(self.manager, self.theme_manager, self.theme_json_data)
+        self.font_manager.load_ui_fonts()
+        self.theme_manager.load_theme('data/ui_themes/ui_theme.json')
 
         self.ui_node_type_and_theme_property_path_dict = {
             ColorUITypes.UI_BACKGROUND_COLOR: 'defaults/colours/normal_bg',
@@ -1139,14 +1622,12 @@ class GameUIManager:
             ColorUITypes.UI_TEXT_SELECTED_FOREGROUND_COLOR: 'defaults/colours/selected_text',
             ColorUITypes.UI_TEXT_SELECTED_BACKGROUND_COLOR: 'text_entry_line/colours/selected_bg',
             ColorUITypes.UI_TEXT_DISABLED_COLOR: 'defaults/colours/disabled_text',
-            ColorUITypes.UI_TITLE_BACKGROUND_COLOR: 'text_box/colours/dark_bg',
-            ColorUITypes.UI_TITLE_BORDER_COLOR: 'text_box/colours/normal_border',
-            ColorUITypes.UI_TITLE_TEXT_COLOR: 'text_box/colours/normal_text'
+            ColorUITypes.UI_TITLE_TEXT_COLOR: '#text_box_title/colours/normal_text'
         }
 
         self.set_ui_colours_from_current_theme()
 
-        self.run_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((730, 10), (130, 50)), text="Run", manager=self.manager)
+        self.run_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((810, 130), (150, 50)), text="Run", manager=self.manager)
 
         self.pathfinding_algorithms_options = ['Depth First Search', 'Breadth First Search', 'Dijkstra', 'A*', 'Greedy Best First Search', 'Bidirectional Best First Search']
         self.pathfinding_algorithms_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((20, 10), (200, 50)),
@@ -1160,14 +1641,14 @@ class GameUIManager:
                                                                   manager=self.manager)
 
         self.maze_generation_algorithms_options = ['Random Maze', 'Random Weighted Maze', 'RD(Recursive Division)', 'RD Horizontal Skew', 'RD Vertical Skew']
-        self.maze_generation_algorithms_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((480, 10), (220, 50)),
+        self.maze_generation_algorithms_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((440, 10), (200, 50)),
                                                                                   options_list=self.maze_generation_algorithms_options,
                                                                                   starting_option='Random Maze',
                                                                                   manager=self.manager)
 
         # TODO(ali): Could remove this label if it isn't needed later
         self.resolution_divider_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((50, 65), (250, 30)),
-                                                                    text='Resolution Divider Slider',
+                                                                    text='Grid Size',
                                                                     manager=self.manager)
 
         self.resolution_divider_slider = pygame_gui.elements.UIHorizontalSlider(relative_rect=pygame.Rect((20, 92), (280, 27)),
@@ -1195,45 +1676,42 @@ class GameUIManager:
                                                                                       value_range=(10, 50),
                                                                                       manager=self.manager)
 
-        self.marked_or_weighted_node_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((20, 130), (150, 35)),
+        self.marked_or_weighted_node_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((20, 130), (200, 50)),
                                                                               options_list=['Marked', 'Weighted'],
                                                                               starting_option='Marked',
                                                                               manager=self.manager)
 
-        self.weighted_node_text_entry_line = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((185, 130), (100, 35)),
+        self.weighted_node_text_entry_line = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((230, 130), (150, 50)),
                                                                                  manager=self.manager)
 
-        clear_node_types = ['Clear Grid', 'Clear Path', 'Clear Checked Nodes', 'Clear Marked Nodes', 'Clear Weighted Nodes']
-        self.clear_nodes_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((310, 130), (200, 40)),
-                                                                   options_list=clear_node_types,
+        self.clear_node_types = ['Clear Grid', 'Clear Path', 'Clear Checked Nodes', 'Clear Marked Nodes', 'Clear Weighted Nodes']
+        self.clear_nodes_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((390, 130), (200, 50)),
+                                                                   options_list=self.clear_node_types,
                                                                    starting_option='Clear Grid',
                                                                    manager=self.manager)
 
-        self.tutorial_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((880, 10), (60, 50)),
+        self.tutorial_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((970, 130), (60, 50)),
                                                             text='?',
                                                             manager=self.manager)
 
-        self.tutorial_window = TutorialWindow(self.manager, self.color_manager)
-
-        self.settings_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((930, 70), (50, 40)),
-                                                            text='¤',
+        self.settings_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((860, 10), (200, 50)),
+                                                            text='Settings',
                                                             manager=self.manager)
 
-        self.settings_window = GameSettingsWindow(self.manager, self.theme_manager, self.theme_json_data, self.grid)
-        # TODO(ali): Remove this after finishing the ui settings window
-        self.settings_window.build_settings_window()
+        self.settings_window = SettingsWindow(self.manager, self.theme_manager, self.theme_json_data, self.grid, self.font_manager)
+        self.tutorial_window = TutorialWindow(self.manager, self.color_manager, self.font_manager)
 
         self.theme_menu = None
         self.generate_theme_menu('Dark Theme')
-        self.theme_window = ThemeWindow(self.manager, self.color_manager)
+        self.theme_window = ThemeWindow(self.manager, self.color_manager, self.font_manager)
 
-        self.ui_networking_manager = UINetworkingManager(self.manager, self.client, self.server)
-        self.generate_networking_menu()
+        self.ui_networking_manager = UINetworkingManager(self.manager, self.client, self.server, self.font_manager)
+        self.generate_networking_menu(kill_networking_menu=False)
 
         self.weighted_node_text_entry_line.set_text_length_limit(10)
         self.weighted_node_text_entry_line.set_allowed_characters([' ', 'N', 'o', 'n', 'e'])
         self.weighted_node_text_entry_line.disable()
-        self.weighted_node_text_entry_line.set_text('     None')
+        self.weighted_node_text_entry_line.set_text('      None')
 
         self.current_pathfinding_algorithm = PathfindingAlgorithmTypes.ASTAR
         self.heuristic = PathfindingHeuristics.MANHATTAN_DISTANCE
@@ -1243,13 +1721,6 @@ class GameUIManager:
         self.recursive_division_speed = 15
         self.cursor_node_type = CursorNodeTypes.MARKED_NODE
         self.weight = 1
-
-    def load_ui_fonts(self):
-        with open('data/fonts/font_info.json') as file:
-            font_json_data = json.loads(file.read())
-            for font_name in font_json_data:
-                self.manager.add_font_paths(font_name, font_json_data[font_name]['regular'], font_json_data[font_name]['bold'], font_json_data[font_name]['italic'])
-
 
     def generate_theme_menu(self, theme=None, kill_theme_menu=False):
         if theme == None:
@@ -1269,12 +1740,15 @@ class GameUIManager:
         if self.client.connected_to_server:
             theme_menu_options.append('Send Theme To Clients')
 
-        self.theme_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((530, 130), (200, 40)),
+        self.theme_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((600, 130), (200, 50)),
                                                              options_list=theme_menu_options,
                                                              starting_option=theme,
                                                              manager=self.manager)
 
-    def generate_networking_menu(self):
+    def generate_networking_menu(self, kill_networking_menu=True):
+        if kill_networking_menu:
+            self.networking_menu.kill()
+
         if self.ui_networking_manager.created_server == False and self.ui_networking_manager.connected_to_server == False:
             options = ['Create Server', 'Connect to Server']
         elif self.ui_networking_manager.created_server and self.ui_networking_manager.connected_to_server == False:
@@ -1288,7 +1762,7 @@ class GameUIManager:
             print("connected_to_server:", self.ui_networking_manager.connected_to_server)
 
 
-        self.networking_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((750, 130), (220, 40)),
+        self.networking_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((650, 10), (200, 50)),
                                                                   options_list=options,
                                                                   starting_option=options[0],
                                                                   manager=self.manager)
@@ -1444,7 +1918,6 @@ class GameUIManager:
         self.recursive_division_speed = recursive_division_speed
         self.recursive_division_speed_slider.set_current_value(self.recursive_division_speed)
 
-
     def handle_ui_drop_down_menu_changed_event(self, event):
         self.theme_window.handle_theme_window_ui_drop_down_menu_changed_event(event)
         self.settings_window.handle_settings_window_ui_drop_down_menu_changed_event(event)
@@ -1558,35 +2031,37 @@ class GameUIManager:
                     theme = self.color_manager.get_theme_from_themes_list(event.text)
                     if theme != None:
                         self.color_manager.current_theme_name = event.text
-                        self.color_manager.set_and_animate_theme_colors_dict(theme)
+                        if self.pathfinding_algorithms_dict[self.current_pathfinding_algorithm].checked_nodes.gen_copy_without_empty_values() != []:
+                            pathfinding_algorithm = self.pathfinding_algorithms_dict[self.current_pathfinding_algorithm]
+                        else:
+                            pathfinding_algorithm = None
+
+                        self.color_manager.set_and_animate_theme_colors_dict(theme, pathfinding_algorithm)
 
         if event.ui_element == self.networking_menu:
             match event.text:
                 case 'Create Server':
                     self.ui_networking_manager.create_server()
-                    self.networking_menu.kill()
                     self.generate_networking_menu()
                     self.generate_theme_menu(kill_theme_menu=True)
                 case 'Connect to Server':
                     self.ui_networking_manager.build_networking_connect_to_server_screen()
                 case 'Show Server Info':
                     self.ui_networking_manager.show_server_info()
-                    self.networking_menu.kill()
                     self.generate_networking_menu()
                 case 'Destroy Server':
                     self.ui_networking_manager.destroy_server()
-                    self.networking_menu.kill()
                     self.generate_networking_menu()
                     self.generate_theme_menu(kill_theme_menu=True)
                 case 'Disconnect from Server':
                     self.ui_networking_manager.disconnect_from_server()
-                    self.networking_menu.kill()
                     self.generate_networking_menu()
                     self.generate_theme_menu(kill_theme_menu=True)
 
 
     def handle_ui_button_pressed_event(self, event):
         self.theme_window.handle_theme_window_ui_button_pressed_event(event)
+        self.settings_window.handle_settings_window_ui_button_pressed_event(event)
         update_theme_menu = self.ui_networking_manager.handle_ui_networking_manager_ui_button_pressed_event(event)
         if update_theme_menu:
             self.generate_theme_menu(kill_theme_menu=True)
@@ -1625,6 +2100,7 @@ class GameUIManager:
 
     def handle_ui_text_entry_finished_event(self, event):
         self.theme_window.handle_theme_window_ui_text_entry_finished_event(event)
+        self.settings_window.handle_settings_window_ui_text_entry_finished_event(event)
         if event.ui_element == self.weighted_node_text_entry_line:
             self.weight = int(event.text)
 
@@ -1649,7 +2125,6 @@ class GameUIManager:
 
         if event.ui_element == self.ui_networking_manager:
             if self.ui_networking_manager.connected_to_server:
-                self.networking_menu.kill()
                 self.generate_networking_menu()
 
         if event.ui_element == self.tutorial_window:
@@ -1663,9 +2138,14 @@ class GameUIManager:
 
     def handle_ui_selection_list_new_selection(self, event):
         self.theme_window.handle_theme_window_ui_selection_list_new_selection(event)
+        self.settings_window.handle_settings_window_ui_selection_list_new_selection(event)
 
     def handle_ui_selection_list_dropped_selection(self, event):
         self.theme_window.handle_theme_window_ui_selection_list_dropped_selection(event)
+        self.settings_window.handle_settings_window_ui_selection_list_dropped_selection(event)
+
+    def handle_ui_file_dialog_path_picked_event(self, event):
+        self.settings_window.handle_settings_window_ui_file_dialog_path_picked_event(event)
 
     def update_client_received_new_theme(self):
         if self.client.received_new_theme:
@@ -1680,7 +2160,6 @@ class GameUIManager:
         if self.client.server_connection_broken:
             self.client.server_connection_broken = False
             self.ui_networking_manager.server_connection_has_broken()
-            self.networking_menu.kill()
             self.generate_networking_menu()
             self.generate_theme_menu(kill_theme_menu=True)
 
@@ -1707,6 +2186,8 @@ class GameUIManager:
             self.theme_json_data['horizontal_slider']['colours']['dark_bg'] = color_string
             self.theme_json_data['selection_list']['colours']['dark_bg'] = color_string
             self.theme_json_data['text_entry_line']['colours']['dark_bg'] = color_string
+            self.theme_json_data['vertical_scroll_bar']['colours']['dark_bg'] = color_string
+            self.theme_json_data['text_box']['colours']['dark_bg'] = color_string
         elif ui_node_type == ColorUITypes.UI_DISABLED_BACKGROUND_COLOR:
             self.theme_json_data['defaults']['colours']['disabled_dark_bg'] = color_string
             self.theme_json_data['text_entry_line']['colours']['disabled_dark_bg'] = color_string
@@ -1729,6 +2210,35 @@ class GameUIManager:
                 self.color_manager.set_node_color(ui_node_type, colour)
 
         self.theme_manager.update_theming(json.dumps(self.theme_json_data))
+
+    def handle_ui_border_width_changed(self):
+        if self.settings_window.changed_ui_border_width:
+            print("[GAME UI MANAGER] Redraw UIDropDownMenus with new border width.")
+            self.settings_window.changed_ui_border_width = False
+            self.update_current_pathfinding_algorithm(self.current_pathfinding_algorithm)
+            self.update_current_maze_generation_algorithm(self.current_maze_generation_algorithm)
+
+            self.marked_or_weighted_node_menu.kill()
+            if self.cursor_node_type == CursorNodeTypes.MARKED_NODE:
+                marked_or_weighted_value = 'Marked'
+            else:
+                marked_or_weighted_value = 'Weighted'
+
+            self.marked_or_weighted_node_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((20, 130), (150, 35)),
+                                                                                   options_list=['Marked', 'Weighted'],
+                                                                                   starting_option=marked_or_weighted_value,
+                                                                                   manager=self.manager)
+
+            current_clear_nodes_option = self.clear_nodes_menu.selected_option
+            self.clear_nodes_menu.kill()
+            self.clear_nodes_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((310, 130), (200, 40)),
+                                                                       options_list=self.clear_node_types,
+                                                                       starting_option=current_clear_nodes_option,
+                                                                       manager=self.manager)
+
+            self.generate_theme_menu(kill_theme_menu=True)
+            self.generate_networking_menu()
+
 
     def draw(self):
         self.manager.draw_ui(self.screen_manager.screen)

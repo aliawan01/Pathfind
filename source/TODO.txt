@@ -40,29 +40,22 @@ FIX:
 - Fix bug with resizing not working in the networking when you change the slider quickly.
 
 - Remove print statements in theme window after you have finished
-- Flash a red light when the user types in the name of a theme which already exists when creating a new custom theme.
-- Find font for ThemeWindow
-- Allow the user to resize the theme window
 - Theme the widgets and put them in the correct place.
-- Replace the start and end nodes with icons and add options to edit their foreground and background colors in the
-  theming window.
 - Change the '->' in the buttons to go the next and previous pages in windows to something else (could be an image or another icon).
 - Make stuff bold in the html text where it needs to be bold.
-- Tooltips!
-- Check if the DRAW_CHECKED_NODES event is running and if it is then pass in the current pathfinding algorithm when setting the current theme.
+- Tooltips! (and find a way to theme them as well).
 - Center the stuff in the windows and make sure that they are in the right place.
-- Fix the transitioning not working properly when changing themes (with the path and the checked nodes).
 - Only let the user use certain widgets when something is running (e.g. only let the user use the recursive division speed slider
   when recursive division is running).
-- Remove the commented code for testing out how to change UI colours in main.py
 - Turn `color` into `colour` wherever possible in the codebase (use search and replace but be careful not to change any of pygame's Color)
 - Look at ways to cache the ui theme colours when changing them, as it seems to be faster
   when you try to switch back and forth between the themes (could try to write changes directly to the ui_theme.json file and then reload
   the theme via reload_theming() function in UIApperanceTheme.
-- UI Settings Menu.
-- Fix the border width not changing correctly for UIDropDownMenu.
-- Create some kind of global variable for the size of the title font and make all of the other title text boxes inherit from
-  that and then by using the <font> tag in the html set the pixel_size of the fonts.
+- UI Settings Menu (need to put the widgets in the correct position)
+- Remove commented code to run algorithms in main.py
+- Fix start and end nodes not animating properly.
+- MAJOR: Fix the positions of the widgets when we recreate them (e.g. the theme menu, pathfinding algorithms menu should be in the same place
+         when we recreate them).
 
 TODO:
 - Play music when the user places and deletes nodes, or when a path is being shown.

@@ -1,50 +1,4 @@
 {
-    "load_normal_font": {
-        "font": {
-            "name": "Roboto",
-            "size": "15",
-            "regular_resource": {
-                "package": "data.fonts.Roboto",
-                "resource": "Roboto-Medium.ttf"
-            },
-            "bold_resource": {
-                "package": "data.fonts.Roboto",
-                "resource": "Roboto-Bold.ttf"
-            },
-            "italic_resource": {
-                "package": "data.fonts.Roboto",
-                "resource": "Roboto-MediumItalic.ttf"
-            },
-            "bold_italic_resource": {
-                "package": "data.fonts.Roboto",
-                "resource": "Roboto-BoldItalic.ttf"
-            }
-        }
-    },
-
-    "load_title_font": {
-        "font": {
-            "name": "Roboto",
-            "size": "20",
-            "regular_resource": {
-                "package": "data.fonts.Roboto",
-                "resource": "Roboto-Medium.ttf"
-            },
-            "bold_resource": {
-                "package": "data.fonts.Roboto",
-                "resource": "Roboto-Bold.ttf"
-            },
-            "italic_resource": {
-                "package": "data.fonts.Roboto",
-                "resource": "Roboto-MediumItalic.ttf"
-            },
-            "bold_italic_resource": {
-                "package": "data.fonts.Roboto",
-                "resource": "Roboto-BoldItalic.ttf"
-            }
-        }
-    },
-
     "#ui_element_shape": {
         "misc": {
             "shape": "rounded_rectangle",
@@ -65,7 +19,8 @@
         "prototype": "#ui_element_shape",
         "font": {
             "name": "Roboto",
-            "size": "15"
+            "size": "15",
+            "normal_font": true
         },
         "colours": {},
         "misc": {
@@ -136,7 +91,8 @@
     "label": {
         "font": {
             "name": "Roboto",
-            "size": "15"
+            "size": "15",
+            "normal_font": true
         }
     },
 
@@ -155,7 +111,8 @@
     "text_box": {
         "font": {
             "name": "Roboto",
-            "size": "15"
+            "size": "15",
+            "normal_font": true
         },
         "colours": {},
         "misc": {
@@ -175,17 +132,14 @@
         }
     },
 
-    "#text_box_title": {
-        "font": {
-            "name": "Roboto",
-            "size": "20"
-        }
-    },
-
     "#text_box_info": {
         "misc": {
             "text_vert_alignment": "top"
         }
+    },
+
+    "#text_box_title": {
+        "colours": {}
     },
 
     "#message_window.text_box": {
@@ -199,7 +153,8 @@
         "prototype": "#ui_element_shape",
         "font": {
             "name": "Roboto",
-            "size": "15"
+            "size": "15",
+            "normal_font": true
         },
         "colours": {},
         "misc": {
@@ -224,11 +179,7 @@
         "prototype": "#ui_element_shape",
         "font": {
             "name": "Fira Mono",
-            "size": "20",
-            "regular_resource": {
-                "package": "data.fonts.FiraMono",
-                "resource": "FiraMono-Medium.ttf"
-            }
+            "size": "20"
         }
     },
 
@@ -255,7 +206,8 @@
     },
 
     "vertical_scroll_bar": {
-        "prototype": "#ui_element_shape"
+        "prototype": "#ui_element_shape",
+        "colours": {}
     },
 
     "vertical_scroll_bar.#sliding_button": {
@@ -278,6 +230,84 @@
             "border_width": "1"
         },
         "font": "Fira Mono"
+    },
+
+    "#custom_file_display_list": {
+        "colours": {}
+    },
+
+    "#custom_file_display_list.#file_display_list.vertical_scroll_bar": {
+        "prototype": "#ui_element_shape",
+        "misc":
+        {
+            "enable_arrow_buttons": "0"
+        }
+    },
+
+    "#custom_file_display_list.#file_display_list.vertical_scroll_bar.button":
+    {
+        "prototype": "#ui_element_shape"
+    },
+
+    "#custom_file_display_list.#file_display_list.#file_list_item":
+    {
+        "prototype": "#ui_element_shape",
+        "misc":
+        {
+            "border_width": "0",
+            "text_horiz_alignment": "left",
+            "text_horiz_alignment_padding": "5"
+        }
+    },
+
+    "#custom_file_display_list.#file_display_list.#directory_list_item":
+    {
+        "prototype": "#ui_element_shape",
+        "misc":
+        {
+            "border_width": "1",
+            "text_horiz_alignment": "left",
+            "text_horiz_alignment_padding": "5"
+        }
+    },
+
+    "#file_dialog_icon_buttons": {
+        "prototype": "#ui_element_shape",
+        "misc": {
+            "border_width": "1",
+            "text_vert_alignment": "top",
+            "text_vert_alignment_padding": "0",
+            "text_horiz_alignment_padding": "0"
+        },
+        "font": "Fira Mono"
+    },
+
+    "#custom_file_display_list.#home_icon_button":
+    {
+        "prototype": "#file_dialog_icon_buttons"
+    },
+
+    "#custom_file_display_list.#delete_icon_button":
+    {
+        "prototype": "#file_dialog_icon_buttons",
+        "misc":
+        {
+            "text_vert_alignment_padding": "0"
+        }
+    },
+
+    "#custom_file_display_list.#parent_icon_button":
+    {
+        "prototype": "#file_dialog_icon_buttons"
+    },
+
+    "#custom_file_display_list.#refresh_icon_button":
+    {
+        "prototype": "#file_dialog_icon_buttons",
+        "misc":
+        {
+            "text_vert_alignment_padding": "0"
+        }
     }
 }
 

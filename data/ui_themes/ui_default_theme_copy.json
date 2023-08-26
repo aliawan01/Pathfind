@@ -1,51 +1,5 @@
 {
-    "load_roboto_15": {
-        "font": {
-            "name": "Roboto",
-            "size": "15",
-            "regular_resource": {
-                "package": "data.fonts.Roboto",
-                "resource": "Roboto-Medium.ttf"
-            },
-            "bold_resource": {
-                "package": "data.fonts.Roboto",
-                "resource": "Roboto-Bold.ttf"
-            },
-            "italic_resource": {
-                "package": "data.fonts.Roboto",
-                "resource": "Roboto-MediumItalic.ttf"
-            },
-            "bold_italic_resource": {
-                "package": "data.fonts.Roboto",
-                "resource": "Roboto-BoldItalic.ttf"
-            }
-        }
-    },
-
-    "load_roboto_20": {
-        "font": {
-            "name": "Roboto",
-            "size": "20",
-            "regular_resource": {
-                "package": "data.fonts.Roboto",
-                "resource": "Roboto-Medium.ttf"
-            },
-            "bold_resource": {
-                "package": "data.fonts.Roboto",
-                "resource": "Roboto-Bold.ttf"
-            },
-            "italic_resource": {
-                "package": "data.fonts.Roboto",
-                "resource": "Roboto-MediumItalic.ttf"
-            },
-            "bold_italic_resource": {
-                "package": "data.fonts.Roboto",
-                "resource": "Roboto-BoldItalic.ttf"
-            }
-        }
-    },
-
-    "#rounded_rectangle_shape": {
+    "#ui_element_shape": {
         "misc": {
             "shape": "rounded_rectangle",
             "shape_corner_radius": "4",
@@ -58,19 +12,17 @@
     },
 
     "defaults": {
-        "colours": {
-            "normal_border": "#d6ffdf,#00ff37,0",
-            "hovered_bg": "#f0cc69"
-        }
+        "colours": {}
     },
 
     "button": {
-        "prototype": "#rounded_rectangle_shape",
+        "prototype": "#ui_element_shape",
         "font": {
             "name": "Roboto",
-            "size": "15"
+            "size": "15",
+            "normal_font": true
         },
-
+        "colours": {},
         "misc": {
             "text_horiz_alignment": "center",
             "text_vert_alignment": "center"
@@ -78,39 +30,42 @@
     },
 
     "drop_down_menu": {
-        "prototype": "#rounded_rectangle_shape",
+        "prototype": "#ui_element_shape",
         "misc": {
             "open_button_width": "0"
         }
     },
 
     "drop_down_menu.#selected_option": {
-        "prototype": "#rounded_rectangle_shape",
+        "prototype": "#ui_element_shape",
         "misc": {
             "border_width": "0"
         }
     },
 
     "drop_down_menu.#drop_down_options_list": {
-        "prototype": "#rounded_rectangle_shape",
+        "prototype": "#ui_element_shape",
         "misc": {
             "border_width": "1"
         }
     },
 
     "drop_down_menu.#drop_down_options_list.button": {
-        "prototype": "#rounded_rectangle_shape",
+        "prototype": "#ui_element_shape",
         "misc": {
             "border_width": "0"
         }
     },
 
     "horizontal_slider": {
-        "prototype": "#rounded_rectangle_shape"
+        "prototype": "#ui_element_shape",
+        "colours": {}
     },
 
     "horizontal_slider.#left_button": {
         "misc": {
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "1",
             "border_width": "1"
         },
         "font": "Fira Mono"
@@ -118,13 +73,15 @@
 
     "horizontal_slider.#right_button": {
         "misc": {
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "1",
             "border_width": "1"
         },
         "font": "Fira Mono"
     },
 
     "horizontal_slider.#sliding_button": {
-        "prototype": "#rounded_rectangle_shape",
+        "prototype": "#ui_element_shape",
         "misc": {
             "shape_corner_radius": "2",
             "border_width": "2"
@@ -134,19 +91,30 @@
     "label": {
         "font": {
             "name": "Roboto",
-            "size": "15"
+            "size": "15",
+            "normal_font": true
         }
     },
 
     "selection_list": {
-        "prototype": "#rounded_rectangle_shape"
+        "prototype": "#ui_element_shape",
+        "colours": {}
+    },
+
+    "selection_list.@selection_list_item": {
+        "misc": {
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "2"
+        }
     },
 
     "text_box": {
         "font": {
             "name": "Roboto",
-            "size": "15"
+            "size": "15",
+            "normal_font": true
         },
+        "colours": {},
         "misc": {
             "text_horiz_alignment": "center",
             "text_vert_alignment": "center",
@@ -164,17 +132,14 @@
         }
     },
 
-    "#text_box_title": {
-        "font": {
-            "name": "Roboto",
-            "size": "20"
-        }
-    },
-
     "#text_box_info": {
         "misc": {
             "text_vert_alignment": "top"
         }
+    },
+
+    "#text_box_title": {
+        "colours": {}
     },
 
     "#message_window.text_box": {
@@ -185,66 +150,72 @@
     },
 
     "text_entry_line": {
-        "prototype": "#rounded_rectangle_shape",
+        "prototype": "#ui_element_shape",
         "font": {
             "name": "Roboto",
-            "size": "15"
+            "size": "15",
+            "normal_font": true
         },
+        "colours": {},
         "misc": {
-            "shape_corner_radius": "4",
             "border_width": "2",
             "padding": "7, 4"
         }
     },
 
     "window": {
-        "prototype": "#rounded_rectangle_shape",
+        "prototype": "#ui_element_shape",
+        "colours": {},
         "misc": {
             "shape_corner_radius": "10"
         }
     },
 
     "window.#title_bar": {
-        "prototype": "#rounded_rectangle_shape"
+        "prototype": "#ui_element_shape"
     },
 
     "window.#close_button": {
-        "prototype": "#rounded_rectangle_shape",
+        "prototype": "#ui_element_shape",
         "font": {
             "name": "Fira Mono",
-            "size": "20",
-            "regular_resource": {
-                "package": "data.fonts.FiraMono",
-                "resource": "FiraMono-Medium.ttf"
-            }
+            "size": "20"
         }
     },
 
     "#colour_picker_dialog.colour_channel_editor.horizontal_slider": {
-        "prototype": "#rounded_rectangle_shape",
+        "prototype": "#ui_element_shape",
         "misc": {
             "border_width": "1"
         }
     },
 
     "#colour_picker_dialog.colour_channel_editor.horizontal_slider.#sliding_button": {
-        "prototype": "#rounded_rectangle_shape",
+        "prototype": "#ui_element_shape",
         "misc": {
             "shape_corner_radius": "2",
             "border_width": "1"
         }
     },
 
+    "#colour_picker_dialog.colour_channel_editor.text_entry_line": {
+        "prototype": "#ui_element_shape",
+        "misc": {
+            "border_width": "1"
+        }
+    },
+
     "vertical_scroll_bar": {
-        "prototype": "#rounded_rectangle_shape"
+        "prototype": "#ui_element_shape",
+        "colours": {}
     },
 
     "vertical_scroll_bar.#sliding_button": {
-        "prototype": "#rounded_rectangle_shape"
+        "prototype": "#ui_element_shape"
     },
 
     "vertical_scroll_bar.#top_button": {
-        "prototype": "#rounded_rectangle_shape",
+        "prototype": "#ui_element_shape",
         "misc": {
             "shape_corner_radius": "2",
             "border_width": "1"
@@ -253,11 +224,90 @@
     },
 
     "vertical_scroll_bar.#bottom_button": {
-        "prototype": "#rounded_rectangle_shape",
+        "prototype": "#ui_element_shape",
         "misc": {
             "shape_corner_radius": "2",
             "border_width": "1"
         },
         "font": "Fira Mono"
+    },
+
+    "#custom_file_display_list": {
+        "colours": {}
+    },
+
+    "#custom_file_display_list.#file_display_list.vertical_scroll_bar": {
+        "prototype": "#ui_element_shape",
+        "misc":
+        {
+            "enable_arrow_buttons": "0"
+        }
+    },
+
+    "#custom_file_display_list.#file_display_list.vertical_scroll_bar.button":
+    {
+        "prototype": "#ui_element_shape"
+    },
+
+    "#custom_file_display_list.#file_display_list.#file_list_item":
+    {
+        "prototype": "#ui_element_shape",
+        "misc":
+        {
+            "border_width": "0",
+            "text_horiz_alignment": "left",
+            "text_horiz_alignment_padding": "5"
+        }
+    },
+
+    "#custom_file_display_list.#file_display_list.#directory_list_item":
+    {
+        "prototype": "#ui_element_shape",
+        "misc":
+        {
+            "border_width": "1",
+            "text_horiz_alignment": "left",
+            "text_horiz_alignment_padding": "5"
+        }
+    },
+
+    "#file_dialog_icon_buttons": {
+        "prototype": "#ui_element_shape",
+        "misc": {
+            "border_width": "1",
+            "text_vert_alignment": "top",
+            "text_vert_alignment_padding": "0",
+            "text_horiz_alignment_padding": "0"
+        },
+        "font": "Fira Mono"
+    },
+
+    "#custom_file_display_list.#home_icon_button":
+    {
+        "prototype": "#file_dialog_icon_buttons"
+    },
+
+    "#custom_file_display_list.#delete_icon_button":
+    {
+        "prototype": "#file_dialog_icon_buttons",
+        "misc":
+        {
+            "text_vert_alignment_padding": "0"
+        }
+    },
+
+    "#custom_file_display_list.#parent_icon_button":
+    {
+        "prototype": "#file_dialog_icon_buttons"
+    },
+
+    "#custom_file_display_list.#refresh_icon_button":
+    {
+        "prototype": "#file_dialog_icon_buttons",
+        "misc":
+        {
+            "text_vert_alignment_padding": "0"
+        }
     }
 }
+

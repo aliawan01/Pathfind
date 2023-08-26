@@ -1,7 +1,1 @@
-{
-    "Roboto": {
-        "regular": "data/fonts/Roboto/Roboto-Medium.ttf",
-        "bold": "data/fonts/Roboto/Roboto-Bold.ttf",
-        "italic": "data/fonts/Roboto/Roboto-MediumItalic.ttf"
-    }
-}
+{"Roboto": {"custom_font": false, "regular": "data/fonts/Roboto/Roboto-Medium.ttf", "bold": "data/fonts/Roboto/Roboto-Bold.ttf", "title": "data/fonts/Roboto/Roboto-Medium.ttf"}, "Fira Mono": {"custom_font": false, "regular": "data/fonts/FiraMono/FiraMono-Medium.ttf", "bold": "data/fonts/FiraMono/FiraMono-Bold.ttf", "title": "data/fonts/FiraMono/FiraMono-Medium.ttf"}, "Satoshi": {"custom_font": false, "regular": "data/fonts/Satoshi/Satoshi-Medium.otf", "bold": "data/fonts/Satoshi/Satoshi-Bold.otf", "title": "data/fonts/Satoshi/Satoshi-Medium.otf"}, "oogy": {"custom_font": true, "regular": "C:\\Users\\aliam\\Downloads\\JetBrainsMono-2.304\\fonts\\variable\\JetBrainsMono-Italic[wght].ttf", "bold": "C:\\Users\\aliam\\Downloads\\Inter-3.19\\Inter Variable\\Inter.ttf", "title": "C:\\Users\\aliam\\Downloads\\Fira_Mono\\FiraMono-Bold.ttf"}}

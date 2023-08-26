@@ -32,8 +32,8 @@ def main():
     pygame.init()
     clock = pygame.time.Clock()
 
-    screen_width = 1000
-    screen_height = 800
+    screen_width = 1100
+    screen_height = 900
 
     grid_width = screen_width
     # grid_height = screen_height
@@ -157,6 +157,9 @@ def main():
 
             if event.type == pygame_gui.UI_SELECTION_LIST_DROPPED_SELECTION:
                 ui_manager.handle_ui_selection_list_dropped_selection(event)
+
+            if event.type == pygame_gui.UI_FILE_DIALOG_PATH_PICKED:
+                ui_manager.handle_ui_file_dialog_path_picked_event(event)
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_F6:
@@ -386,6 +389,7 @@ def main():
                 #
                 #     client.create_network_event(NetworkingEventTypes.RUN_MAZE_GENERATION_ALGORITHM, MazeGenerationAlgorithmTypes.RECURSIVE_DIVISION, recursive_division_maze.maze.to_list())
 
+                # TODO(ali): Will need to remove this after testing
                 if event.key == pygame.K_F2:
                     client.connect_to_server("127.0.0.1", 5000)
 
@@ -519,6 +523,7 @@ def main():
         server.get_pathfinding_algorithm_speed_and_recursive_division_speed(pathfinding_algorithm_speed, recursive_division_speed)
         ui_manager.update_networking_server_connection_broken()
         ui_manager.update_client_received_new_theme()
+        ui_manager.handle_ui_border_width_changed()
 
         ui_manager.draw()
         pygame.draw.aaline(screen, color_manager.colors['green'], (top_left[0] + centerx, top_left[1] + centery), (top_right[0] + centerx, top_right[1] + centery))
