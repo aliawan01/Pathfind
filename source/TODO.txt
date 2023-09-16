@@ -33,29 +33,21 @@ FIX:
   be a problem with the current version of the interpreter).
 - Allow the user to just close the window and it will shut down it's connection to the server as well
   (if it is already implemented it doesn't seem to be working properly).
-- Find a way to fix the bug to clear the checked nodes without clearing or drawing over the path nodes without crashing
-  the program.
 - Try removing the try except statements from function get_start_and_end_coords and see if the
     networking will crash.
 - Fix bug with resizing not working in the networking when you change the slider quickly.
 
 - Remove print statements in theme window after you have finished
-- Theme the widgets and put them in the correct place.
 - Change the '->' in the buttons to go the next and previous pages in windows to something else (could be an image or another icon).
-- Make stuff bold in the html text where it needs to be bold.
 - Tooltips! (and find a way to theme them as well).
-- Center the stuff in the windows and make sure that they are in the right place.
-- Only let the user use certain widgets when something is running (e.g. only let the user use the recursive division speed slider
-  when recursive division is running).
 - Turn `color` into `colour` wherever possible in the codebase (use search and replace but be careful not to change any of pygame's Color)
-- Look at ways to cache the ui theme colours when changing them, as it seems to be faster
-  when you try to switch back and forth between the themes (could try to write changes directly to the ui_theme.json file and then reload
-  the theme via reload_theming() function in UIApperanceTheme.
-- UI Settings Menu (need to put the widgets in the correct position)
 - Remove commented code to run algorithms in main.py
 - Fix start and end nodes not animating properly.
-- MAJOR: Fix the positions of the widgets when we recreate them (e.g. the theme menu, pathfinding algorithms menu should be in the same place
-         when we recreate them).
+- May have accidentally fixed issues with recursive division crashing in networking?!! Keep on checking to make sure (there may also be some issue
+  with the stacks not being reset when resizing the grid after running a maze generation algorithm but I think it fixed itself as well).
+- Go through all of the TODO in the project.
+- Finish making the tutorial window
+- Fix bug so that if the path goes over a weighted node then the path node should be drawn on top of the weighted node.
 
 TODO:
 - Play music when the user places and deletes nodes, or when a path is being shown.

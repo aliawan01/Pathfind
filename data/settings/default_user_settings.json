@@ -5,5 +5,6 @@
     "ui_normal_font_size_value": 15,
     "ui_title_font_size_value": 20,
     "grid_width": 1,
-    "current_font_name": "Roboto"
+    "current_font_name": "Roboto",
+    "disable_tutorial_on_startup": false
 }

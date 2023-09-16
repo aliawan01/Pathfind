@@ -57,12 +57,16 @@ class PathfindingAlgorithm:
         else:
             return self.path
 
-    def reset_checked_nodes_pointer(self):
-        self.checked_nodes_pointer = -1
+    def reset_checked_nodes_pointer(self, check_for_colliding_path_nodes=False):
         if self.reset_checked_nodes == False:
-            for coord in self.checked_nodes.gen_copy_without_empty_values():
-                self.animation_manager.add_coords_to_animation_dict(coord, AnimationTypes.SHRINKING_SQUARE, self.color_manager.CHECKED_NODE_FOREGROUND_COLOR, AnimationBackgroundTypes.THEME_BACKGROUND)
+            for coord in self.checked_nodes.gen_copy_without_empty_values()[:self.checked_nodes_pointer]:
+                if check_for_colliding_path_nodes:
+                    if coord not in self.path.gen_copy_without_empty_values():
+                        self.animation_manager.add_coords_to_animation_dict(coord, AnimationTypes.SHRINKING_SQUARE, self.color_manager.CHECKED_NODE_FOREGROUND_COLOR, AnimationBackgroundTypes.THEME_BACKGROUND)
+                else:
+                    self.animation_manager.add_coords_to_animation_dict(coord, AnimationTypes.SHRINKING_SQUARE, self.color_manager.CHECKED_NODE_FOREGROUND_COLOR, AnimationBackgroundTypes.THEME_BACKGROUND)
 
+        self.checked_nodes_pointer = -1
         self.reset_checked_nodes = True
         self.checked_nodes = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
 
@@ -73,15 +77,20 @@ class PathfindingAlgorithm:
         else:
             return -1
 
-    def reset_path_pointer(self, background_color=AnimationBackgroundTypes.THEME_BACKGROUND):
-        self.path_pointer = -1
+    def reset_path_pointer(self, use_checked_nodes_foreground_color=False):
         if self.reset_path_nodes == False:
-            for coord in self.path.gen_copy_without_empty_values():
-                if coord not in self.checked_nodes.gen_copy_without_empty_values():
-                    self.animation_manager.add_coords_to_animation_dict(coord, AnimationTypes.SHRINKING_SQUARE, self.color_manager.PATH_NODE_FOREGROUND_COLOR, AnimationBackgroundTypes.THEME_BACKGROUND)
-                else:
-                    self.animation_manager.add_coords_to_animation_dict(coord, AnimationTypes.SHRINKING_SQUARE, self.color_manager.PATH_NODE_FOREGROUND_COLOR, background_color)
+            print(self.path_pointer)
+            print(len(self.path.gen_copy_without_empty_values()))
+            if self.path_pointer != -1:
+                for coord in self.path.gen_copy_without_empty_values()[:self.path_pointer]:
+                    if use_checked_nodes_foreground_color:
+                        if coord in self.checked_nodes.gen_copy_without_empty_values():
+                            self.animation_manager.add_coords_to_animation_dict(coord, AnimationTypes.SHRINKING_SQUARE, self.color_manager.PATH_NODE_FOREGROUND_COLOR, self.color_manager.CHECKED_NODE_FOREGROUND_COLOR)
+                            continue
 
+                    self.animation_manager.add_coords_to_animation_dict(coord, AnimationTypes.SHRINKING_SQUARE, self.color_manager.PATH_NODE_FOREGROUND_COLOR, self.color_manager.BOARD_COLOR)
+
+        self.path_pointer = -1
         self.reset_path_nodes = True
         self.path = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
 

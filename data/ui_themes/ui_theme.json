@@ -96,6 +96,18 @@
         }
     },
 
+    "#label_left_horiz_alignment": {
+        "font": {
+            "name": "Roboto",
+            "size": "15",
+            "normal_font": true
+        },
+        "misc": {
+            "text_horiz_alignment": "left"
+        },
+        "colours": {}
+    },
+
     "selection_list": {
         "prototype": "#ui_element_shape",
         "colours": {}
@@ -176,6 +188,14 @@
     },
 
     "window.#close_button": {
+        "prototype": "#ui_element_shape",
+        "font": {
+            "name": "Fira Mono",
+            "size": "20"
+        }
+    },
+
+    "#tutorial_button": {
         "prototype": "#ui_element_shape",
         "font": {
             "name": "Fira Mono",

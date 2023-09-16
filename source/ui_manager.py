@@ -121,23 +121,23 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
                                                               container=self,
                                                               manager=self.manager)
 
-        self.custom_theme_name_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((150, 80), (200, 80)),
+        self.custom_theme_name_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((220, 80), (220, 80)),
                                                                    text='Custom Theme Name',
                                                                    container=self,
                                                                    manager=self.manager)
 
-        self.custom_theme_name_text_entry_line = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((175, 140), (150, 50)),
+        self.custom_theme_name_text_entry_line = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((230, 140), (200, 50)),
                                                                                      container=self,
                                                                                      manager=self.manager)
 
-        self.custom_theme_inheriting_theme_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((150, 250), (200, 80)),
+        self.custom_theme_inheriting_theme_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((220, 250), (220, 80)),
                                                                                text='Inherit from Theme',
                                                                                container=self,
                                                                                manager=self.manager)
 
         custom_themes_names = self.color_manager.get_all_theme_names_from_themes_list()
         custom_themes_names.append('None')
-        self.custom_theme_inheriting_theme_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((175, 310), (150, 50)),
+        self.custom_theme_inheriting_theme_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((230, 310), (200, 50)),
                                                                                      options_list=custom_themes_names,
                                                                                      starting_option='None',
                                                                                      container=self,
@@ -248,15 +248,15 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
                                                                     manager=self.manager)
 
         # TODO(ali): Make the self.custom_theme_name bold in the html_text (do this once you have set the fonts)
-        self.finish_button_info = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((100, 100), (400, 200)),
-                                                                html_text=(f"Pressing the finish button will create "
-                                                                           f"the new custom theme {self.custom_theme_name} and it will "
-                                                                           f"be set as the current theme."),
+        self.finish_button_info = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((140, 100), (400, 200)),
+                                                                html_text=(f"Pressing the <b>Finish Button</b> will create "
+                                                                           f"the New Custom Theme: <b>{self.custom_theme_name}</b> "
+                                                                           f"and it will be set as the Current Theme."),
                                                                 object_id="#text_box_info",
                                                                 container=self,
                                                                 manager=self.manager)
 
-        self.finish_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((200, 330), (200, 100)),
+        self.finish_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((240, 500), (200, 50)),
                                                           text='Finish',
                                                           container=self,
                                                           manager=self.manager)
@@ -298,9 +298,9 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
                                                                                    container=self,
                                                                                    manager=self.manager)
 
-        self.custom_theme_editing_selection_list_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((160, 70), (300, 100)),
+        self.custom_theme_editing_selection_list_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((190, 70), (300, 100)),
                                                                                           html_text=('Press the theme you want to edit and then'
-                                                                                                     ' click on the next page button'),
+                                                                                                     ' click on the <b>Next Page</b> button'),
                                                                                           object_id="#text_box_info",
                                                                                           container=self,
                                                                                           manager=self.manager)
@@ -312,7 +312,7 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
             self.changed_custom_theme_to_edit_name = True
 
         print(self.custom_theme_to_edit_name)
-        self.custom_theme_editing_selection_list = pygame_gui.elements.UISelectionList(relative_rect=pygame.Rect((180, 180), ((250, 250))),
+        self.custom_theme_editing_selection_list = pygame_gui.elements.UISelectionList(relative_rect=pygame.Rect((210, 180), ((250, 250))),
                                                                                        item_list=custom_theme_names,
                                                                                        default_selection=self.custom_theme_to_edit_name,
                                                                                        container=self,
@@ -327,6 +327,7 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
     def build_custom_theme_editing_color_selection_screen(self):
         self.stage = ThemeWindowStages.CUSTOM_THEME_EDITING_COLOR_SELECTION_SCREEN
         self.custom_theme_editing_previous_page_button.enable()
+        self.custom_theme_editing_next_page_button.enable()
         self.custom_theme_editing_color_selection_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((70, 5), (self.window_width - 180, 50)),
                                                                                            html_text=f"<font name={self.font_manager.current_font_name} pixel_size={self.font_manager.ui_title_font_size_value}><var>Edit Color Selection</var></font>",
                                                                                            object_id="#text_box_title",
@@ -415,15 +416,15 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
                                                                                          manager=self.manager)
 
         # TODO(ali): Make the self.custom_theme_to_edit_name bold in the html_text (do this once you have set the fonts)
-        self.custom_theme_editing_save_changes_button_info = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((100, 100), (400, 200)),
-                                                                                     html_text=(f"Pressing the save changes button will save the changes"
-                                                                                                f" you made to the custom theme {self.custom_theme_to_edit_name}"
-                                                                                                f" and it will be set as the current theme."),
+        self.custom_theme_editing_save_changes_button_info = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((130, 100), (400, 200)),
+                                                                                     html_text=(f"Pressing the <b>Save Changes</b> button will save the changes"
+                                                                                                f" you made to the Custom Theme: <b>{self.custom_theme_to_edit_name}</b>"
+                                                                                                f" and it will be set as the Current Theme."),
                                                                                      object_id="#text_box_info",
                                                                                      container=self,
                                                                                      manager=self.manager)
 
-        self.custom_theme_editing_save_changes_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((200, 330), (200, 100)),
+        self.custom_theme_editing_save_changes_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((240, 500), (200, 50)),
                                                                                      text='Save Changes',
                                                                                      container=self,
                                                                                      manager=self.manager)
@@ -452,9 +453,9 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
                                                                                   container=self,
                                                                                   manager=self.manager)
 
-        self.custom_theme_deletion_info_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((10, 47), (self.window_width-50, 100)),
+        self.custom_theme_deletion_info_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((10, 60), (self.window_width-50, 100)),
                                                                                  html_text= ("Select the Custom Theme you want to delete from the menu below"
-                                                                                             " and press the 'Delete Themes' button to delete the theme."),
+                                                                                             " and press the <b>Delete Themes</b> button to delete the theme."),
                                                                                  object_id="#text_box_info",
                                                                                  container=self,
                                                                                  manager=self.manager)
@@ -462,13 +463,13 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
         custom_theme_names = self.color_manager.get_all_custom_theme_names_from_themes_list()
         print("[THEME WINDOW] Custom theme names:", custom_theme_names)
 
-        self.custom_themes_selection_list = pygame_gui.elements.UISelectionList(relative_rect=pygame.Rect((180, 120), ((250, 250))),
+        self.custom_themes_selection_list = pygame_gui.elements.UISelectionList(relative_rect=pygame.Rect((210, 150), ((250, 250))),
                                                                                 item_list=custom_theme_names,
                                                                                 allow_multi_select=True,
                                                                                 container=self,
                                                                                 manager=self.manager)
 
-        self.custom_theme_delete_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((205, 390), (200, 50)),
+        self.custom_theme_delete_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((237, 420), (200, 50)),
                                                                        text='Delete Themes',
                                                                        container=self,
                                                                        manager=self.manager)
@@ -531,7 +532,7 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
                         else:
                             current_inheriting_theme_name = self.inheriting_theme
 
-                        self.custom_theme_inheriting_theme_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((175, 310), (150, 50)),
+                        self.custom_theme_inheriting_theme_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((230, 310), (200, 50)),
                                                                                                      options_list=custom_themes_names,
                                                                                                      starting_option=current_inheriting_theme_name,
                                                                                                      container=self,
@@ -696,8 +697,8 @@ class UINetworkingManager(pygame_gui.elements.UIWindow):
             self.client.connect_to_server(self.ip_address, self.port)
             # TODO(ali): Make the port and ip address bold
 
-            message = (f'We have successfully created a server running on<br><br>Ip Address: {self.ip_address}<br>Port: {self.port}<br>'
-                       f'<br>You can now allow your friends to join your game by telling them to click on the `Connect to Server` option'
+            message = (f'We have successfully created a server running on<br><br><b>IP Address: {self.ip_address}<br>Port: {self.port}</b><br>'
+                       f'<br>You can now allow your friends to join your game by telling them to click on the <b>Connect to Server</b> option'
                        f' and typing in the IP address and port shown in this window in the relevant fields.')
 
             pygame_gui.windows.UIMessageWindow(rect=pygame.Rect((60, 100), (self.window_width, self.window_height)),
@@ -706,9 +707,9 @@ class UINetworkingManager(pygame_gui.elements.UIWindow):
                                                manager=self.manager)
 
     def show_server_info(self):
-        message = (f'Your server is running on<br><br>Ip Address: {self.ip_address}<br>Port: {self.port}<br>'
-                   f'Number of currently connected clients: {self.server.get_number_of_currently_connected_clients()}'
-                   f'<br><br>You can allow your friends to join your game by telling them to click on the `Connect to Server`'
+        message = (f'Your server is running on<br><br><b>IP Address: {self.ip_address}<br>Port: {self.port}<br>'
+                   f'Number of currently connected clients: {self.server.get_number_of_currently_connected_clients()}</b>'
+                   f'<br><br>You can allow your friends to join your game by telling them to click on the <b>Connect to Server</b>'
                    f' option and typing in the IP address and port shown in this window in the relevant fields.')
 
         pygame_gui.windows.UIMessageWindow(rect=pygame.Rect((60, 100), (self.window_width, self.window_height)),
@@ -770,32 +771,32 @@ class UINetworkingManager(pygame_gui.elements.UIWindow):
         self.networking_connect_to_server_welcome_info_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((10, 55), (self.window_width - 50, 100)),
                                                                                                 html_text= ("In order to connect to a server you must type in the"
                                                                                                             " server's IP Address and Port Number in the relevant fields"
-                                                                                                            " below. You can then click the Connect button to see if"
+                                                                                                            " below. You can then click the <b>Connect</b> button to see if"
                                                                                                             " we can connect to the server with the information you have provided."),
                                                                                                 object_id="#text_box_info",
                                                                                                 container=self,
                                                                                                 manager=self.manager)
 
-        self.networking_connect_to_server_ip_address_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((220, 170), (150, 35)),
+        self.networking_connect_to_server_ip_address_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((235, 170), (150, 35)),
                                                                                          text='IP Address',
                                                                                          container=self,
                                                                                          manager=self.manager)
 
-        self.networking_connect_to_server_ip_address_text_entry_line = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((190, 205), (200, 50)),
+        self.networking_connect_to_server_ip_address_text_entry_line = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((205, 205), (200, 50)),
                                                                                                            container=self,
                                                                                                            manager=self.manager)
         self.networking_connect_to_server_ip_address_text_entry_line.set_text("127.0.0.1")
 
-        self.networking_connect_to_server_port_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((220, 285), (150, 35)),
+        self.networking_connect_to_server_port_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((235, 285), (150, 35)),
                                                                                    text='Port Number',
                                                                                    container=self,
                                                                                    manager=self.manager)
 
-        self.networking_connect_to_server_port_text_entry_line = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((190, 320), (200, 50)),
+        self.networking_connect_to_server_port_text_entry_line = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((205, 320), (200, 50)),
                                                                                                      container=self,
                                                                                                      manager=self.manager)
 
-        self.networking_connect_to_server_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((190, 420), (200, 50)),
+        self.networking_connect_to_server_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((205, 420), (200, 50)),
                                                                                 text='Connect',
                                                                                 container=self,
                                                                                 manager=self.manager)
@@ -826,7 +827,7 @@ class UINetworkingManager(pygame_gui.elements.UIWindow):
 
                 server_ip_address = self.networking_connect_to_server_ip_address_text_entry_line.get_text()
                 if self.check_is_valid_ip_address(server_ip_address) == False:
-                    self.networking_connect_to_server_ip_address_text_entry_line.set_text("Invalid ip address")
+                    self.networking_connect_to_server_ip_address_text_entry_line.set_text("Invalid IP Address")
                     exit = True
 
                 try:
@@ -844,11 +845,11 @@ class UINetworkingManager(pygame_gui.elements.UIWindow):
                 successfully_connected_to_server = self.client.connect_to_server(server_ip_address, server_port)
                 print(self.client.connected_to_server)
                 if successfully_connected_to_server == False:
-                    message = f'Unable to connect to server with ip address {server_ip_address} on port {server_port}'
+                    message = f'Unable to connect to server with IP Address <b>{server_ip_address}</b> on port <b>{server_port}</b>'
                     self.connected_to_server = False
                     self.created_server = False
                 else:
-                    message = f'Successfully connected to server with ip address {server_ip_address} on port {server_port}'
+                    message = f'Successfully connected to server with IP Address <b>{server_ip_address}</b> on port <b>{server_port}</b>'
                     self.connected_to_server = True
                     self.created_server = False
 
@@ -862,24 +863,41 @@ class UINetworkingManager(pygame_gui.elements.UIWindow):
                 if self.connected_to_server:
                     return True
 
-
-
     def shutdown_networking_window(self):
         print("[NETWORKING WINDOW] Shutdown Networking Window")
         self.window_running = False
 
 class TutorialWindowStages(IntEnum):
-    TUTORIAL_WELCOME_SCREEN = 0
+    TUTORIAL_WELCOME_SCREEN = 0,
+    TUTORIAL_PROJECT_DESCRIPTION = 1,
+    TUTORIAL_PATHFINDING_ALGORITHM = 2,
+    TUTORIAL_PATHFINDING_ALGORITHM_INFO = 3,
+    TUTORIAL_MAZE_GENERATION_ALGORITHM = 4,
+    TUTORIAL_MAZE_GENERATION_ALGORITHM_INFO = 5,
+    TUTORIAL_SETTINGS = 6,
+    TUTORIAL_FONTS = 7,
+    TUTORIAL_MARKED_AND_WEIGHTED_NODES = 8,
+    TUTORIAL_CLEARING_NODES = 9,
+    TUTORIAL_THEMING = 10,
+    TUTORIAL_NETWORKING = 11,
+    # TODO(ali): Tell the user to explore the rest of the UI and game as well in the end screen.
+    TUTORIAL_END_SCREEN = 12
 
 class TutorialWindow(pygame_gui.elements.UIWindow):
-    def __init__(self, manager, color_manager, font_manager):
+    def __init__(self, manager, color_manager, font_manager, settings_window):
         self.manager = manager
         self.color_manager = color_manager
         self.font_manager = font_manager
+        self.settings_window = settings_window
         self.window_width = 650
         self.window_height = 600
         self.window_running = False
-        self.stage = None
+        self.stage = 0
+        self.stages_build_and_clean_functions_dict = {
+            TutorialWindowStages.TUTORIAL_WELCOME_SCREEN: {'build': self.build_tutorial_welcome_screen, 'clean': self.clean_tutorial_welcome_screen},
+            TutorialWindowStages.TUTORIAL_PROJECT_DESCRIPTION: {'build': self.build_project_description_screen, 'clean': self.clean_project_description_screen},
+            TutorialWindowStages.TUTORIAL_PATHFINDING_ALGORITHM: {'build': self.build_pathfinding_algorithm_screen, 'clean': self.clean_pathfinding_algorithm_screen}
+        }
 
     def build_tutorial_welcome_screen(self):
         self.stage = TutorialWindowStages.TUTORIAL_WELCOME_SCREEN
@@ -911,9 +929,60 @@ class TutorialWindow(pygame_gui.elements.UIWindow):
                                                               container=self,
                                                               manager=self.manager)
 
+        self.disable_tutorial_on_startup = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((410, 470), (180, 50)),
+                                                                        text='Disable On Startup',
+                                                                        container=self,
+                                                                        manager=self.manager)
+
+        if self.settings_window.should_build_tutorial_window_on_startup() == False:
+            self.disable_tutorial_on_startup.hide()
+
     def clean_tutorial_welcome_screen(self):
-        self.stage = None
         self.welcome_text_box.kill()
+        self.disable_tutorial_on_startup.kill()
+
+    def build_project_description_screen(self):
+        self.stage = TutorialWindowStages.TUTORIAL_PROJECT_DESCRIPTION
+        self.project_description_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((70, 5), (self.window_width - 180, 80)),
+                                                                          html_text=f"<font name={self.font_manager.current_font_name} pixel_size={self.font_manager.ui_title_font_size_value}><var>Project Description</var></font>",
+                                                                          object_id="#text_box_title",
+                                                                          container=self,
+                                                                          manager=self.manager)
+
+        self.next_page_button.enable()
+        self.previous_page_button.enable()
+
+    def clean_project_description_screen(self):
+        self.project_description_text_box.kill()
+
+    def build_pathfinding_algorithm_screen(self):
+        self.stage = TutorialWindowStages.TUTORIAL_PATHFINDING_ALGORITHM
+        self.pathfinding_algorithm_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((70, 5), (self.window_width - 180, 80)),
+                                                                            html_text=f"<font name={self.font_manager.current_font_name} pixel_size={self.font_manager.ui_title_font_size_value}><var>Pathfinding Algorithms</var></font>",
+                                                                            object_id="#text_box_title",
+                                                                            container=self,
+                                                                            manager=self.manager)
+
+        self.next_page_button.enable()
+        self.previous_page_button.enable()
+
+    def clean_pathfinding_algorithm_screen(self):
+        self.pathfinding_algorithm_text_box.kill()
+
+    def handle_tutorial_window_ui_button_pressed(self, event):
+        if self.window_running:
+            if self.stage == TutorialWindowStages.TUTORIAL_WELCOME_SCREEN:
+                if event.ui_element == self.disable_tutorial_on_startup:
+                    print("[TUTORIAL WINDOW] Tutorial Window has been disabled from startup")
+                    self.settings_window.set_disable_tutorial_window_on_startup(True)
+                    self.disable_tutorial_on_startup.kill()
+
+            if event.ui_element == self.next_page_button:
+                self.stages_build_and_clean_functions_dict[self.stage]['clean']()
+                self.stages_build_and_clean_functions_dict[self.stage+1]['build']()
+            elif event.ui_element == self.previous_page_button:
+                self.stages_build_and_clean_functions_dict[self.stage]['clean']()
+                self.stages_build_and_clean_functions_dict[self.stage-1]['build']()
 
     def shutdown(self):
         print("[TUTORIAL WINDOW] Shutdown Tutorial Window")
@@ -1004,6 +1073,7 @@ class FontManager:
                         self.theme_json_data[ui_element]['font']['name'] = font_name
             else:
                 self.theme_manager.update_theming(json.dumps(self.theme_json_data))
+
         else:
             print(f"[FONT MANAGER: SET_CURRENT_FONT] Error no font exists with the name '{font_name}'")
             return False
@@ -1100,7 +1170,7 @@ class SettingsWindow(pygame_gui.elements.UIWindow):
         self.changed_ui_border_width = True
 
         self.ui_element_shape_drop_down_menu.kill()
-        self.ui_element_shape_drop_down_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((30, 100), (160, 40)),
+        self.ui_element_shape_drop_down_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((70, 100), (160, 40)),
                                                                                   options_list=['Rounded Rectangle', 'Rectangle'],
                                                                                   starting_option=self.ui_element_shape,
                                                                                   container=self,
@@ -1113,7 +1183,7 @@ class SettingsWindow(pygame_gui.elements.UIWindow):
         if self.font_manager.custom_ui_fonts_exist():
             font_name_list.append('Delete Custom Font')
 
-        self.ui_font_drop_down_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((30, 380), (160, 40)),
+        self.ui_font_drop_down_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((80, 380), (160, 40)),
                                                                          options_list=font_name_list,
                                                                          starting_option=self.font_manager.current_font_name,
                                                                          container=self,
@@ -1133,6 +1203,13 @@ class SettingsWindow(pygame_gui.elements.UIWindow):
         self.theme_json_data['horizontal_slider.#right_button']['misc']['shape_corner_radius'] = str(self.ui_corner_roundness_value // 2)
         self.theme_manager.update_theming(json.dumps(self.theme_json_data))
 
+    def should_build_tutorial_window_on_startup(self):
+        return not self.user_settings_json_data['disable_tutorial_on_startup']
+
+    def set_disable_tutorial_window_on_startup(self, option):
+        self.user_settings_json_data['disable_tutorial_on_startup'] = option
+        self.save_user_settings()
+
     def build_settings_window(self):
         self.stage = SettingsWindowStages.SETTINGS_WINDOW_SETTINGS_SCREEN
 
@@ -1151,36 +1228,24 @@ class SettingsWindow(pygame_gui.elements.UIWindow):
                                                                           object_id="#text_box_title",
                                                                           container=self,
                                                                           manager=self.manager)
-        """
-        TODO(ali): Settings that the user needs to be able to change (make it remember the settings as well maybe?): 
-        - Shape (rectangle or rounded rectangle?) (DONE)
-        - Roundness (if rounded rectangle) (DONE)
-        - Grid width (DONE)
-        - Border Width (DONE)
-        - Normal font size (DONE MOSTLY - Need to fix errors with the text not fitting in the rects of the UI elements)
-        - Title font size (DONE)
-        - Font (DONE)
-        - Reset button (DONE)
-        - Save Button (DONE)
-        """
 
-        self.ui_element_shape_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((30, 60), (160, 40)),
+        self.ui_element_shape_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((60, 60), (180, 40)),
                                                                   text="UI Element Shape",
                                                                   container=self,
                                                                   manager=self.manager)
 
-        self.ui_element_shape_drop_down_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((30, 100), (160, 40)),
+        self.ui_element_shape_drop_down_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((70, 100), (160, 40)),
                                                                                   options_list=['Rounded Rectangle', 'Rectangle'],
                                                                                   starting_option=self.ui_element_shape,
                                                                                   container=self,
                                                                                   manager=self.manager)
 
-        self.ui_corner_roundness_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((230, 60), (240, 40)),
+        self.ui_corner_roundness_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((330, 60), (240, 40)),
                                                                      text="UI Corner Roundness",
                                                                      container=self,
                                                                      manager=self.manager)
 
-        self.ui_corner_roundness_slider = pygame_gui.elements.UIHorizontalSlider(relative_rect=pygame.Rect((230, 100), (210, 27)),
+        self.ui_corner_roundness_slider = pygame_gui.elements.UIHorizontalSlider(relative_rect=pygame.Rect((340, 100), (210, 27)),
                                                                                  start_value=self.ui_corner_roundness_value,
                                                                                  value_range=(3, 11),
                                                                                  container=self,
@@ -1188,51 +1253,51 @@ class SettingsWindow(pygame_gui.elements.UIWindow):
         if self.ui_element_shape == 'Rectangle':
             self.ui_corner_roundness_slider.disable()
 
-        self.grid_width_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((30, 160), (160, 40)),
+        self.grid_width_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((70, 160), (160, 40)),
                                                             text="Grid Width",
                                                             container=self,
                                                             manager=self.manager)
 
-        self.grid_width_slider = pygame_gui.elements.UIHorizontalSlider(relative_rect=pygame.Rect((30, 200), (210, 27)),
+        self.grid_width_slider = pygame_gui.elements.UIHorizontalSlider(relative_rect=pygame.Rect((50, 200), (210, 27)),
                                                                         start_value=self.grid.line_width,
                                                                         value_range=(1, 7),
                                                                         container=self,
                                                                         manager=self.manager)
 
-        self.ui_border_width_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((260, 160), (160, 40)),
+        self.ui_border_width_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((365, 160), (160, 40)),
                                                                  text="UI Border Width",
                                                                  container=self,
                                                                  manager=self.manager)
 
-        self.ui_border_width_slider = pygame_gui.elements.UIHorizontalSlider(relative_rect=pygame.Rect((260, 200), (210, 27)),
+        self.ui_border_width_slider = pygame_gui.elements.UIHorizontalSlider(relative_rect=pygame.Rect((340, 200), (210, 27)),
                                                                              start_value=self.ui_border_width_value,
                                                                              value_range=(1, 4),
                                                                              container=self,
                                                                              manager=self.manager)
 
-        self.ui_normal_font_size_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((30, 260), (160, 40)),
+        self.ui_normal_font_size_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((55, 260), (200, 40)),
                                                                      text="UI Normal Font Size",
                                                                      container=self,
                                                                      manager=self.manager)
 
-        self.ui_normal_font_size_slider = pygame_gui.elements.UIHorizontalSlider(relative_rect=pygame.Rect((30, 300), (210, 27)),
+        self.ui_normal_font_size_slider = pygame_gui.elements.UIHorizontalSlider(relative_rect=pygame.Rect((50, 300), (210, 27)),
                                                                                  start_value=self.font_manager.ui_normal_font_size_value,
-                                                                                 value_range=(5, 22),
+                                                                                 value_range=(5, 21),
                                                                                  container=self,
                                                                                  manager=self.manager)
 
-        self.ui_title_font_size_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((260, 260), (160, 40)),
+        self.ui_title_font_size_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((365, 260), (160, 40)),
                                                                      text="UI Title Font Size",
                                                                      container=self,
                                                                      manager=self.manager)
 
-        self.ui_title_font_size_slider = pygame_gui.elements.UIHorizontalSlider(relative_rect=pygame.Rect((260, 300), (210, 27)),
+        self.ui_title_font_size_slider = pygame_gui.elements.UIHorizontalSlider(relative_rect=pygame.Rect((340, 300), (210, 27)),
                                                                                 start_value=self.font_manager.ui_title_font_size_value,
                                                                                 value_range=(5, 35),
                                                                                 container=self,
                                                                                 manager=self.manager)
 
-        self.ui_font_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((30, 340), (160, 40)),
+        self.ui_font_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((80, 340), (160, 40)),
                                                          text="UI Font",
                                                          container=self,
                                                          manager=self.manager)
@@ -1242,11 +1307,27 @@ class SettingsWindow(pygame_gui.elements.UIWindow):
         if self.font_manager.custom_ui_fonts_exist():
             font_name_list.append('Delete Custom Font')
 
-        self.ui_font_drop_down_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((30, 380), (160, 40)),
+        self.ui_font_drop_down_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((80, 380), (160, 40)),
                                                                          options_list=font_name_list,
                                                                          starting_option=self.font_manager.current_font_name,
                                                                          container=self,
                                                                          manager=self.manager)
+
+        self.ui_disable_tutorial_on_startup_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((350, 340), (200, 40)),
+                                                                                text="Disable Tutorial On Startup",
+                                                                                container=self,
+                                                                                manager=self.manager)
+
+        if self.user_settings_json_data['disable_tutorial_on_startup']:
+            startup_button_icon = '╳'
+        else:
+            startup_button_icon = ''
+
+        self.ui_disable_tutorial_on_startup_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((420, 380), (45, 40)),
+                                                                                  text=startup_button_icon,
+                                                                                  container=self,
+                                                                                  object_id="#tutorial_button",
+                                                                                  manager=self.manager)
 
         self.ui_reset_settings_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((80, 450), (200, 50)),
                                                                      text='Reset',
@@ -1277,6 +1358,8 @@ class SettingsWindow(pygame_gui.elements.UIWindow):
         self.ui_title_font_size_slider.kill()
         self.ui_font_label.kill()
         self.ui_font_drop_down_menu.kill()
+        self.ui_disable_tutorial_on_startup_label.kill()
+        self.ui_disable_tutorial_on_startup_button.kill()
         self.ui_reset_settings_button.kill()
         self.ui_save_settings_button.kill()
 
@@ -1294,12 +1377,12 @@ class SettingsWindow(pygame_gui.elements.UIWindow):
                                                                  container=self,
                                                                  manager=self.manager)
 
-        self.custom_font_name_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((190, 70), (200, 40)),
+        self.custom_font_name_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((210, 360), (200, 40)),
                                                                   text='Custom Font Name',
                                                                   container=self,
                                                                   manager=self.manager)
 
-        self.custom_font_name_text_entry_line = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((210, 110), (170, 50)),
+        self.custom_font_name_text_entry_line = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((210, 400), (200, 50)),
                                                                                     container=self,
                                                                                     manager=self.manager)
 
@@ -1308,12 +1391,13 @@ class SettingsWindow(pygame_gui.elements.UIWindow):
                                              'Title Font File Path (Regular Weight)': None
                                             }
 
-        distance_x = 130
-        distance_y = 170
+        distance_x = 120
+        distance_y = 70
         for custom_font_label_name in self.custom_font_ui_elements_dict:
-            self.custom_font_ui_elements_dict[custom_font_label_name] = [pygame_gui.elements.UILabel(relative_rect=pygame.Rect((distance_x, distance_y), (300, 40)),
+            self.custom_font_ui_elements_dict[custom_font_label_name] = [pygame_gui.elements.UILabel(relative_rect=pygame.Rect((distance_x, distance_y), (380, 40)),
                                                                                                      text=custom_font_label_name,
                                                                                                      container=self,
+                                                                                                     object_id='#label_left_horiz_alignment',
                                                                                                      manager=self.manager),
                                                                          pygame_gui.elements.UIButton(relative_rect=pygame.Rect((distance_x, distance_y+40), (100, 40)),
                                                                                                       text='Find File',
@@ -1399,6 +1483,18 @@ class SettingsWindow(pygame_gui.elements.UIWindow):
                     self.load_user_settings()
                     self.clean_settings_window()
                     self.build_settings_window()
+
+                elif event.ui_element == self.ui_disable_tutorial_on_startup_button:
+                    if self.user_settings_json_data['disable_tutorial_on_startup']:
+                        self.set_disable_tutorial_window_on_startup(False)
+                        self.ui_disable_tutorial_on_startup_button.set_text('')
+                        print("[SETTINGS WINDOW] User enabled the tutorial window to appear on startup.")
+                    else:
+                        self.set_disable_tutorial_window_on_startup(True)
+                        self.ui_disable_tutorial_on_startup_button.set_text('╳')
+                        print("[SETTINGS WINDOW] User disabled the tutorial window from appearing on startup.")
+
+
 
             if self.stage == SettingsWindowStages.SETTINGS_WINDOW_CUSTOM_FONT_CREATION_SCREEN:
                 if event.ui_element == self.previous_page_button:
@@ -1578,6 +1674,10 @@ class SettingsWindow(pygame_gui.elements.UIWindow):
         print("[SETTINGS WINDOW] Shutdown Settings Window")
         self.window_running = False
 
+class GameUIStates(IntEnum):
+    UI_NORMAL_STATE = 0,
+    UI_RUNNING_PATHFINDING_ALGORITHM_STATE = 1,
+    UI_RUNNING_RECURSIVE_DIVISION_STATE = 2
 
 class GameUIManager:
     def __init__(self, screen_manager, rect_array_obj, color_manager, animation_manager, grid, client, server, pathfinding_algorithms_dict, maze_generation_algorithms_dict, events_dict):
@@ -1591,7 +1691,7 @@ class GameUIManager:
         self.pathfinding_algorithms_dict = pathfinding_algorithms_dict
         self.maze_generation_algorithms_dict = maze_generation_algorithms_dict
         self.events_dict = events_dict
-        self.screen_lock = False
+        self.state = GameUIStates.UI_NORMAL_STATE
 
         self.manager = pygame_gui.UIManager((screen_manager.screen_width, screen_manager.screen_height))
         self.theme_manager = self.manager.get_theme()
@@ -1627,7 +1727,7 @@ class GameUIManager:
 
         self.set_ui_colours_from_current_theme()
 
-        self.run_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((810, 130), (150, 50)), text="Run", manager=self.manager)
+        self.run_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((810, 130), (180, 50)), text="Run", manager=self.manager)
 
         self.pathfinding_algorithms_options = ['Depth First Search', 'Breadth First Search', 'Dijkstra', 'A*', 'Greedy Best First Search', 'Bidirectional Best First Search']
         self.pathfinding_algorithms_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((20, 10), (200, 50)),
@@ -1651,27 +1751,27 @@ class GameUIManager:
                                                                     text='Grid Size',
                                                                     manager=self.manager)
 
-        self.resolution_divider_slider = pygame_gui.elements.UIHorizontalSlider(relative_rect=pygame.Rect((20, 92), (280, 27)),
+        self.resolution_divider_slider = pygame_gui.elements.UIHorizontalSlider(relative_rect=pygame.Rect((20, 92), (320, 27)),
                                                                                 start_value=4,
                                                                                 value_range=(1, 8),
                                                                                 manager=self.manager)
 
         # TODO(ali): Could remove this label it isn't needed later
-        self.pathfinding_algorithm_speed_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((370, 65), (250, 30)),
+        self.pathfinding_algorithm_speed_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((400, 65), (280, 30)),
                                                                              text='Pathfinding Algorithm Speed',
                                                                              manager=self.manager)
 
-        self.pathfinding_algorithm_speed_slider = pygame_gui.elements.UIHorizontalSlider(relative_rect=pygame.Rect((340, 92), (280, 27)),
+        self.pathfinding_algorithm_speed_slider = pygame_gui.elements.UIHorizontalSlider(relative_rect=pygame.Rect((380, 92), (320, 27)),
                                                                                          start_value=25,
                                                                                          value_range=(12, 100),
                                                                                          manager=self.manager)
 
         # TODO(ali): Could remove this label if it isn't needed later
-        self.recursive_division_speed_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((660, 65), (220, 30)),
+        self.recursive_division_speed_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((775, 65), (250, 30)),
                                                                           text='Recursive Division Speed',
                                                                           manager=self.manager)
 
-        self.recursive_division_speed_slider = pygame_gui.elements.UIHorizontalSlider(relative_rect=pygame.Rect((640, 92), (280, 27)),
+        self.recursive_division_speed_slider = pygame_gui.elements.UIHorizontalSlider(relative_rect=pygame.Rect((740, 92), (320, 27)),
                                                                                       start_value=15,
                                                                                       value_range=(10, 50),
                                                                                       manager=self.manager)
@@ -1690,7 +1790,7 @@ class GameUIManager:
                                                                    starting_option='Clear Grid',
                                                                    manager=self.manager)
 
-        self.tutorial_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((970, 130), (60, 50)),
+        self.tutorial_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((1000, 130), (60, 50)),
                                                             text='?',
                                                             manager=self.manager)
 
@@ -1699,12 +1799,11 @@ class GameUIManager:
                                                             manager=self.manager)
 
         self.settings_window = SettingsWindow(self.manager, self.theme_manager, self.theme_json_data, self.grid, self.font_manager)
-        self.tutorial_window = TutorialWindow(self.manager, self.color_manager, self.font_manager)
+        self.tutorial_window = TutorialWindow(self.manager, self.color_manager, self.font_manager, self.settings_window)
 
         self.theme_menu = None
         self.generate_theme_menu('Dark Theme')
         self.theme_window = ThemeWindow(self.manager, self.color_manager, self.font_manager)
-
         self.ui_networking_manager = UINetworkingManager(self.manager, self.client, self.server, self.font_manager)
         self.generate_networking_menu(kill_networking_menu=False)
 
@@ -1715,12 +1814,17 @@ class GameUIManager:
 
         self.current_pathfinding_algorithm = PathfindingAlgorithmTypes.ASTAR
         self.heuristic = PathfindingHeuristics.MANHATTAN_DISTANCE
+        self.pathfinding_algorithms_dict[self.current_pathfinding_algorithm].heuristic = self.heuristic
         self.current_maze_generation_algorithm = MazeGenerationAlgorithmTypes.RANDOM_MARKED_MAZE
         self.recursive_division_skew = None
         self.pathfinding_algorithm_speed = 25
         self.recursive_division_speed = 15
         self.cursor_node_type = CursorNodeTypes.MARKED_NODE
         self.weight = 1
+
+        if self.settings_window.should_build_tutorial_window_on_startup():
+            print("[UI MANAGER] Building tutorial window.")
+            self.tutorial_window.build_tutorial_welcome_screen()
 
     def generate_theme_menu(self, theme=None, kill_theme_menu=False):
         if theme == None:
@@ -1774,12 +1878,13 @@ class GameUIManager:
         self.rect_array_obj.gen_rect_array_with_adjacent_nodes()
         self.rect_array_obj.reset_non_user_weights()
 
-        pathfinding_algorithm.reset_checked_nodes_pointer()
         pathfinding_algorithm.reset_path_pointer()
+        pathfinding_algorithm.reset_checked_nodes_pointer()
 
         pathfinding_algorithm.reset_animated_checked_coords_stack()
         pathfinding_algorithm.reset_animated_path_coords_stack()
 
+        print("Current pathfinding heuristic:", heuristic)
         pathfinding_algorithm.heuristic = heuristic
         pathfinding_algorithm.run()
 
@@ -1787,7 +1892,7 @@ class GameUIManager:
     def create_empty_heuristics_menu(self):
         self.heuristics_menu.kill()
         self.heuristic = None
-        self.heuristics_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((240, 10), (200, 50)),
+        self.heuristics_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((230, 10), (200, 50)),
                                                                   options_list=['None'],
                                                                   starting_option='None',
                                                                   manager=self.manager)
@@ -1795,15 +1900,19 @@ class GameUIManager:
 
     def create_heuristics_menu_with_distances(self, starting_value='Manhattan Distance'):
         self.heuristics_menu.kill()
-        self.heuristic = PathfindingHeuristics.MANHATTAN_DISTANCE
-        self.heuristics_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((240, 10), (200, 50)),
+        if starting_value == 'Manhattan Distance':
+            self.heuristic = PathfindingHeuristics.MANHATTAN_DISTANCE
+        else:
+            self.heuristic = PathfindingHeuristics.EUCLIDEAN_DISTANCE
+
+        self.heuristics_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((230, 10), (200, 50)),
                                                                   options_list=['Manhattan Distance', 'Euclidean Distance'],
                                                                   starting_option=starting_value,
                                                                   manager=self.manager)
 
     def run_current_maze_generation_algorithm(self):
-        self.pathfinding_algorithms_dict[self.current_pathfinding_algorithm].reset_checked_nodes_pointer()
         self.pathfinding_algorithms_dict[self.current_pathfinding_algorithm].reset_path_pointer()
+        self.pathfinding_algorithms_dict[self.current_pathfinding_algorithm].reset_checked_nodes_pointer()
 
         self.maze_generation_algorithms_dict[self.current_maze_generation_algorithm].reset_maze_pointer()
         # screen_lock = True
@@ -1830,14 +1939,15 @@ class GameUIManager:
                 self.maze_generation_algorithms_dict[self.current_maze_generation_algorithm].run_recursive_division()
 
                 pygame.time.set_timer(self.events_dict['DRAW_MAZE'], self.recursive_division_speed)
+                self.build_ui_running_recursive_division_state()
                 self.client.create_network_event(NetworkingEventTypes.RUN_MAZE_GENERATION_ALGORITHM, self.current_maze_generation_algorithm, self.recursive_division_skew, self.maze_generation_algorithms_dict[self.current_maze_generation_algorithm].maze.to_list())
 
     def get_current_pathfinding_algorithm(self):
         return self.pathfinding_algorithms_dict[self.current_pathfinding_algorithm]
 
-    def update_current_pathfinding_algorithm(self, pathfinding_algorithm):
+    def update_current_pathfinding_algorithm(self, pathfinding_algorithm, heuristic, is_server_event=False):
         self.current_pathfinding_algorithm = pathfinding_algorithm
-        match self.current_maze_generation_algorithm:
+        match self.current_pathfinding_algorithm:
             case PathfindingAlgorithmTypes.DFS:
                 starting_option = 'Depth First Search'
             case PathfindingAlgorithmTypes.BFS:
@@ -1857,20 +1967,23 @@ class GameUIManager:
                                                                               starting_option=starting_option,
                                                                               manager=self.manager)
 
-        if self.pathfinding_algorithms_dict[self.current_pathfinding_algorithm].heuristic == None:
+        if heuristic == None:
             self.create_empty_heuristics_menu()
         else:
-            self.heuristic = self.pathfinding_algorithms_dict[self.current_pathfinding_algorithm].heuristic
+            self.heuristic = heuristic
             match self.heuristic:
                 case PathfindingHeuristics.EUCLIDEAN_DISTANCE:
                     self.create_heuristics_menu_with_distances('Euclidean Distance')
                 case PathfindingHeuristics.MANHATTAN_DISTANCE:
                     self.create_heuristics_menu_with_distances()
 
+        if is_server_event:
+            self.build_ui_running_pathfinding_algorithm_state()
+
     def get_current_maze_generation_algorithm(self):
         return self.maze_generation_algorithms_dict[self.current_maze_generation_algorithm]
 
-    def update_current_maze_generation_algorithm(self, maze_generation_algorithm):
+    def update_current_maze_generation_algorithm(self, maze_generation_algorithm, is_server_event=False):
         self.current_maze_generation_algorithm = maze_generation_algorithm
         match self.current_maze_generation_algorithm:
             case MazeGenerationAlgorithmTypes.RANDOM_MARKED_MAZE:
@@ -1887,16 +2000,16 @@ class GameUIManager:
                 elif skew == RecursiveDivisionSkew.VERTICAL:
                     starting_value = 'RD Vertical Skew'
 
+                if is_server_event:
+                    self.build_ui_running_recursive_division_state()
+
         self.maze_generation_algorithms_menu.kill()
-        self.maze_generation_algorithms_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((480, 10), (220, 50)),
+        self.maze_generation_algorithms_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((440, 10), (200, 50)),
                                                                                   options_list=self.maze_generation_algorithms_options,
                                                                                   starting_option=starting_value,
                                                                                   manager=self.manager)
     def update_resolution_divider(self):
         self.resolution_divider_slider.set_current_value(self.screen_manager.resolution_divider)
-
-    def update_screen_lock(self, screen_lock):
-        self.screen_lock = screen_lock
 
     def get_pathfinding_algorithm_speed(self):
         return self.pathfinding_algorithm_speed
@@ -1922,8 +2035,8 @@ class GameUIManager:
         self.theme_window.handle_theme_window_ui_drop_down_menu_changed_event(event)
         self.settings_window.handle_settings_window_ui_drop_down_menu_changed_event(event)
         if event.ui_element == self.pathfinding_algorithms_menu:
-            self.pathfinding_algorithms_dict[self.current_pathfinding_algorithm].reset_checked_nodes_pointer()
             self.pathfinding_algorithms_dict[self.current_pathfinding_algorithm].reset_path_pointer()
+            self.pathfinding_algorithms_dict[self.current_pathfinding_algorithm].reset_checked_nodes_pointer()
 
             match event.text:
                 case 'Depth First Search':
@@ -1934,7 +2047,7 @@ class GameUIManager:
                     self.create_empty_heuristics_menu()
                 case 'Dijkstra':
                     self.current_pathfinding_algorithm = PathfindingAlgorithmTypes.DIJKASTRA
-                    self.create_heuristics_menu_with_distances()
+                    self.create_empty_heuristics_menu()
                 case 'A*':
                     self.current_pathfinding_algorithm = PathfindingAlgorithmTypes.ASTAR
                     self.create_heuristics_menu_with_distances()
@@ -1993,17 +2106,17 @@ class GameUIManager:
                     self.grid.reset_marked_nodes()
                     self.grid.reset_all_weights()
 
-                    self.pathfinding_algorithms_dict[self.current_pathfinding_algorithm].reset_checked_nodes_pointer()
                     self.pathfinding_algorithms_dict[self.current_pathfinding_algorithm].reset_path_pointer()
+                    self.pathfinding_algorithms_dict[self.current_pathfinding_algorithm].reset_checked_nodes_pointer()
 
                     self.maze_generation_algorithms_dict[self.current_maze_generation_algorithm].reset_maze_pointer()
 
                     self.client.create_network_event(NetworkingEventTypes.CLEAR_GRID)
                 case 'Clear Path':
-                    self.pathfinding_algorithms_dict[self.current_pathfinding_algorithm].reset_path_pointer(self.color_manager.CHECKED_NODE_FOREGROUND_COLOR)
+                    self.pathfinding_algorithms_dict[self.current_pathfinding_algorithm].reset_path_pointer(True)
                     self.client.create_network_event(NetworkingEventTypes.CLEAR_PATH)
                 case 'Clear Checked Nodes':
-                    self.pathfinding_algorithms_dict[self.current_pathfinding_algorithm].reset_checked_nodes_pointer()
+                    self.pathfinding_algorithms_dict[self.current_pathfinding_algorithm].reset_checked_nodes_pointer(True)
                     self.client.create_network_event(NetworkingEventTypes.CLEAR_CHECKED_NODES)
                 case 'Clear Marked Nodes':
                     self.maze_generation_algorithms_dict[self.current_maze_generation_algorithm].reset_maze_pointer()
@@ -2059,18 +2172,43 @@ class GameUIManager:
                     self.generate_theme_menu(kill_theme_menu=True)
 
 
+    def cancel_pathfinding_algorithm(self):
+        self.pathfinding_algorithms_dict[self.current_pathfinding_algorithm].reset_path_pointer()
+        self.pathfinding_algorithms_dict[self.current_pathfinding_algorithm].reset_checked_nodes_pointer()
+        pygame.time.set_timer(self.events_dict['DRAW_CHECKED_NODES'], 0)
+        pygame.time.set_timer(self.events_dict['DRAW_PATH'], 0)
+        self.build_ui_normal_state()
+
+    def cancel_recursive_division(self, cut_off_point=None):
+        self.maze_generation_algorithms_dict[self.current_maze_generation_algorithm].cut_maze(cut_off_point)
+        pygame.time.set_timer(self.events_dict['DRAW_MAZE'], 0)
+        self.build_ui_normal_state()
+
     def handle_ui_button_pressed_event(self, event):
         self.theme_window.handle_theme_window_ui_button_pressed_event(event)
         self.settings_window.handle_settings_window_ui_button_pressed_event(event)
+        self.tutorial_window.handle_tutorial_window_ui_button_pressed(event)
         update_theme_menu = self.ui_networking_manager.handle_ui_networking_manager_ui_button_pressed_event(event)
         if update_theme_menu:
             self.generate_theme_menu(kill_theme_menu=True)
 
-        if event.ui_element == self.run_button:
-            self.run_pathfinding_algorithm(self.pathfinding_algorithms_dict[self.current_pathfinding_algorithm], self.heuristic)
-            self.client.create_network_event(NetworkingEventTypes.RUN_PATHFINDING_ALGORITHM, self.current_pathfinding_algorithm, self.heuristic)
+        if self.state == GameUIStates.UI_NORMAL_STATE:
+            if event.ui_element == self.run_button:
+                self.run_pathfinding_algorithm(self.pathfinding_algorithms_dict[self.current_pathfinding_algorithm], self.heuristic)
+                self.client.create_network_event(NetworkingEventTypes.RUN_PATHFINDING_ALGORITHM, self.current_pathfinding_algorithm, self.heuristic)
 
-            pygame.time.set_timer(self.events_dict['DRAW_CHECKED_NODES'], self.pathfinding_algorithm_speed)
+                pygame.time.set_timer(self.events_dict['DRAW_CHECKED_NODES'], self.pathfinding_algorithm_speed)
+                self.build_ui_running_pathfinding_algorithm_state()
+
+        elif self.state == GameUIStates.UI_RUNNING_PATHFINDING_ALGORITHM_STATE:
+            if event.ui_element == self.run_button:
+                self.cancel_pathfinding_algorithm()
+                self.client.create_network_event(NetworkingEventTypes.CANCEL_PATHFINDING_ALGORITHM)
+
+        elif self.state == GameUIStates.UI_RUNNING_RECURSIVE_DIVISION_STATE:
+            if event.ui_element == self.run_button:
+                self.cancel_recursive_division()
+                self.client.create_network_event(NetworkingEventTypes.CANCEL_RECURSIVE_DIVISION, self.maze_generation_algorithms_dict[self.current_maze_generation_algorithm].maze_pointer)
 
         if event.ui_element == self.tutorial_button:
             self.tutorial_window.build_tutorial_welcome_screen()
@@ -2083,8 +2221,8 @@ class GameUIManager:
         if event.ui_element == self.resolution_divider_slider:
             self.screen_manager.set_resolution_divider(event.value)
             self.rect_array_obj.reset_rect_array()
-            self.pathfinding_algorithms_dict[self.current_pathfinding_algorithm].reset_checked_nodes_pointer()
             self.pathfinding_algorithms_dict[self.current_pathfinding_algorithm].reset_path_pointer()
+            self.pathfinding_algorithms_dict[self.current_pathfinding_algorithm].reset_checked_nodes_pointer()
             self.maze_generation_algorithms_dict[self.current_maze_generation_algorithm].reset_maze_pointer()
             self.client.create_network_event(NetworkingEventTypes.SET_RESOLUTION_DIVIDER, event.value)
 
@@ -2204,10 +2342,20 @@ class GameUIManager:
         print(f"[SET_UI_COLOURS_FROM_CURRENT_THEME] Set UI Colours from theme: '{self.color_manager.current_theme_name}'")
 
     def handle_ui_colour_animations(self):
+        update_text_entry_line = False
         for ui_colour_to_update_dict in self.animation_manager.update_ui_element_interpolation_dict():
             for ui_node_type, colour in ui_colour_to_update_dict.items():
+                update_text_entry_line = True
                 self.set_colour_to_ui_element(ui_node_type, colour, False)
                 self.color_manager.set_node_color(ui_node_type, colour)
+
+        if update_text_entry_line == False:
+            if self.state == GameUIStates.UI_NORMAL_STATE and self.marked_or_weighted_node_menu.selected_option == 'Marked':
+                self.weighted_node_text_entry_line.set_text_length_limit(10)
+                self.weighted_node_text_entry_line.set_allowed_characters([' ', 'N', 'o', 'n', 'e'])
+                self.weighted_node_text_entry_line.enable()
+                self.weighted_node_text_entry_line.disable()
+                self.weighted_node_text_entry_line.set_text('      None')
 
         self.theme_manager.update_theming(json.dumps(self.theme_json_data))
 
@@ -2215,7 +2363,7 @@ class GameUIManager:
         if self.settings_window.changed_ui_border_width:
             print("[GAME UI MANAGER] Redraw UIDropDownMenus with new border width.")
             self.settings_window.changed_ui_border_width = False
-            self.update_current_pathfinding_algorithm(self.current_pathfinding_algorithm)
+            self.update_current_pathfinding_algorithm(self.current_pathfinding_algorithm, self.heuristic)
             self.update_current_maze_generation_algorithm(self.current_maze_generation_algorithm)
 
             self.marked_or_weighted_node_menu.kill()
@@ -2224,14 +2372,15 @@ class GameUIManager:
             else:
                 marked_or_weighted_value = 'Weighted'
 
-            self.marked_or_weighted_node_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((20, 130), (150, 35)),
+            self.marked_or_weighted_node_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((20, 130), (200, 50)),
                                                                                    options_list=['Marked', 'Weighted'],
                                                                                    starting_option=marked_or_weighted_value,
                                                                                    manager=self.manager)
 
             current_clear_nodes_option = self.clear_nodes_menu.selected_option
             self.clear_nodes_menu.kill()
-            self.clear_nodes_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((310, 130), (200, 40)),
+
+            self.clear_nodes_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((390, 130), (200, 50)),
                                                                        options_list=self.clear_node_types,
                                                                        starting_option=current_clear_nodes_option,
                                                                        manager=self.manager)
@@ -2239,6 +2388,101 @@ class GameUIManager:
             self.generate_theme_menu(kill_theme_menu=True)
             self.generate_networking_menu()
 
+    def handle_bottom_ui_drop_down_menus_open(self):
+        for drop_down_menu in [self.marked_or_weighted_node_menu, self.clear_nodes_menu, self.theme_menu]:
+            if drop_down_menu.current_state == drop_down_menu.menu_states['expanded']:
+                return True
+
+        return False
+
+    def handle_ui_window_open(self):
+        if len(self.manager.get_window_stack().get_stack()) > 0:
+            return True
+        else:
+            return False
+
+    def build_ui_normal_state(self):
+        self.state = GameUIStates.UI_NORMAL_STATE
+        self.run_button.set_text("Run")
+        self.pathfinding_algorithms_menu.enable()
+        self.update_current_pathfinding_algorithm(self.current_pathfinding_algorithm, self.heuristic)
+        self.maze_generation_algorithms_menu.enable()
+        self.resolution_divider_label.enable()
+        self.resolution_divider_slider.enable()
+        self.pathfinding_algorithm_speed_label.enable()
+        self.pathfinding_algorithm_speed_slider.enable()
+        self.recursive_division_speed_label.enable()
+        self.recursive_division_speed_slider.enable()
+        self.marked_or_weighted_node_menu.enable()
+        if self.marked_or_weighted_node_menu.selected_option == 'Weighted':
+            self.weighted_node_text_entry_line.enable()
+        else:
+            self.weighted_node_text_entry_line.disable()
+        self.clear_nodes_menu.enable()
+        self.tutorial_button.enable()
+        self.settings_button.enable()
+        self.theme_menu.enable()
+        self.generate_theme_menu(kill_theme_menu=True)
+        self.networking_menu.enable()
+        self.generate_networking_menu()
+
+    def build_ui_running_pathfinding_algorithm_state(self):
+        self.state = GameUIStates.UI_RUNNING_PATHFINDING_ALGORITHM_STATE
+        self.run_button.set_text("Cancel")
+        self.pathfinding_algorithms_menu.disable()
+        self.heuristics_menu.disable()
+        self.maze_generation_algorithms_menu.disable()
+        self.resolution_divider_label.disable()
+        self.resolution_divider_slider.disable()
+        self.pathfinding_algorithm_speed_label.enable()
+        self.pathfinding_algorithm_speed_slider.enable()
+        self.recursive_division_speed_label.disable()
+        self.recursive_division_speed_slider.disable()
+        if self.marked_or_weighted_node_menu.selected_option == 'Marked':
+            self.weighted_node_text_entry_line.disable()
+            self.weighted_node_text_entry_line.set_text('      None')
+        else:
+            weight = self.weighted_node_text_entry_line.get_text()
+            self.weighted_node_text_entry_line.disable()
+            self.weighted_node_text_entry_line.set_text(weight)
+        self.marked_or_weighted_node_menu.disable()
+        self.clear_nodes_menu.disable()
+        self.tutorial_button.disable()
+        self.settings_button.disable()
+        self.theme_menu.disable()
+        self.networking_menu.disable()
+
+    def build_ui_running_recursive_division_state(self):
+        self.state = GameUIStates.UI_RUNNING_RECURSIVE_DIVISION_STATE
+        self.run_button.set_text("Cancel")
+        self.pathfinding_algorithms_menu.disable()
+        self.heuristics_menu.disable()
+        self.maze_generation_algorithms_menu.disable()
+        self.resolution_divider_label.disable()
+        self.resolution_divider_slider.disable()
+        self.pathfinding_algorithm_speed_label.disable()
+        self.pathfinding_algorithm_speed_slider.disable()
+        self.recursive_division_speed_label.enable()
+        self.recursive_division_speed_slider.enable()
+        if self.marked_or_weighted_node_menu.selected_option == 'Marked':
+            self.weighted_node_text_entry_line.disable()
+            self.weighted_node_text_entry_line.set_text('      None')
+        else:
+            weight = self.weighted_node_text_entry_line.get_text()
+            self.weighted_node_text_entry_line.disable()
+            self.weighted_node_text_entry_line.set_text(weight)
+        self.marked_or_weighted_node_menu.disable()
+        self.clear_nodes_menu.disable()
+        self.tutorial_button.disable()
+        self.settings_button.disable()
+        self.theme_menu.disable()
+        self.networking_menu.disable()
+
+    def not_normal_state(self):
+        if self.state != GameUIStates.UI_NORMAL_STATE:
+            return True
+        else:
+            return False
 
     def draw(self):
         self.manager.draw_ui(self.screen_manager.screen)

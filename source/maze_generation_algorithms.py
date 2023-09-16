@@ -42,6 +42,14 @@ class MazeGenerationAlgorithm:
         else:
             return -1
 
+    def cut_maze(self, cut_off_index=None):
+        if cut_off_index == None:
+            cut_off_index = self.maze_pointer
+        else:
+            self.maze_pointer = cut_off_index
+
+        self.maze.stack = self.maze.stack[:cut_off_index]
+
     def draw(self):
         for x in range(self.maze_pointer):
             coord = self.maze.stack[x]

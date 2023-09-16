@@ -1,9 +1,1 @@
-{
-    "ui_element_shape": "Rounded Rectangle",
-    "ui_corner_roundness_value": 4,
-    "ui_border_width_value":  2,
-    "ui_normal_font_size_value": 15,
-    "ui_title_font_size_value": 20,
-    "grid_width": 1,
-    "current_font_name": "Roboto"
-}
+{"ui_element_shape": "Rounded Rectangle", "ui_corner_roundness_value": 4, "ui_border_width_value": 2, "ui_normal_font_size_value": 15, "ui_title_font_size_value": 20, "grid_width": 1, "current_font_name": "Roboto", "disable_tutorial_on_startup": false}

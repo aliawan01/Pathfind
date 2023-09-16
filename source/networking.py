@@ -29,7 +29,9 @@ class NetworkingEventTypes(IntEnum):
     SEND_GRID_UPON_CONNECTION = 13,
     SEND_THEME = 14,
     SET_PATHFINDING_ALGORITHM_SPEED = 15,
-    SET_RECURSIVE_DIVISION_SPEED = 16
+    SET_RECURSIVE_DIVISION_SPEED = 16,
+    CANCEL_PATHFINDING_ALGORITHM = 17,
+    CANCEL_RECURSIVE_DIVISION = 18
 
 class Client:
     def __init__(self, screen_manager, grid, rect_array_obj, pathfinding_algorithms_dict, maze_generation_algorithms_dict, animation_manager, events_dict, color_manager):
@@ -52,14 +54,16 @@ class Client:
         self.changed_recursive_division_speed = False
         self.changed_current_pathfinding_algorithm = False
         self.changed_current_maze_generation_algorithm = False
-        self.changed_screen_lock = False
+
+        self.cancel_pathfinding_algorithm = False
+        self.cancel_recursive_division = False
+        self.recursive_division_cut_off_point = None
 
         self.resolution_divider = None
         self.pathfinding_algorithm_speed = 25
         self.recursive_division_speed = 15
         self.current_pathfinding_algorithm = None
         self.current_maze_generation_algorithm = None
-        self.screen_lock = False
 
     def connect_to_server(self, server_ip_address, port):
         if self.connected_to_server == False:
@@ -153,6 +157,13 @@ class Client:
                     # args = recursive division speed
                     command = {NetworkingEventTypes.SET_RECURSIVE_DIVISION_SPEED: args}
 
+                case NetworkingEventTypes.CANCEL_PATHFINDING_ALGORITHM:
+                    command = {NetworkingEventTypes.CANCEL_PATHFINDING_ALGORITHM: None}
+
+                case NetworkingEventTypes.CANCEL_RECURSIVE_DIVISION:
+                    # args = cut off point
+                    command = {NetworkingEventTypes.CANCEL_RECURSIVE_DIVISION: args}
+
             print("[SOME CLIENT]: Created and sent event: ", command)
             self.client_socket.sendall(json.dumps(command).encode())
 
@@ -196,20 +207,20 @@ class Client:
         else:
             return [False, maze_generation_algorithm]
 
-    def update_screen_lock(self, screen_lock):
-        if self.changed_screen_lock:
-            self.changed_screen_lock = False
-            return [True, self.screen_lock]
-        else:
-            return [False, screen_lock]
+    def reset_cancel_pathfinding_algorithm(self):
+        self.cancel_pathfinding_algorithm = False
+
+    def reset_cancel_recursive_division(self):
+        self.cancel_recursive_division = False
+        self.recursive_division_cut_off_point = None
 
     def apply_resolution_divider(self):
         self.screen_manager.set_resolution_divider(self.resolution_divider)
         self.rect_array_obj.reset_rect_array()
 
         if self.current_pathfinding_algorithm != None:
-            self.current_pathfinding_algorithm.reset_checked_nodes_pointer()
             self.current_pathfinding_algorithm.reset_path_pointer()
+            self.current_pathfinding_algorithm.reset_checked_nodes_pointer()
 
         if self.current_maze_generation_algorithm != None:
             self.current_maze_generation_algorithm.reset_maze_pointer()
@@ -257,7 +268,7 @@ class Client:
                         self.grid.unmark_node_at_mouse_pos(mouse_pos)
 
                     case NetworkingEventTypes.SET_RESOLUTION_DIVIDER:
-                        if args[0] != self.screen_manager.set_resolution_divider:
+                        if args[0] != self.screen_manager.resolution_divider:
                             self.changed_resolution_divider = True
                             self.resolution_divider = args[0]
 
@@ -282,10 +293,7 @@ class Client:
 
                         pygame.time.set_timer(self.events_dict['DRAW_CHECKED_NODES'], 25)
 
-                        self.screen_lock = True
-
                         self.changed_current_pathfinding_algorithm = True
-                        self.changed_screen_lock = True
 
                     case NetworkingEventTypes.RUN_MAZE_GENERATION_ALGORITHM:
                         maze_generation_algorithm_type = args[0]
@@ -298,8 +306,8 @@ class Client:
                         self.grid.reset_all_weights()
 
                         if self.current_pathfinding_algorithm != None:
-                            self.current_pathfinding_algorithm.reset_checked_nodes_pointer()
                             self.current_pathfinding_algorithm.reset_path_pointer()
+                            self.current_pathfinding_algorithm.reset_checked_nodes_pointer()
 
                         if self.current_maze_generation_algorithm != None:
                             self.current_maze_generation_algorithm.reset_maze_pointer()
@@ -315,11 +323,8 @@ class Client:
                             self.current_maze_generation_algorithm.skew = maze_generation_algorithm_skew
 
                             self.current_maze_generation_algorithm.maze.stack = args[2]
-                            self.screen_lock = True
 
                             pygame.time.set_timer(self.events_dict['DRAW_MAZE'], 15)
-
-                            self.changed_screen_lock = True
 
                         elif maze_generation_algorithm_type == MazeGenerationAlgorithmTypes.RANDOM_MARKED_MAZE:
                             for y, x in args[1]:
@@ -331,8 +336,8 @@ class Client:
                         self.grid.reset_all_weights()
 
                         if self.current_pathfinding_algorithm != None:
-                            self.current_pathfinding_algorithm.reset_checked_nodes_pointer()
                             self.current_pathfinding_algorithm.reset_path_pointer()
+                            self.current_pathfinding_algorithm.reset_checked_nodes_pointer()
 
                         if self.current_maze_generation_algorithm != None:
                             self.current_maze_generation_algorithm.reset_maze_pointer()
@@ -387,8 +392,8 @@ class Client:
                         self.grid.reset_all_weights()
 
                         if self.current_pathfinding_algorithm != None:
-                            self.current_pathfinding_algorithm.reset_checked_nodes_pointer()
                             self.current_pathfinding_algorithm.reset_path_pointer()
+                            self.current_pathfinding_algorithm.reset_checked_nodes_pointer()
 
                         if self.current_maze_generation_algorithm != None:
                             self.current_maze_generation_algorithm.reset_maze_pointer()
@@ -424,6 +429,14 @@ class Client:
                         if args[0] != self.recursive_division_speed:
                             self.recursive_division_speed = args[0]
                             self.changed_recursive_division_speed = True
+
+                    case NetworkingEventTypes.CANCEL_PATHFINDING_ALGORITHM:
+                        self.cancel_pathfinding_algorithm = True
+
+                    case NetworkingEventTypes.CANCEL_RECURSIVE_DIVISION:
+                        self.recursive_division_cut_off_point = args[0]
+                        self.cancel_recursive_division = True
+
 
 class Server:
     def __init__(self, grid, color_manager):

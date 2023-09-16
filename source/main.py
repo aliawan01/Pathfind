@@ -33,7 +33,7 @@ def main():
     clock = pygame.time.Clock()
 
     screen_width = 1100
-    screen_height = 900
+    screen_height = 800
 
     grid_width = screen_width
     # grid_height = screen_height
@@ -115,6 +115,7 @@ def main():
     bottom_left = (-20, -20)
     bottom_right = (20, -20)
 
+    image_surface = pygame.image.load('data/tutorial_assets/point_a_to_b.png')
     while True:
         top_left = (rotation_matrix[0]*top_left[0] + rotation_matrix[1]*top_left[1],
                     rotation_matrix[2]*top_left[0] + rotation_matrix[3]*top_left[1])
@@ -163,14 +164,23 @@ def main():
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_F6:
-                    print("Set light theme!")
-                    color_manager.set_and_animate_light_theme(current_pathfinding_algorithm)
-                    client.create_network_event(NetworkingEventTypes.SEND_THEME)
+                    print("[UI Manager] Setting to UI_NORMAL_STATE")
+                    ui_manager.build_ui_normal_state()
+                    # print("Set light theme!")
+                    # color_manager.set_and_animate_light_theme(current_pathfinding_algorithm)
+                    # client.create_network_event(NetworkingEventTypes.SEND_THEME)
 
                 if event.key == pygame.K_F7:
-                    print("Set dark theme")
-                    color_manager.set_and_animate_dark_theme(current_pathfinding_algorithm)
-                    client.create_network_event(NetworkingEventTypes.SEND_THEME)
+                    print("[UI Manager] Setting to UI_RUNNING_PATHFINDING_ALGORITHM_STATE")
+                    ui_manager.build_ui_running_pathfinding_algorithm_state()
+                    # print(ui_manager.manager.get_window_stack().get_stack())
+                    # print("Set dark theme")
+                    # color_manager.set_and_animate_dark_theme(current_pathfinding_algorithm)
+                    # client.create_network_event(NetworkingEventTypes.SEND_THEME)
+
+                if event.key == pygame.K_F8:
+                    print("[UI Manager] Setting to UI_RUNNING_RECURSIVE_DIVISION_STATE")
+                    ui_manager.build_ui_running_recursive_division_state()
 
                 if event.key == pygame.K_q:
                     client.create_network_event(NetworkingEventTypes.DISCONNECT_FROM_SERVER)
@@ -187,8 +197,8 @@ def main():
                     rect_array.reset_rect_array()
 
                     if current_pathfinding_algorithm != None:
-                        current_pathfinding_algorithm.reset_checked_nodes_pointer()
                         current_pathfinding_algorithm.reset_path_pointer()
+                        current_pathfinding_algorithm.reset_checked_nodes_pointer()
 
                     if current_maze_generation_algorithm != None:
                         current_maze_generation_algorithm.reset_maze_pointer()
@@ -199,8 +209,8 @@ def main():
                     rect_array.reset_rect_array()
 
                     if current_pathfinding_algorithm != None:
-                        current_pathfinding_algorithm.reset_checked_nodes_pointer()
                         current_pathfinding_algorithm.reset_path_pointer()
+                        current_pathfinding_algorithm.reset_checked_nodes_pointer()
 
                     if current_maze_generation_algorithm != None:
                         current_maze_generation_algorithm.reset_maze_pointer()
@@ -211,8 +221,8 @@ def main():
                     grid.reset_all_weights()
 
                     if current_pathfinding_algorithm != None:
-                        current_pathfinding_algorithm.reset_checked_nodes_pointer()
                         current_pathfinding_algorithm.reset_path_pointer()
+                        current_pathfinding_algorithm.reset_checked_nodes_pointer()
 
                     if current_maze_generation_algorithm != None:
                         current_maze_generation_algorithm.reset_maze_pointer()
@@ -433,7 +443,7 @@ def main():
                     flag = current_pathfinding_algorithm.update_path_pointer()
                     if flag == -1:
                         pygame.time.set_timer(DRAW_PATH, 0)
-                        screen_lock = False
+                        ui_manager.build_ui_normal_state()
                     else:
                         pygame.time.set_timer(DRAW_PATH, pathfinding_algorithm_speed)
 
@@ -442,7 +452,7 @@ def main():
                     flag = current_maze_generation_algorithm.update_maze_pointer()
                     if flag == -1:
                         pygame.time.set_timer(DRAW_MAZE, 0)
-                        screen_lock = False
+                        ui_manager.build_ui_normal_state()
                     else:
                         pygame.time.set_timer(DRAW_MAZE, recursive_division_speed)
 
@@ -508,22 +518,30 @@ def main():
         new_pathfinding_algorithm = client.update_current_pathfinding_algorithm(current_pathfinding_algorithm)
         if new_pathfinding_algorithm[0]:
             current_pathfinding_algorithm = new_pathfinding_algorithm[1]
-            ui_manager.update_current_pathfinding_algorithm(current_pathfinding_algorithm.type)
+            ui_manager.update_current_pathfinding_algorithm(current_pathfinding_algorithm.type, current_pathfinding_algorithm.heuristic, True)
 
         new_maze_generation_algorithm = client.update_current_maze_generation_algorithm(current_maze_generation_algorithm)
         if new_maze_generation_algorithm[0]:
             current_maze_generation_algorithm = new_maze_generation_algorithm[1]
-            ui_manager.update_current_maze_generation_algorithm(current_maze_generation_algorithm.type)
+            ui_manager.update_current_maze_generation_algorithm(current_maze_generation_algorithm.type, True)
 
-        new_screen_lock = client.update_screen_lock(screen_lock)
-        if new_screen_lock[0]:
-            screen_lock = new_screen_lock[1]
-            ui_manager.update_screen_lock(screen_lock)
+        if client.cancel_pathfinding_algorithm:
+            ui_manager.cancel_pathfinding_algorithm()
+            client.reset_cancel_pathfinding_algorithm()
+
+        if client.cancel_recursive_division:
+            ui_manager.cancel_recursive_division(client.recursive_division_cut_off_point)
+            client.reset_cancel_recursive_division()
 
         server.get_pathfinding_algorithm_speed_and_recursive_division_speed(pathfinding_algorithm_speed, recursive_division_speed)
         ui_manager.update_networking_server_connection_broken()
         ui_manager.update_client_received_new_theme()
         ui_manager.handle_ui_border_width_changed()
+
+        if ui_manager.handle_bottom_ui_drop_down_menus_open() or ui_manager.handle_ui_window_open() or ui_manager.not_normal_state():
+            screen_lock = True
+        else:
+            screen_lock = False
 
         ui_manager.draw()
         pygame.draw.aaline(screen, color_manager.colors['green'], (top_left[0] + centerx, top_left[1] + centery), (top_right[0] + centerx, top_right[1] + centery))
