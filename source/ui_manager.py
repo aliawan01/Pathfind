@@ -684,7 +684,7 @@ class UINetworkingManager(pygame_gui.elements.UIWindow):
         self.created_server = False
         self.shutdown_server = False
         self.connected_to_server = False
-        self.ip_address = "127.0.0.1"
+        self.ip_address = socket.gethostbyname(socket.gethostname())
 
     def create_server(self):
         if self.created_server == False:
@@ -785,7 +785,6 @@ class UINetworkingManager(pygame_gui.elements.UIWindow):
         self.networking_connect_to_server_ip_address_text_entry_line = pygame_gui.elements.UITextEntryLine(relative_rect=pygame.Rect((205, 205), (200, 50)),
                                                                                                            container=self,
                                                                                                            manager=self.manager)
-        self.networking_connect_to_server_ip_address_text_entry_line.set_text("127.0.0.1")
 
         self.networking_connect_to_server_port_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((235, 285), (150, 35)),
                                                                                    text='Port Number',
@@ -876,10 +875,10 @@ class TutorialWindowStages(IntEnum):
     TUTORIAL_MAZE_GENERATION_ALGORITHM_INFO = 5,
     TUTORIAL_SETTINGS = 6,
     TUTORIAL_FONTS = 7,
-    TUTORIAL_MARKED_AND_WEIGHTED_NODES = 8,
-    TUTORIAL_CLEARING_NODES = 9,
-    TUTORIAL_THEMING = 10,
-    TUTORIAL_NETWORKING = 11,
+    TUTORIAL_MARKED_AND_WEIGHTED_NODES = 9,
+    TUTORIAL_CLEARING_NODES = 10,
+    TUTORIAL_THEMING = 11,
+    TUTORIAL_NETWORKING = 12,
     # TODO(ali): Tell the user to explore the rest of the UI and game as well in the end screen.
     TUTORIAL_END_SCREEN = 12
 
@@ -893,11 +892,38 @@ class TutorialWindow(pygame_gui.elements.UIWindow):
         self.window_height = 600
         self.window_running = False
         self.stage = 0
+        self.load_tutorial_assets()
         self.stages_build_and_clean_functions_dict = {
             TutorialWindowStages.TUTORIAL_WELCOME_SCREEN: {'build': self.build_tutorial_welcome_screen, 'clean': self.clean_tutorial_welcome_screen},
             TutorialWindowStages.TUTORIAL_PROJECT_DESCRIPTION: {'build': self.build_project_description_screen, 'clean': self.clean_project_description_screen},
             TutorialWindowStages.TUTORIAL_PATHFINDING_ALGORITHM: {'build': self.build_pathfinding_algorithm_screen, 'clean': self.clean_pathfinding_algorithm_screen}
         }
+
+    def load_tutorial_assets(self):
+        file_names = os.listdir('data/tutorial_assets')
+        keys = [file_name[:-4] for file_name in file_names]
+        self.ui_tutorial_image_surfaces_dict = {}
+
+        for i in range(len(keys)):
+            self.ui_tutorial_image_surfaces_dict[keys[i]] = pygame.image.load('data/tutorial_assets/' + file_names[i]).convert_alpha()
+
+        print('[UI MANAGER] Tutorial asset keys:', keys)
+
+    def fill_image_with_color(self, key, color):
+        width, height = self.ui_tutorial_image_surfaces_dict[key].get_size()
+
+        for y in range(height):
+            for x in range(width):
+                alpha_value = self.ui_tutorial_image_surfaces_dict[key].get_at((x, y))[3]
+                if alpha_value != 0:
+                    color[3] = alpha_value
+                    # TODO(ali): Clean up this hideous code.
+                    if self.ui_tutorial_image_surfaces_dict[key].get_at((x, y))[0] == 255:
+                        new_color = self.color_manager.UI_BORDER_COLOR
+                        new_color[3] = alpha_value
+                        self.ui_tutorial_image_surfaces_dict[key].set_at((x, y), new_color)
+                    else:
+                        self.ui_tutorial_image_surfaces_dict[key].set_at((x, y), color)
 
     def build_tutorial_welcome_screen(self):
         self.stage = TutorialWindowStages.TUTORIAL_WELCOME_SCREEN
@@ -929,6 +955,14 @@ class TutorialWindow(pygame_gui.elements.UIWindow):
                                                               container=self,
                                                               manager=self.manager)
 
+
+        self.fill_image_with_color('game_tutorial_logo', self.color_manager.UI_TEXT_COLOR)
+        self.game_tutorial_logo_image = pygame_gui.elements.UIImage(relative_rect=pygame.Rect((130, 70), (350, 350)),
+                                                                    image_surface=self.ui_tutorial_image_surfaces_dict['game_tutorial_logo'],
+                                                                    container=self,
+                                                                    manager=self.manager)
+
+
         self.disable_tutorial_on_startup = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((410, 470), (180, 50)),
                                                                         text='Disable On Startup',
                                                                         container=self,
@@ -939,6 +973,7 @@ class TutorialWindow(pygame_gui.elements.UIWindow):
 
     def clean_tutorial_welcome_screen(self):
         self.welcome_text_box.kill()
+        self.game_tutorial_logo_image.kill()
         self.disable_tutorial_on_startup.kill()
 
     def build_project_description_screen(self):
@@ -949,11 +984,28 @@ class TutorialWindow(pygame_gui.elements.UIWindow):
                                                                           container=self,
                                                                           manager=self.manager)
 
+        description_text = (
+            f"Pathfind is a tool designed to help you find different routes between nodes"
+            f" through using various kinds of algorithms. From Dijkstra's to A*. You can always"
+            f" FIND THE PATH.<br><br>To playing pathfinding puzzles with your friends, to creating"
+            f" your own colour schemes, creativity is your limitation."
+        )
+        self.project_description_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((60, 80), (510, 170)),
+                                                                          html_text=description_text,
+                                                                          container=self,
+                                                                          manager=self.manager)
+
+        self.fill_image_with_color('point_a_to_b', self.color_manager.UI_TEXT_COLOR)
+        self.point_a_to_b_image = pygame_gui.elements.UIImage(relative_rect=pygame.Rect((200, 270), (220, 220)),
+                                                              image_surface=self.ui_tutorial_image_surfaces_dict['point_a_to_b'],
+                                                              container=self,
+                                                              manager=self.manager)
         self.next_page_button.enable()
         self.previous_page_button.enable()
 
     def clean_project_description_screen(self):
         self.project_description_text_box.kill()
+        self.point_a_to_b_image.kill()
 
     def build_pathfinding_algorithm_screen(self):
         self.stage = TutorialWindowStages.TUTORIAL_PATHFINDING_ALGORITHM
@@ -963,11 +1015,45 @@ class TutorialWindow(pygame_gui.elements.UIWindow):
                                                                             container=self,
                                                                             manager=self.manager)
 
+        description_text = (
+            f"Pathfind supports the use of various kinds of algorithms some which are "
+            f"<b>weighted</b> and others which are <b>unweighted</b>.<br><br>You can select"
+            f" a pathfinding algorithm using the pathfinding algorithms menu (picture on bottom left)"
+            f" and then press the <b>run</b> button (picture at the bottom) to run the algorithm.<br><br>"
+            f"You should also note that some algorithms also support <b>heuristics</b> which you will be able"
+            f" to select using the heuristics menu (picture on the bottom right). The heuristics menu will only"
+            f" appear if the pathfinding algorithm supports heuristics).<br><br>When an algorithm is running you"
+            f" can change the speed at which the nodes are being animated by changing the <b>Pathfinding Speed</b> slider."
+        )
+        self.pathfinding_algorithm_description_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((60, 80), (510, 180)),
+                                                                                        html_text=description_text,
+                                                                                        container=self,
+                                                                                        manager=self.manager)
+
+        self.pathfinding_algorithms_menu_image = pygame_gui.elements.UIImage(relative_rect=pygame.Rect((100, 280), (215, 185)),
+                                                                             image_surface=self.ui_tutorial_image_surfaces_dict['pathfinding_algorithms_menu'],
+                                                                             container=self,
+                                                                             manager=self.manager)
+
+        self.heuristics_menu_image = pygame_gui.elements.UIImage(relative_rect=pygame.Rect((350, 280), (213, 103)),
+                                                                 image_surface=self.ui_tutorial_image_surfaces_dict['heuristics_menu'],
+                                                                 container=self,
+                                                                 manager=self.manager)
+
+        self.run_button_image = pygame_gui.elements.UIImage(relative_rect=pygame.Rect((360, 393), (190, 60)),
+                                                            image_surface=self.ui_tutorial_image_surfaces_dict['run_button'],
+                                                            container=self,
+                                                            manager=self.manager)
+
         self.next_page_button.enable()
         self.previous_page_button.enable()
 
     def clean_pathfinding_algorithm_screen(self):
         self.pathfinding_algorithm_text_box.kill()
+        self.pathfinding_algorithm_description_text_box.kill()
+        self.pathfinding_algorithms_menu_image.kill()
+        self.heuristics_menu_image.kill()
+        self.run_button_image.kill()
 
     def handle_tutorial_window_ui_button_pressed(self, event):
         if self.window_running:

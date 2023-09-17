@@ -40,7 +40,7 @@ def main():
     grid_height = 600
 
     screen = pygame.display.set_mode((screen_width, screen_height))
-    pygame.display.set_caption("Pathfinding Visualizer")
+    pygame.display.set_caption("Pathfind")
 
     screen_manager = ScreenManager(screen, screen_width, screen_height, grid_width, grid_height, 4)
 
@@ -115,7 +115,6 @@ def main():
     bottom_left = (-20, -20)
     bottom_right = (20, -20)
 
-    image_surface = pygame.image.load('data/tutorial_assets/point_a_to_b.png')
     while True:
         top_left = (rotation_matrix[0]*top_left[0] + rotation_matrix[1]*top_left[1],
                     rotation_matrix[2]*top_left[0] + rotation_matrix[3]*top_left[1])

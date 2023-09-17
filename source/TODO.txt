@@ -48,6 +48,7 @@ FIX:
 - Go through all of the TODO in the project.
 - Finish making the tutorial window
 - Fix bug so that if the path goes over a weighted node then the path node should be drawn on top of the weighted node.
+- Add icon to the window.
 
 TODO:
 - Play music when the user places and deletes nodes, or when a path is being shown.
