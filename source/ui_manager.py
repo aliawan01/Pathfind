@@ -26,6 +26,13 @@ class ThemeWindowStages(IntEnum):
 
 class ThemeWindow(pygame_gui.elements.UIWindow):
     def __init__(self, manager, color_manager, font_manager):
+        """
+        Initializes the ThemeWindow class.
+
+        @param manager: pygame_gui.ui_manager.UIManager
+        @param color_manager: ColorManager
+        @param font_manager: FontManager
+        """
         self.manager = manager
         self.color_manager = color_manager
         self.font_manager = font_manager
@@ -86,6 +93,9 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
 
 
     def build_custom_theme_creation_welcome_screen(self):
+        """
+        It will first create a window and then create the widgets for ThemeWindowStages.CUSTOM_THEME_CREATION_WELCOME_SCREEN.
+        """
         self.stage = ThemeWindowStages.CUSTOM_THEME_CREATION_WELCOME_SCREEN
 
         if self.window_running == False:
@@ -143,6 +153,9 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
                                                                                      container=self,
                                                                                      manager=self.manager)
     def clean_custom_theme_creation_welcome_screen(self):
+        """
+        Removes the widgets for ThemeWindowStages.CUSTOM_THEME_CREATION_WELCOME_SCREEN.
+        """
         self.stage = None
         self.welcome_text_box.kill()
         self.custom_theme_name_label.kill()
@@ -152,6 +165,9 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
 
 
     def build_custom_theme_creation_selection_screen(self):
+        """
+        Creates the widgets for ThemeWindowStages.CUSTOM_THEME_CREATION_COLOR_SELECTION_SCREEN.
+        """
         self.stage = ThemeWindowStages.CUSTOM_THEME_CREATION_COLOR_SELECTION_SCREEN
         self.previous_page_button.enable()
         self.next_page_button.enable()
@@ -220,6 +236,9 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
 
 
     def clean_custom_theme_creation_selection_screen(self):
+        """
+        Removes the widgets for ThemeWindowStages.CUSTOM_THEME_CREATION_COLOR_SELECTION_SCREEN.
+        """
         self.stage = None
         self.color_selection_text_box.kill()
         self.scrolling_container.kill()
@@ -237,8 +256,10 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
         self.ui_text_boxes = []
         self.ui_buttons = []
 
-
     def build_custom_theme_creation_finish_screen(self):
+        """
+        Creates the widgets for ThemeWindowStages.CUSTOM_THEME_CREATION_FINISH_SCREEN.
+        """
         self.stage = ThemeWindowStages.CUSTOM_THEME_CREATION_FINISH_SCREEN
         self.next_page_button.disable()
         self.finish_screen_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((70, 5), (self.window_width - 180, 50)),
@@ -247,7 +268,6 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
                                                                     container=self,
                                                                     manager=self.manager)
 
-        # TODO(ali): Make the self.custom_theme_name bold in the html_text (do this once you have set the fonts)
         self.finish_button_info = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((140, 100), (400, 200)),
                                                                 html_text=(f"Pressing the <b>Finish Button</b> will create "
                                                                            f"the New Custom Theme: <b>{self.custom_theme_name}</b> "
@@ -262,12 +282,18 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
                                                           manager=self.manager)
 
     def clean_custom_theme_creation_finish_screen(self):
+        """
+        Removes the widgets for ThemeWindowStages.CUSTOM_THEME_CREATION_FINISH_SCREEN.
+        """
         self.stage = None
         self.finish_screen_text_box.kill()
         self.finish_button_info.kill()
         self.finish_button.kill()
 
     def build_custom_theme_editing_welcome_screen(self):
+        """
+        Creates widgets for ThemeWindowStages.CUSTOM_THEME_EDITING_WELCOME_SCREEN.
+        """
         self.stage = ThemeWindowStages.CUSTOM_THEME_EDITING_WELCOME_SCREEN
         self.edited_custom_theme = False
 
@@ -311,7 +337,6 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
             self.custom_theme_to_edit_name = custom_theme_names[0]
             self.changed_custom_theme_to_edit_name = True
 
-        print(self.custom_theme_to_edit_name)
         self.custom_theme_editing_selection_list = pygame_gui.elements.UISelectionList(relative_rect=pygame.Rect((210, 180), ((250, 250))),
                                                                                        item_list=custom_theme_names,
                                                                                        default_selection=self.custom_theme_to_edit_name,
@@ -319,12 +344,18 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
                                                                                        manager=self.manager)
 
     def clean_custom_theme_editing_welcome_screen(self):
+        """
+        Removes widgets for ThemeWindowStages.CUSTOM_THEME_EDITING_WELCOME_SCREEN.
+        """
         self.stage = None
         self.custom_theme_editing_welcome_text_box.kill()
         self.custom_theme_editing_selection_list_text_box.kill()
         self.custom_theme_editing_selection_list.kill()
 
     def build_custom_theme_editing_color_selection_screen(self):
+        """
+        Creates widgets for ThemeWindowStages.CUSTOM_THEME_EDITING_COLOR_SELECTION_SCREEN.
+        """
         self.stage = ThemeWindowStages.CUSTOM_THEME_EDITING_COLOR_SELECTION_SCREEN
         self.custom_theme_editing_previous_page_button.enable()
         self.custom_theme_editing_next_page_button.enable()
@@ -387,6 +418,9 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
 
 
     def clean_custom_theme_editing_color_selection_screen(self):
+        """
+        Removes widgets for ThemeWindowStages.CUSTOM_THEME_EDITING_COLOR_SELECTION_SCREEN.
+        """
         self.stage = None
         self.custom_theme_editing_color_selection_text_box.kill()
         self.custom_theme_scrolling_container.kill()
@@ -405,6 +439,9 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
         self.custom_theme_editing_ui_buttons = []
 
     def build_custom_theme_editing_finish_screen(self):
+        """
+        Creates widgets for ThemeWindowStages.CUSTOM_THEME_EDITING_FINISH_SCREEN.
+        """
         self.stage = ThemeWindowStages.CUSTOM_THEME_EDITING_FINISH_SCREEN
         print("Reached the theme editing finish screen")
 
@@ -415,7 +452,6 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
                                                                                          container=self,
                                                                                          manager=self.manager)
 
-        # TODO(ali): Make the self.custom_theme_to_edit_name bold in the html_text (do this once you have set the fonts)
         self.custom_theme_editing_save_changes_button_info = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((130, 100), (400, 200)),
                                                                                      html_text=(f"Pressing the <b>Save Changes</b> button will save the changes"
                                                                                                 f" you made to the Custom Theme: <b>{self.custom_theme_to_edit_name}</b>"
@@ -430,12 +466,18 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
                                                                                      manager=self.manager)
 
     def clean_custom_theme_editing_finish_screen(self):
+        """
+        Removes widgets for ThemeWindowStages.CUSTOM_THEME_EDITING_FINISH_SCREEN.
+        """
         self.stage = None
         self.custom_theme_editing_finish_screen_text_box.kill()
         self.custom_theme_editing_save_changes_button_info.kill()
         self.custom_theme_editing_save_changes_button.kill()
 
     def build_custom_theme_delete_screen(self):
+        """
+        Creates widgets for ThemeWindowStages.CUSTOM_THEME_DELETE_SCREEN.
+        """
         self.stage = ThemeWindowStages.CUSTOM_THEME_DELETE_SCREEN
         self.custom_themes_to_delete_names = []
         self.deleted_themes = False
@@ -476,6 +518,9 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
 
 
     def clean_custom_theme_delete_screen(self):
+        """
+        Removes widgets for ThemeWindowStages.CUSTOM_THEME_DELETE_SCREEN.
+        """
         self.stage = None
         self.window_running = False
         self.custom_theme_deletion_title_text_box.kill()
@@ -485,12 +530,16 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
 
 
     def handle_theme_window_ui_text_entry_finished_event(self, event):
+        """
+        Handles the pygame_gui.UI_TEXT_ENTRY_FINISHED event for the ThemeWindow.
+
+        @param event: pygame.event
+        """
         if self.window_running:
             match self.stage:
                 case ThemeWindowStages.CUSTOM_THEME_CREATION_WELCOME_SCREEN:
                     if event.ui_element == self.custom_theme_name_text_entry_line:
                         if event.text in self.color_manager.get_all_theme_names_from_themes_list():
-                            # TODO(ali): Flash a red color on the text entry line and empty it instead.
                             self.custom_theme_name_text_entry_line.set_text('A custom theme already exists with this name.')
                         else:
                             self.custom_theme_name = event.text
@@ -498,6 +547,11 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
                             self.next_page_button.enable()
 
     def handle_theme_window_ui_drop_down_menu_changed_event(self, event):
+        """
+        Handles the pygame_gui.UI_DROP_DOWN_MENU_CHANGED event for ThemeWindow.
+
+        @param event: pygame.event
+        """
         if self.window_running:
             match self.stage:
                 case ThemeWindowStages.CUSTOM_THEME_CREATION_WELCOME_SCREEN:
@@ -510,6 +564,11 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
 
 
     def handle_theme_window_ui_button_pressed_event(self, event):
+        """
+        Handles the pygame_gui.UI_BUTTON_PRESSED event for ThemeWindow.
+
+        @param event: pygame.event
+        """
         if self.window_running:
             match self.stage:
                 case ThemeWindowStages.CUSTOM_THEME_CREATION_WELCOME_SCREEN:
@@ -633,6 +692,11 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
                         self.kill()
 
     def handle_theme_window_ui_color_picker_color_picked_event(self, event):
+        """
+        Handles the pygame_gui.UI_COLOUR_PICKER_COLOUR_PICKED event for ThemeWindow.
+
+        @param event: pygame.event
+        """
         if self.window_running:
             if self.stage == ThemeWindowStages.CUSTOM_THEME_CREATION_COLOR_SELECTION_SCREEN:
                 if event.ui_element == self.color_picker:
@@ -650,6 +714,11 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
 
 
     def handle_theme_window_ui_selection_list_new_selection(self, event):
+        """
+        Handles the pygame_gui.UI_SELECTION_LIST_NEW_SELECTION event for ThemeWindow.
+
+        @param event: pygame.event
+        """
         if self.window_running:
             if self.stage == ThemeWindowStages.CUSTOM_THEME_DELETE_SCREEN:
                 if event.ui_element == self.custom_themes_selection_list:
@@ -663,17 +732,33 @@ class ThemeWindow(pygame_gui.elements.UIWindow):
                     print(self.custom_theme_to_edit_name)
 
     def handle_theme_window_ui_selection_list_dropped_selection(self, event):
+        """
+        Handles the pygame_gui.UI_SELECTION_LIST_DROPPED_SELECTION event for ThemeWindow.
+
+        @param event: pygame.event
+        """
         if self.window_running and self.stage == ThemeWindowStages.CUSTOM_THEME_DELETE_SCREEN:
             if event.ui_element == self.custom_themes_selection_list:
                 self.custom_themes_to_delete_names.remove(event.text)
                 print(self.custom_themes_to_delete_names)
 
     def shutdown(self):
+        """
+        Sets the window_running attribute to False.
+        """
         print("[THEME WINDOW] Shutdown Theme Window")
         self.window_running = False
 
 class UINetworkingManager(pygame_gui.elements.UIWindow):
     def __init__(self, manager, client, server, font_manager):
+        """
+        Initializes the UINetworkingManager class.
+
+        @param manager: pygame_gui.ui_manager.UIManager
+        @param client: Client
+        @param server: Server
+        @param font_manager: FontManager
+        """
         self.manager = manager
         self.client = client
         self.server = server
@@ -687,6 +772,12 @@ class UINetworkingManager(pygame_gui.elements.UIWindow):
         self.ip_address = socket.gethostbyname(socket.gethostname())
 
     def create_server(self):
+        """
+        Creates a message window telling the user that they have successfully created
+        a server running on their local machine. This message window will also tell the
+        user information about the server (i.e. the IP Address and Port Number the server
+        is running on).
+        """
         if self.created_server == False:
             self.created_server = True
             self.shutdown_server = False
@@ -695,7 +786,6 @@ class UINetworkingManager(pygame_gui.elements.UIWindow):
             self.port = random.randint(2000, 10000)
             self.server.run_server(self.ip_address, self.port)
             self.client.connect_to_server(self.ip_address, self.port)
-            # TODO(ali): Make the port and ip address bold
 
             message = (f'We have successfully created a server running on<br><br><b>IP Address: {self.ip_address}<br>Port: {self.port}</b><br>'
                        f'<br>You can now allow your friends to join your game by telling them to click on the <b>Connect to Server</b> option'
@@ -707,8 +797,15 @@ class UINetworkingManager(pygame_gui.elements.UIWindow):
                                                manager=self.manager)
 
     def show_server_info(self):
-        message = (f'Your server is running on<br><br><b>IP Address: {self.ip_address}<br>Port: {self.port}<br>'
-                   f'Number of currently connected clients: {self.server.get_number_of_currently_connected_clients()}</b>'
+        """
+        Creates a message window which will tell the user the following
+        information about the game server running on their local machine.
+
+        - IP Address of the server.
+        - Port Number the server is listening on.
+        - How many clients are connected to the server.
+        """
+        message = (f'Your server is running on<br><br><b>IP Address: {self.ip_address}<br>Port: {self.port}<br>' f'Number of currently connected clients: {self.server.get_number_of_currently_connected_clients()}</b>'
                    f'<br><br>You can allow your friends to join your game by telling them to click on the <b>Connect to Server</b>'
                    f' option and typing in the IP address and port shown in this window in the relevant fields.')
 
@@ -718,6 +815,16 @@ class UINetworkingManager(pygame_gui.elements.UIWindow):
                                            manager=self.manager)
 
     def destroy_server(self):
+        """
+        This function is used to shut down a server and will do the following:
+
+        - The shutdown_server attribute is set to True
+        - The created_server attribute is set to False
+        - The connected_to_server attribute is set to False
+        - The shutdown() method is called from self.server
+        - A message window is created telling the user that the server
+          has been shutdown successfully.
+        """
         self.shutdown_server = True
         self.created_server = False
         self.connected_to_server = False
@@ -728,6 +835,13 @@ class UINetworkingManager(pygame_gui.elements.UIWindow):
                                            manager=self.manager)
 
     def check_is_valid_ip_address(self, ip_address):
+        """
+        This function will take in a string and check if
+        it is the valid format to be considered an IP Address.
+
+        @param ip_address: Str
+        @return: bool
+        """
         try:
             ip_address_obj = ipaddress.ip_address(ip_address)
             return True
@@ -735,12 +849,26 @@ class UINetworkingManager(pygame_gui.elements.UIWindow):
             return False
 
     def check_is_valid_port(self, port_number):
+        """
+        This function will check if the port_number given
+        is in the range 2000 to 9999.
+
+        @param port_number: int
+        @return: bool
+        """
         if port_number in range(2000, 10000):
             return True
         else:
             return False
 
     def server_connection_has_broken(self):
+        """
+        This function will set both the created_server and connected_to_server
+        attributes to False. It will then check if the shutdown_server attribute
+        is set to True, if it is we will set to it to False, otherwise we will
+        create a message window telling the user that the server they were connected
+        to has been shut down by the owner.
+        """
         self.created_server = False
         self.connected_to_server = False
         if self.shutdown_server:
@@ -752,6 +880,10 @@ class UINetworkingManager(pygame_gui.elements.UIWindow):
 
 
     def build_networking_connect_to_server_screen(self):
+        """
+        It will first create a window and then create the widgets for the
+        screen to connect to server.
+        """
         self.window_running = True
 
         self.created_server = False
@@ -801,6 +933,9 @@ class UINetworkingManager(pygame_gui.elements.UIWindow):
                                                                                 manager=self.manager)
 
     def clean_networking_connect_server_screen(self):
+        """
+        Removes the widgets for the screen to connect to the server.
+        """
         self.window_running = False
         self.networking_connect_to_server_welcome_title_text_box.kill()
         self.networking_connect_to_server_welcome_info_text_box.kill()
@@ -811,6 +946,13 @@ class UINetworkingManager(pygame_gui.elements.UIWindow):
         self.networking_connect_to_server_button.kill()
 
     def disconnect_from_server(self):
+        """
+        This function will set the created_server and connected_to_server attributes to
+        False. It will then create a network event using the create_network_event method
+        in self.client with the event NetworkingEventTypes.DISCONNECT_FROM_SERVER. After
+        this, the function will create a message window telling the user that they have
+        successfully disconnected from the server.
+        """
         self.created_server = False
         self.connected_to_server = False
 
@@ -820,6 +962,11 @@ class UINetworkingManager(pygame_gui.elements.UIWindow):
                                            manager=self.manager)
 
     def handle_ui_networking_manager_ui_button_pressed_event(self, event):
+        """
+        Handles the pygame_gui.UI_BUTTON_PRESSED event for UINetworkingManager.
+
+        @param event: pygame.event
+        """
         if self.window_running:
             if event.ui_element == self.networking_connect_to_server_button:
                 exit = False
@@ -854,8 +1001,6 @@ class UINetworkingManager(pygame_gui.elements.UIWindow):
 
                 pygame_gui.windows.UIMessageWindow(rect=pygame.Rect((60, 100), (self.window_width, self.window_height)), html_message=message, manager=self.manager)
 
-
-                # TODO(ali): Set self.connected_to_server = True and self.created_server = False, here if we can successfully connect to the server.
                 self.clean_networking_connect_server_screen()
                 self.kill()
 
@@ -863,6 +1008,9 @@ class UINetworkingManager(pygame_gui.elements.UIWindow):
                     return True
 
     def shutdown_networking_window(self):
+        """
+        Sets the window_running attribute to False
+        """
         print("[NETWORKING WINDOW] Shutdown Networking Window")
         self.window_running = False
 
@@ -875,15 +1023,22 @@ class TutorialWindowStages(IntEnum):
     TUTORIAL_MAZE_GENERATION_ALGORITHM_INFO = 5,
     TUTORIAL_SETTINGS = 6,
     TUTORIAL_FONTS = 7,
-    TUTORIAL_MARKED_AND_WEIGHTED_NODES = 9,
-    TUTORIAL_CLEARING_NODES = 10,
-    TUTORIAL_THEMING = 11,
-    TUTORIAL_NETWORKING = 12,
-    # TODO(ali): Tell the user to explore the rest of the UI and game as well in the end screen.
+    TUTORIAL_MARKED_AND_WEIGHTED_NODES = 8,
+    TUTORIAL_CLEARING_NODES = 9,
+    TUTORIAL_THEMING = 10,
+    TUTORIAL_NETWORKING = 11,
     TUTORIAL_END_SCREEN = 12
 
 class TutorialWindow(pygame_gui.elements.UIWindow):
     def __init__(self, manager, color_manager, font_manager, settings_window):
+        """
+        Initializes the TutorialWindow class.
+
+        @param manager: pygame_gui.ui_manager.UIManager
+        @param color_manager: ColorManager
+        @param font_manager: FontManager
+        @param settings_window: SettingsWindow
+        """
         self.manager = manager
         self.color_manager = color_manager
         self.font_manager = font_manager
@@ -896,10 +1051,27 @@ class TutorialWindow(pygame_gui.elements.UIWindow):
         self.stages_build_and_clean_functions_dict = {
             TutorialWindowStages.TUTORIAL_WELCOME_SCREEN: {'build': self.build_tutorial_welcome_screen, 'clean': self.clean_tutorial_welcome_screen},
             TutorialWindowStages.TUTORIAL_PROJECT_DESCRIPTION: {'build': self.build_project_description_screen, 'clean': self.clean_project_description_screen},
-            TutorialWindowStages.TUTORIAL_PATHFINDING_ALGORITHM: {'build': self.build_pathfinding_algorithm_screen, 'clean': self.clean_pathfinding_algorithm_screen}
+            TutorialWindowStages.TUTORIAL_PATHFINDING_ALGORITHM: {'build': self.build_pathfinding_algorithm_screen, 'clean': self.clean_pathfinding_algorithm_screen},
+            TutorialWindowStages.TUTORIAL_PATHFINDING_ALGORITHM_INFO: {'build': self.build_pathfinding_algorithm_info_screen, 'clean': self.clean_pathfinding_algorithm_info_screen},
+            TutorialWindowStages.TUTORIAL_MAZE_GENERATION_ALGORITHM: {'build': self.build_maze_generation_algorithm_screen, 'clean': self.clean_maze_generation_algorithm_screen},
+            TutorialWindowStages.TUTORIAL_MAZE_GENERATION_ALGORITHM_INFO: {'build': self.build_maze_generation_algorithm_info_screen, 'clean': self.clean_maze_generation_algorithm_info_screen},
+            TutorialWindowStages.TUTORIAL_SETTINGS: {'build': self.build_settings_screen, 'clean': self.clean_settings_screen},
+            TutorialWindowStages.TUTORIAL_FONTS: {'build': self.build_fonts_screen, 'clean': self.clean_fonts_screen},
+            TutorialWindowStages.TUTORIAL_MARKED_AND_WEIGHTED_NODES: {'build': self.build_marked_and_weighted_nodes_screen, 'clean': self.clean_marked_and_weighted_nodes_screen},
+            TutorialWindowStages.TUTORIAL_CLEARING_NODES: {'build': self.build_clearing_nodes_screen, 'clean': self.clean_clearing_nodes_screen},
+            TutorialWindowStages.TUTORIAL_THEMING: {'build': self.build_theming_screen, 'clean': self.clean_theming_screen},
+            TutorialWindowStages.TUTORIAL_NETWORKING: {'build': self.build_networking_screen, 'clean': self.clean_networking_screen},
+            TutorialWindowStages.TUTORIAL_END_SCREEN: {'build': self.build_end_screen, 'clean': self.clean_end_screen}
         }
 
     def load_tutorial_assets(self):
+        """
+        This function will go through each image in the data/tutorial_assets directory
+        and remove the file extension from the image file's name. It will then add this
+        image file name (without the file extension) as a key for the ui_tutorial_images_surfaces_dict
+        dictionary with the value for the key being the loaded image file (this should be a pointer to
+        or a way for us to access the image file in memory so that it is ready to draw onto the screen).
+        """
         file_names = os.listdir('data/tutorial_assets')
         keys = [file_name[:-4] for file_name in file_names]
         self.ui_tutorial_image_surfaces_dict = {}
@@ -909,16 +1081,29 @@ class TutorialWindow(pygame_gui.elements.UIWindow):
 
         print('[UI MANAGER] Tutorial asset keys:', keys)
 
-    def fill_image_with_color(self, key, color):
+    def fill_image_with_color_and_set_shadow_to_border_color(self, key, color, shadow_colour=(255, 0, 0)):
+        """
+        This function will go through each pixel in the image specified by the key (we will get the image
+        data by accessing with the key given in ui_tutorial_image_surfaces_dict dictionary) and it will check
+        the value of the alpha channel of the pixel. If the pixel is transparent then we will continue to the next
+        iteration otherwise we will check if the rgb values of the pixel are the same as those specified in the
+        shadow_colour given. If it is, we will make the rgb value of this pixel be the same as the UI_BORDER_COLOR
+        (we can get this by accessing the UI_BORDER_COLOR method in self.color_manager). If the rgb values are not the
+        same as the shadow_colour we will instead set the rgb values of the pixel to be the same as the color given.
+
+        @param key: str
+        @param color: tuple
+        @param shadow_colour: tuple
+        """
         width, height = self.ui_tutorial_image_surfaces_dict[key].get_size()
 
         for y in range(height):
             for x in range(width):
-                alpha_value = self.ui_tutorial_image_surfaces_dict[key].get_at((x, y))[3]
+                current_colour = self.ui_tutorial_image_surfaces_dict[key].get_at((x, y))
+                alpha_value = current_colour[3]
                 if alpha_value != 0:
                     color[3] = alpha_value
-                    # TODO(ali): Clean up this hideous code.
-                    if self.ui_tutorial_image_surfaces_dict[key].get_at((x, y))[0] == 255:
+                    if current_colour[0] == shadow_colour[0]:
                         new_color = self.color_manager.UI_BORDER_COLOR
                         new_color[3] = alpha_value
                         self.ui_tutorial_image_surfaces_dict[key].set_at((x, y), new_color)
@@ -926,6 +1111,9 @@ class TutorialWindow(pygame_gui.elements.UIWindow):
                         self.ui_tutorial_image_surfaces_dict[key].set_at((x, y), color)
 
     def build_tutorial_welcome_screen(self):
+        """
+        It will first create a window and then create the widgets for TutorialWindowStages.TUTORIAL_WELCOME_SCREEN.
+        """
         self.stage = TutorialWindowStages.TUTORIAL_WELCOME_SCREEN
 
         if self.window_running == False:
@@ -956,7 +1144,7 @@ class TutorialWindow(pygame_gui.elements.UIWindow):
                                                               manager=self.manager)
 
 
-        self.fill_image_with_color('game_tutorial_logo', self.color_manager.UI_TEXT_COLOR)
+        self.fill_image_with_color_and_set_shadow_to_border_color('game_tutorial_logo', self.color_manager.UI_TEXT_COLOR)
         self.game_tutorial_logo_image = pygame_gui.elements.UIImage(relative_rect=pygame.Rect((130, 70), (350, 350)),
                                                                     image_surface=self.ui_tutorial_image_surfaces_dict['game_tutorial_logo'],
                                                                     container=self,
@@ -972,11 +1160,17 @@ class TutorialWindow(pygame_gui.elements.UIWindow):
             self.disable_tutorial_on_startup.hide()
 
     def clean_tutorial_welcome_screen(self):
+        """
+        Removes the widgets TutorialWindowStages.TUTORIAL_WELCOME_SCREEN.
+        """
         self.welcome_text_box.kill()
         self.game_tutorial_logo_image.kill()
         self.disable_tutorial_on_startup.kill()
 
     def build_project_description_screen(self):
+        """
+        Creates widgets for TutorialWindowStages.TUTORIAL_PROJECT_DESCRIPTION.
+        """
         self.stage = TutorialWindowStages.TUTORIAL_PROJECT_DESCRIPTION
         self.project_description_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((70, 5), (self.window_width - 180, 80)),
                                                                           html_text=f"<font name={self.font_manager.current_font_name} pixel_size={self.font_manager.ui_title_font_size_value}><var>Project Description</var></font>",
@@ -995,7 +1189,7 @@ class TutorialWindow(pygame_gui.elements.UIWindow):
                                                                           container=self,
                                                                           manager=self.manager)
 
-        self.fill_image_with_color('point_a_to_b', self.color_manager.UI_TEXT_COLOR)
+        self.fill_image_with_color_and_set_shadow_to_border_color('point_a_to_b', self.color_manager.UI_TEXT_COLOR)
         self.point_a_to_b_image = pygame_gui.elements.UIImage(relative_rect=pygame.Rect((200, 270), (220, 220)),
                                                               image_surface=self.ui_tutorial_image_surfaces_dict['point_a_to_b'],
                                                               container=self,
@@ -1004,10 +1198,16 @@ class TutorialWindow(pygame_gui.elements.UIWindow):
         self.previous_page_button.enable()
 
     def clean_project_description_screen(self):
+        """
+        Removes the widgets for TutorialWindowStages.TUTORIAL_PROJECT_DESCRIPTION.
+        """
         self.project_description_text_box.kill()
         self.point_a_to_b_image.kill()
 
     def build_pathfinding_algorithm_screen(self):
+        """
+        Creates the widgets for TutorialWindowStages.TUTORIAL_PATHFINDING_ALGORITHM.
+        """
         self.stage = TutorialWindowStages.TUTORIAL_PATHFINDING_ALGORITHM
         self.pathfinding_algorithm_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((70, 5), (self.window_width - 180, 80)),
                                                                             html_text=f"<font name={self.font_manager.current_font_name} pixel_size={self.font_manager.ui_title_font_size_value}><var>Pathfinding Algorithms</var></font>",
@@ -1023,24 +1223,24 @@ class TutorialWindow(pygame_gui.elements.UIWindow):
             f"You should also note that some algorithms also support <b>heuristics</b> which you will be able"
             f" to select using the heuristics menu (picture on the bottom right). The heuristics menu will only"
             f" appear if the pathfinding algorithm supports heuristics).<br><br>When an algorithm is running you"
-            f" can change the speed at which the nodes are being animated by changing the <b>Pathfinding Speed</b> slider."
+            f" can change the speed at which the nodes are being animated by changing the <b>Pathfinding Algorithm Speed</b> slider."
         )
-        self.pathfinding_algorithm_description_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((60, 80), (510, 180)),
+        self.pathfinding_algorithm_description_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((60, 80), (510, 220)),
                                                                                         html_text=description_text,
                                                                                         container=self,
                                                                                         manager=self.manager)
 
-        self.pathfinding_algorithms_menu_image = pygame_gui.elements.UIImage(relative_rect=pygame.Rect((100, 280), (215, 185)),
+        self.pathfinding_algorithms_menu_image = pygame_gui.elements.UIImage(relative_rect=pygame.Rect((100, 320), (215, 185)),
                                                                              image_surface=self.ui_tutorial_image_surfaces_dict['pathfinding_algorithms_menu'],
                                                                              container=self,
                                                                              manager=self.manager)
 
-        self.heuristics_menu_image = pygame_gui.elements.UIImage(relative_rect=pygame.Rect((350, 280), (213, 103)),
+        self.heuristics_menu_image = pygame_gui.elements.UIImage(relative_rect=pygame.Rect((350, 320), (213, 103)),
                                                                  image_surface=self.ui_tutorial_image_surfaces_dict['heuristics_menu'],
                                                                  container=self,
                                                                  manager=self.manager)
 
-        self.run_button_image = pygame_gui.elements.UIImage(relative_rect=pygame.Rect((360, 393), (190, 60)),
+        self.run_button_image = pygame_gui.elements.UIImage(relative_rect=pygame.Rect((360, 433), (190, 60)),
                                                             image_surface=self.ui_tutorial_image_surfaces_dict['run_button'],
                                                             container=self,
                                                             manager=self.manager)
@@ -1049,13 +1249,485 @@ class TutorialWindow(pygame_gui.elements.UIWindow):
         self.previous_page_button.enable()
 
     def clean_pathfinding_algorithm_screen(self):
+        """
+        Removes the widgets for TutorialWindowStages.TUTORIAL_PATHFINDING_ALGORITHM.
+        """
         self.pathfinding_algorithm_text_box.kill()
         self.pathfinding_algorithm_description_text_box.kill()
         self.pathfinding_algorithms_menu_image.kill()
         self.heuristics_menu_image.kill()
         self.run_button_image.kill()
 
+    def build_pathfinding_algorithm_info_screen(self):
+        """
+        Creates the widgets for TutorialWindowStages.TUTORIAL_PATHFINDING_ALGORITHM_INFO.
+        """
+        self.stage = TutorialWindowStages.TUTORIAL_PATHFINDING_ALGORITHM_INFO
+        self.pathfinding_algorithm_info_title_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((70, 5), (self.window_width - 180, 80)),
+                                                                                 html_text=f"<font name={self.font_manager.current_font_name} pixel_size={self.font_manager.ui_title_font_size_value}><var>Pathfinding Algorithms Info</var></font>",
+                                                                                 object_id="#text_box_title",
+                                                                                 container=self,
+                                                                                 manager=self.manager)
+
+        description_text = (
+            f"Brief description of each pathfinding algorithm supported in Pathfind.<br><br>"
+            f"<b>Depth Fist Search</b> (unweighted): Very slow, very bad. Doesn't guarantee the shortest path.<br>"
+            f"<b>Breadth First Search</b> (unweighted): Pretty solid algorithm and it guarantees the shortest path.<br>"
+            f"<b>Dijkstra</b> (weighted): The father of pathfinding algorithms, supports weights and guarantees the shortest path.<br>"
+            f"<b>A*</b> (weighted): Supports weights and is faster than Dijkstra through the use of heuristics (estimate "
+            f"of how far a specific node is from a target node). Also guarantees the shortest path.<br>"
+            f"<b>Greedy Best First Search</b> (unweighted): Only relies on heuristics and doesn't support weights, but it's pretty fast!"
+            f" Doesn't guarantee the shortest path.<br>"
+            f"<b>Bidirectional Best First Search</b> (unweighted): Launches breadth first search from both the starting node and the target"
+            f" node, so it's twice as fast as BFS! It also guarantees the shortest path.<br>"
+        )
+        self.pathfinding_algorithm_info_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((60, 80), (510, 430)),
+                                                                                 html_text=description_text,
+                                                                                 container=self,
+                                                                                 manager=self.manager)
+
+        self.next_page_button.enable()
+        self.previous_page_button.enable()
+
+    def clean_pathfinding_algorithm_info_screen(self):
+        """
+        Removes the widgets for TutorialWindowStages.TUTORIAL_PATHFINDING_ALGORITHM_INFO.
+        """
+        self.pathfinding_algorithm_info_title_text_box.kill()
+        self.pathfinding_algorithm_info_text_box.kill()
+
+
+    def build_maze_generation_algorithm_screen(self):
+        """
+        Creates the widgets for TutorialWindowStages.TUTORIAL_MAZE_GENERATION_ALGORITHM.
+        """
+        self.stage = TutorialWindowStages.TUTORIAL_MAZE_GENERATION_ALGORITHM
+        self.maze_generation_algorithm_title_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((70, 5), (self.window_width - 180, 80)),
+                                                                       html_text=f"<font name={self.font_manager.current_font_name} pixel_size={self.font_manager.ui_title_font_size_value}><var>Maze Generation</var></font>",
+                                                                       object_id="#text_box_title",
+                                                                       container=self,
+                                                                       manager=self.manager)
+
+        description_text = (
+            f"Pathfind allows you to create your own mazes and also generate mazes using different algorithms, some of "
+            f"these maze generation algorithms are <b>weighted</b> and others are <b>unweighted</b>.<br><br> You can select a maze generation "
+            f"algorithm by using the maze generation algorithms menu (picture at the bottom).<br><br>Maze generation algorithms "
+            f"which use Recursive Division will be animated sequentially (like a pathfinding algorithm) for this reason you are "
+            f"able to manipulate the speed at which these algorithms are being animated using the <b>Recursive Division Speed</b>"
+            f" slider. When a Recursive Division algorithm is running you can also press the <b>Cancel</b> button to stop the algorithm"
+            f" from adding new nodes to the maze."
+        )
+        self.maze_generation_algorithm_description_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((60, 80), (510, 240)),
+                                                                                            html_text=description_text,
+                                                                                            container=self,
+                                                                                            manager=self.manager)
+
+
+        self.mazes_menu_image = pygame_gui.elements.UIImage(relative_rect=pygame.Rect((200, 350), (210, 163)),
+                                                            image_surface=self.ui_tutorial_image_surfaces_dict['mazes_menu'],
+                                                            container=self,
+                                                            manager=self.manager)
+
+        self.next_page_button.enable()
+        self.previous_page_button.enable()
+
+    def clean_maze_generation_algorithm_screen(self):
+        """
+        Removes the widgets for TutorialWindowStages.TUTORIAL_MAZE_GENERATION_ALGORITHM.
+        """
+        self.maze_generation_algorithm_title_text_box.kill()
+        self.maze_generation_algorithm_description_text_box.kill()
+        self.mazes_menu_image.kill()
+
+
+    def build_maze_generation_algorithm_info_screen(self):
+        """
+        Creates the widgets for TutorialWindowStages.TUTORIAL_MAZE_GENERATION_ALGORITHM_INFO.
+        """
+        self.stage = TutorialWindowStages.TUTORIAL_MAZE_GENERATION_ALGORITHM_INFO
+        self.maze_generation_algorithm_info_title_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((70, 5), (self.window_width - 180, 80)),
+                                                                                           html_text=f"<font name={self.font_manager.current_font_name} pixel_size={self.font_manager.ui_title_font_size_value}><var>Maze Generation Algorithms</var></font>",
+                                                                                           object_id="#text_box_title",
+                                                                                           container=self,
+                                                                                           manager=self.manager)
+
+        description_text = (
+            f"Brief description of each maze generation algorithm supported in Pathfind.<br><br>"
+            f"<b>Random Maze</b> (unweighted): Pretty simple algorithm. Just go through each node and "
+            f"randomly choose whether or not it should be marked, doesn't guarantee a perfect maze.<br>"
+            f"<b>Random Weighted Maze</b> (weighted): Same steps as a random maze, but we give"
+            f" each node in the maze a random weight, also doesn't guarantee a perfect maze.<br>"
+            f"<b>RD(Recursive Division)</b> (unweighted): An interesting algorithm, it divides the grid horizontally"
+            f" and vertically by adding a wall of marked nodes and adds an empty space inside of these walls"
+            f" to ensure a perfect maze! (oversimplified explanation).<br>"
+            f"<b>RD Horizontal Skew</b> (unweighted): Recursive Division but biased horizontally (it will make more"
+            f" horizontal splits of the maze). Guarantees a perfect maze.<br>"
+            f"<b>RD Vertical Skew</b> (unweighted): Recursive Division but biased vertically (it will make more"
+            f" vertical splits of the maze), also guarantees a perfect maze.<br>"
+        )
+
+        self.maze_generation_algorithm_info_description_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((60, 80), (510, 430)),
+                                                                                                 html_text=description_text,
+                                                                                                 container=self,
+                                                                                                 manager=self.manager)
+
+        self.next_page_button.enable()
+        self.previous_page_button.enable()
+
+    def clean_maze_generation_algorithm_info_screen(self):
+        """
+        Removes the widgets for TutorialWindowStages.TUTORIAL_MAZE_GENERATION_ALGORITHM_INFO.
+        """
+        self.maze_generation_algorithm_info_title_text_box.kill()
+        self.maze_generation_algorithm_info_description_text_box.kill()
+
+
+    def build_settings_screen(self):
+        """
+        Creates the widgets for TutorialWindowStages.TUTORIAL_SETTINGS.
+        """
+        self.stage = TutorialWindowStages.TUTORIAL_SETTINGS
+        self.settings_title_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((70, 5), (self.window_width - 180, 80)),
+                                                                                           html_text=f"<font name={self.font_manager.current_font_name} pixel_size={self.font_manager.ui_title_font_size_value}><var>Settings</var></font>",
+                                                                                           object_id="#text_box_title",
+                                                                                           container=self,
+                                                                                           manager=self.manager)
+
+        description_text = (
+            f"Pathfind also allows you customize the look and feel of the UI to help suit your needs and preferences.<br>"
+            f"You can access the Settings Window (picture at the bottom) by pressing the <b>settings</b> button.<br><br>"
+            f"<b>UI Element Shape</b>: This will allow to choose whether you want the UI to use a <b>Rectangle</b> shape "
+            f"(with hard edges) or a <b>Rounded Rectangle</b> shape (with rounded edges).<br>"
+            f"<b>UI Corner Roundness</b>: If the <b>UI Element Shape</b> is set to be a <b>Rounded Rectangle</b> then"
+            f" the <b>UI Corner Roundness</b> slider will allow to change how round the edges of the UI Elements are.<br>"
+            f"<b>Grid Width</b>: This slider will allow you set the thickness of the lines drawn on the grid.<br>"
+            f"<b>UI Border Width</b>: This slider will change the thickness of the UI Elements.<br>"
+            f"<b>UI Normal Font Size</b>: This slider will change the font size of the text in every element in the UI except"
+            f" for the titles in windows.<br>"
+            f"<b>UI Title Font Size</b>: This slider will only change the font size of the titles in windows (e.g. the title"
+            f" for the last page was <b>Maze Generation Algorithms</b> which you could see at the top of the screen before).<br>"
+            f"<b>UI Font</b>: This Drop Down Menu will allow to change the fonts the UI is using as well as creating and deleting"
+            f" custom fonts (more information about this on the next page).<br>"
+            f"<b>Disable Tutorial on Startup</b>: This button will allow you toggle whether or not you want to stop the tutorial"
+            f" from appearing whenever the game starts up, and this is false by default (if this option is set to false you can "
+            f"also press the <b>Disable on Startup</b> button on the first page of the tutorial to stop the tutorial from appearing "
+            f"whenever the game is launched).<br>"
+            f"<b>Reset</b>: This button will change all of the settings back to their default values.<br>"
+            f"<b>Save</b>: This button will save you current settings. So when you restart the game, the game will continue to use"
+            f" the same settings you are using now.<br>"
+        )
+
+        self.settings_description_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((50, 80), (520, 205)),
+                                                                           html_text=description_text,
+                                                                           container=self,
+                                                                           manager=self.manager)
+
+
+
+        self.settings_window_image = pygame_gui.elements.UIImage(relative_rect=pygame.Rect(((180, 300)), (249, 229)),
+                                                                 image_surface=self.ui_tutorial_image_surfaces_dict['settings_window'],
+                                                                 container=self,
+                                                                 manager=self.manager)
+
+        self.next_page_button.enable()
+        self.previous_page_button.enable()
+
+    def clean_settings_screen(self):
+        """
+        Removes the widgets for TutorialWindowStages.TUTORIAL_SETTINGS.
+        """
+        self.settings_title_text_box.kill()
+        self.settings_description_text_box.kill()
+        self.settings_window_image.kill()
+
+    def build_fonts_screen(self):
+        """
+        Creates the widgets for TutorialWindowStages.TUTORIAL_FONTS.
+        """
+        self.stage = TutorialWindowStages.TUTORIAL_FONTS
+        self.fonts_title_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((70, 5), (self.window_width - 180, 80)),
+                                                                  html_text=f"<font name={self.font_manager.current_font_name} pixel_size={self.font_manager.ui_title_font_size_value}><var>Fonts</var></font>",
+                                                                  object_id="#text_box_title",
+                                                                  container=self,
+                                                                  manager=self.manager)
+
+        description_text = (
+            f"Pathfind allows you to select custom fonts for the UI. If you want to create a new custom font you should select"
+            f" the <b>Create Custom Font</b> Option from the <b>UI Font</b> Drop Down Menu located in the settings window and"
+            f" this will open up the <b>Custom Font Creation</b> page (picture on the bottom left). You can use the <b>Find File</b>"
+            f" buttons to browse your filesystem and find the location of the font you want to use.<br><br>"
+            f"<b>Normal Font File Path (Regular Weight)</b>: This is the file path to the font file you want to use for regular"
+            f" text anywhere in the UI except for the titles in windows.<br>"
+            f"<b>Normal Font File Path (Bold Weight)</b>: This is the file path to the font file you want to use for bold text"
+            f" anywhere in the UI except for the titles in windows.<br>"
+            f"<b>Title Font File Path (Regular Weight)</b>: This is the the file path to the font file you want to use for the titles"
+            f" in windows.<br>"
+            f"<b>Custom Font Name</b>: Name of the custom font you are creating.<br>"
+            f"<b>Create Custom Font</b>: This will create the new custom font if all of the information you provided is correct (i.e."
+            f" you have filled in each data entry, you have selected valid font files and the custom font name you have specified is not"
+            f" already being used by any other font).<br><br>"
+            f"If you have already created a custom font and you want to delete it you can select the <b>Delete Custom Font</b> Option from the "
+            f"<b>UI Font</b> Drop Down Menu (this option will only appear if you have already created a custom font). This will open the "
+            f"<b>Custom Font Deletion</b> page where you can select the custom fonts you want to delete and then press the <b>Delete</b> to delete them."
+        )
+
+        self.fonts_description_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((50, 80), (520, 205)),
+                                                                        html_text=description_text,
+                                                                        container=self,
+                                                                        manager=self.manager)
+
+
+
+        self.custom_font_creation_screen_image = pygame_gui.elements.UIImage(relative_rect=pygame.Rect(((40, 300)), (249, 229)),
+                                                                             image_surface=self.ui_tutorial_image_surfaces_dict['custom_font_creation_screen'],
+                                                                             container=self,
+                                                                             manager=self.manager)
+
+        self.custom_font_deletion_screen_image = pygame_gui.elements.UIImage(relative_rect=pygame.Rect(((320, 298)), (249, 235)),
+                                                                             image_surface=self.ui_tutorial_image_surfaces_dict['custom_font_deletion_screen'],
+                                                                             container=self,
+                                                                             manager=self.manager)
+
+        self.next_page_button.enable()
+        self.previous_page_button.enable()
+
+    def clean_fonts_screen(self):
+        """
+        Removes the widgets for TutorialWindowStages.TUTORIAL_FONTS.
+        """
+        self.fonts_title_text_box.kill()
+        self.fonts_description_text_box.kill()
+        self.custom_font_creation_screen_image.kill()
+        self.custom_font_deletion_screen_image.kill()
+
+
+    def build_marked_and_weighted_nodes_screen(self):
+        """
+        Creates the widgets for TutorialWindowStages.TUTORIAL_MARKED_AND_WEIGHTED_NODES.
+        """
+        self.stage = TutorialWindowStages.TUTORIAL_MARKED_AND_WEIGHTED_NODES
+        self.marked_and_weighted_nodes_title_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((70, 5), (self.window_width - 180, 80)),
+                                                                                     html_text=f"<font name={self.font_manager.current_font_name} pixel_size={self.font_manager.ui_title_font_size_value}><var>Marked and Weighted Nodes</var></font>",
+                                                                                     object_id="#text_box_title",
+                                                                                     container=self,
+                                                                                     manager=self.manager)
+
+        description_text = (
+            f"Pathfind's pathfinding algorithms support 2 types of nodes. <b>Marked</b> nodes and <b>Weighted</b> nodes."
+            f" Marked nodes simply act as a barrier which the pathfinding algorithms must traverse around to find a path."
+            f" Weighted nodes on the other hand behave slightly differently. A weighted node is a node which has a distance value (also"
+            f" known as a <b>weight</b>) which is used to signify the cost of traversing to the node. Certain pathfinding algorithms"
+            f" (Dijkstra and A*) will take these weights into consideration in order to find an ideal path to the target node.<br><br>"
+            f"You can select whether you want to place marked or weighted nodes using the <b>Marked or Weighted Node</b> Drop Down Menu"
+            f" (picture at the bottom). If you select the <b>Marked</b> option you are able to place and remove marked nodes using the left"
+            f" and right mouse button respectively. Alternatively, if you select the <b>Weighted</b> option you can type in the weight you"
+            f" want the nodes to have using the text entry line on the right and any nodes you place using the left mouse button will have"
+            f" the specified weight, you can also remove weighted nodes using the right mouse button."
+        )
+        self.marked_and_weighted_nodes_description_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((60, 80), (510, 270)),
+                                                                                            html_text=description_text,
+                                                                                            container=self,
+                                                                                            manager=self.manager)
+
+
+        self.marked_and_weighted_nodes_image = pygame_gui.elements.UIImage(relative_rect=pygame.Rect((130, 370), (368, 104)),
+                                                                           image_surface=self.ui_tutorial_image_surfaces_dict['marked_or_weighted_nodes'],
+                                                                           container=self,
+                                                                           manager=self.manager)
+
+        self.next_page_button.enable()
+        self.previous_page_button.enable()
+
+    def clean_marked_and_weighted_nodes_screen(self):
+        """
+        Removes the widgets for TutorialWindowStages.TUTORIAL_MARKED_AND_WEIGHTED_NODES.
+        """
+        self.marked_and_weighted_nodes_title_text_box.kill()
+        self.marked_and_weighted_nodes_description_text_box.kill()
+        self.marked_and_weighted_nodes_image.kill()
+
+    def build_clearing_nodes_screen(self):
+        """
+        Creates the widgets for TutorialWindowStages.TUTORIAL_CLEARING_NODES.
+        """
+        self.stage = TutorialWindowStages.TUTORIAL_CLEARING_NODES
+        self.clearing_nodes_title_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((70, 5), (self.window_width - 180, 80)),
+                                                                           html_text=f"<font name={self.font_manager.current_font_name} pixel_size={self.font_manager.ui_title_font_size_value}><var>Clearing Nodes</var></font>",
+                                                                           object_id="#text_box_title",
+                                                                           container=self,
+                                                                           manager=self.manager)
+
+        description_text = (
+            f"You can clear different kinds of nodes from the grid using the <b>Clear Nodes</b> drop down menu (picture at the bottom)."
+            f" A shortcut to clear all the nodes from the screen is to press the <b>c</b> key.<br><br>"
+            f"<b>Clear Grid</b>: Clears all the nodes off the grid.<br>"
+            f"<b>Clear Path</b>: Only clears nodes which are in the path.<br>"
+            f"<b>Clear Checked Nodes</b>: Only clears nodes which have been checked by a pathfinding algorithm.<br>"
+            f"<b>Clear Marked Nodes</b>: Only clears marked nodes.<br>"
+            f"<b>Clear Weighted Nodes</b>: Only clears weighted nodes.<br>"
+        )
+        self.clearing_nodes_description_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((60, 80), (510, 255)),
+                                                                                 html_text=description_text,
+                                                                                 container=self,
+                                                                                 manager=self.manager)
+
+        self.clear_grid_menu_image = pygame_gui.elements.UIImage(relative_rect=pygame.Rect((200, 350), (215, 175)),
+                                                                 image_surface=self.ui_tutorial_image_surfaces_dict['clear_grid_menu'],
+                                                                 container=self,
+                                                                 manager=self.manager)
+
+        self.next_page_button.enable()
+        self.previous_page_button.enable()
+
+    def clean_clearing_nodes_screen(self):
+        """
+        Removes the widgets for TutorialWindowStages.TUTORIAL_CLEARING_NODES.
+        """
+        self.clearing_nodes_title_text_box.kill()
+        self.clearing_nodes_description_text_box.kill()
+        self.clear_grid_menu_image.kill()
+
+    def build_theming_screen(self):
+        """
+        Creates the widgets for TutorialWindowStages.TUTORIAL_THEMING.
+        """
+        self.stage = TutorialWindowStages.TUTORIAL_THEMING
+        self.theming_title_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((70, 5), (self.window_width - 180, 80)),
+                                                                    html_text=f"<font name={self.font_manager.current_font_name} pixel_size={self.font_manager.ui_title_font_size_value}><var>Theming</var></font>",
+                                                                    object_id="#text_box_title",
+                                                                    container=self,
+                                                                    manager=self.manager)
+
+        description_text = (
+            f"Pathfind also allows you to create and delete custom themes. These custom themes will allow you change the colour"
+            f" of every element in the UI from the background colour to even the colour of the title text. You can access this by"
+            f" using the <b>Themes Menu</b> (picture at the bottom). By default there are 3 default themes in the game <b>Dark Theme</b>"
+            f" (this is the theme which is set whenever you start the game), <b>Light Theme</b> and <b>Gruvbox</b>.<br><br>"
+            f"You can create custom themes using the <b>Create Custom Theme</b> option. This will open a new page which will allow you "
+            f"to specify the name of your new theme and also whether you want to inherit colours from another themes, you can then modify the"
+            f" individual colours in the theme and then create the theme. If you have already created custom themes you can edit the colours in the"
+            f" theme using the <b>Edit Custom Theme</b> option or you can also delete the custom themes using the <b>Delete Custom Theme</b> option."
+        )
+        self.theming_description_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((60, 80), (510, 215)),
+                                                                          html_text=description_text,
+                                                                          container=self,
+                                                                          manager=self.manager)
+
+        self.themes_menu_image = pygame_gui.elements.UIImage(relative_rect=pygame.Rect((200, 300), (212, 225)),
+                                                             image_surface=self.ui_tutorial_image_surfaces_dict['themes_menu'],
+                                                             container=self,
+                                                             manager=self.manager)
+
+        self.next_page_button.enable()
+        self.previous_page_button.enable()
+
+    def clean_theming_screen(self):
+        """
+        Removes the widgets for TutorialWindowStages.TUTORIAL_THEMING.
+        """
+        self.theming_title_text_box.kill()
+        self.theming_description_text_box.kill()
+        self.themes_menu_image.kill()
+
+    def build_networking_screen(self):
+        """
+        Creates the widgets for TutorialWindowStages.TUTORIAL_NETWORKING.
+        """
+        self.stage = TutorialWindowStages.TUTORIAL_NETWORKING
+        self.networking_title_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((70, 5), (self.window_width - 180, 80)),
+                                                                       html_text=f"<font name={self.font_manager.current_font_name} pixel_size={self.font_manager.ui_title_font_size_value}><var>Networking</var></font>",
+                                                                       object_id="#text_box_title",
+                                                                       container=self,
+                                                                       manager=self.manager)
+
+        description_text = (
+            f"Pathfind has built-in network functionality so you can play with your friends! This networking feature"
+            f" will allow you to share a grid with your friends where you can all interactively place nodes, run "
+            f"pathfinding and maze generation algorithms and see the results.<br><br>To access these networking"
+            f" features you must use the <b>Networking Menu</b> (picture on the bottom left) if you want to create"
+            f" a server you should select the <b>Create Server</b> option which will create a server on running on"
+            f" your local IP Address on a certain port (this information will be shown in a window on your screen), you"
+            f" can then share this information with you friends who can then join the server. In order to join a server"
+            f" you must select the <b>Connect to Server</b> option which will open up the <b>Connect to Server Window</b>"
+            f" (picture on the bottom right) you can then type down the IP Address and port the server is running on "
+            f" and try to connect to the server by pressing the <b>Connect</b> button. If the information is valid you "
+            f" will receive a message that you have successfully joined the server otherwise you will receive a message"
+            f" that we've been unable to establish a connection to the server."
+        )
+
+        self.networking_description_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((50, 80), (520, 205)),
+                                                                           html_text=description_text,
+                                                                           container=self,
+                                                                           manager=self.manager)
+
+
+
+        self.networking_menu_image = pygame_gui.elements.UIImage(relative_rect=pygame.Rect(((90, 300)), (209, 102)),
+                                                                 image_surface=self.ui_tutorial_image_surfaces_dict['networking_menu'],
+                                                                 container=self,
+                                                                 manager=self.manager)
+
+        self.connect_to_server_window_image = pygame_gui.elements.UIImage(relative_rect=pygame.Rect(((320, 300)), (249, 229)),
+                                                                 image_surface=self.ui_tutorial_image_surfaces_dict['connect_to_server_window'],
+                                                                 container=self,
+                                                                 manager=self.manager)
+
+        self.next_page_button.enable()
+        self.previous_page_button.enable()
+
+    def clean_networking_screen(self):
+        """
+        Creates the widgets for TutorialWindowStages.TUTORIAL_NETWORKING.
+        """
+        self.networking_title_text_box.kill()
+        self.networking_description_text_box.kill()
+        self.networking_menu_image.kill()
+        self.connect_to_server_window_image.kill()
+
+    def build_end_screen(self):
+        """
+        Creates the widgets for TutorialWindowStages.TUTORIAL_END_SCREEN.
+        """
+        self.stage = TutorialWindowStages.TUTORIAL_END_SCREEN
+        self.end_title_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((70, 5), (self.window_width - 180, 80)),
+                                                                html_text=f"<font name={self.font_manager.current_font_name} pixel_size={self.font_manager.ui_title_font_size_value}><var>The End</var></font>",
+                                                                object_id="#text_box_title",
+                                                                container=self,
+                                                                manager=self.manager)
+
+        description_text = (
+            f"This page marks the end of the Tutorial. Remember you can always return to the tutorial by pressing"
+            f" the <b>Tutorial</b> button (picture at the bottom).<br><br>Continue to explore and enjoy the game!"
+        )
+
+        self.end_description_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((60, 80), (520, 205)),
+                                                                      html_text=description_text,
+                                                                      container=self,
+                                                                      manager=self.manager)
+
+        self.tutorial_button_image = pygame_gui.elements.UIImage(relative_rect=pygame.Rect(((240, 300)), (143, 134)),
+                                                                 image_surface=self.ui_tutorial_image_surfaces_dict['tutorial_button'],
+                                                                 container=self,
+                                                                 manager=self.manager)
+
+
+        self.next_page_button.disable()
+        self.previous_page_button.enable()
+
+    def clean_end_screen(self):
+        """
+        Creates the widgets for TutorialWindowStages.TUTORIAL_END_SCREEN.
+        """
+        self.end_title_text_box.kill()
+        self.end_description_text_box.kill()
+        self.tutorial_button_image.kill()
+
     def handle_tutorial_window_ui_button_pressed(self, event):
+        """
+        Handles the pygame_gui.UI_NETWORKING_MANAGER_UI_BUTTON_PRESSED event for TutorialWindow.
+
+        @param event: pygame.event
+        """
         if self.window_running:
             if self.stage == TutorialWindowStages.TUTORIAL_WELCOME_SCREEN:
                 if event.ui_element == self.disable_tutorial_on_startup:
@@ -1064,18 +1736,30 @@ class TutorialWindow(pygame_gui.elements.UIWindow):
                     self.disable_tutorial_on_startup.kill()
 
             if event.ui_element == self.next_page_button:
-                self.stages_build_and_clean_functions_dict[self.stage]['clean']()
-                self.stages_build_and_clean_functions_dict[self.stage+1]['build']()
+                if self.stage+1 < 13:
+                    self.stages_build_and_clean_functions_dict[self.stage]['clean']()
+                    self.stages_build_and_clean_functions_dict[self.stage+1]['build']()
             elif event.ui_element == self.previous_page_button:
-                self.stages_build_and_clean_functions_dict[self.stage]['clean']()
-                self.stages_build_and_clean_functions_dict[self.stage-1]['build']()
+                if self.stage-1 > 0:
+                    self.stages_build_and_clean_functions_dict[self.stage]['clean']()
+                    self.stages_build_and_clean_functions_dict[self.stage-1]['build']()
 
     def shutdown(self):
+        """
+        Sets the window_running attribute to False.
+        """
         print("[TUTORIAL WINDOW] Shutdown Tutorial Window")
         self.window_running = False
 
 class FontManager:
     def __init__(self, manager, theme_manager, theme_json_data):
+        """
+        Initializes the FontManager class.
+
+        @param manager: pygame_gui.ui_manager.UIManager
+        @param theme_manager: pygame_gui.core.interfaces.appearance_theme_interface.IUIAppearanceThemeInterface
+        @param theme_json_data: Dict
+        """
         self.manager = manager
         self.theme_manager = theme_manager
         self.theme_json_data = theme_json_data
@@ -1087,10 +1771,24 @@ class FontManager:
             self.font_json_data = json.loads(file.read())
 
     def save_font_json_data(self):
+        """
+        Will turn the font_json_data dictionary into json and save
+        it in the data/fonts/font_info.json file.
+        """
         with open('data/fonts/font_info.json', 'w') as file:
             file.write(json.dumps(self.font_json_data))
 
     def load_ui_fonts(self):
+        """
+        This function will go through each font in the font_json_data dictionary and check
+        if the file paths of the font files still exist in the filesystem. If any of the font
+        files no longer exist in the filesystem we will add the font's name to the fonts_to_remove
+        list. If all the font files for the font exist we will load the font files into the UI, so
+        we can use the font whenever we want. After we finish going through all the fonts in the font_json_data
+        dictionary we will iterate over all the fonts in the fonts_to_remove list and remove the
+        key-value pair in the dictionary which is associated with the font. After we have finished
+        iterating through the fonts_to_remove list we will run the save_font_json_data method.
+        """
         self.fonts_to_remove = []
 
         for font_name in self.font_json_data:
@@ -1118,6 +1816,27 @@ class FontManager:
                 self.save_font_json_data()
 
     def add_ui_font(self, font_name, normal_font_regular_weight_file_path, normal_font_bold_weight_file_path, title_font_regular_weight_file_path):
+        """
+        If the font with the font_name specified does not exist as a key in the font_json_data dictionary
+        (we can get a list of all the keys in the font_json_data dictionary using the get_ui_font_names method)
+        we will add a new key-value pair into the dictionary where the key will be the font_name given and
+        the value will be another dictionary containing the following key-value pairs:
+
+        {
+            "custom_font": True,
+            "regular": normal_font_regular_weight_file_path,
+            "bold": normal_font_bold_weight_file_path,
+            "title": title_font_regular_weight_file_path
+        }
+
+        After this we will run the save_font_json_data method, and then we will load the font files into
+        the UI, so we can the font whenever we want.
+
+        @param font_name: Str
+        @param normal_font_regular_weight_file_path: Str
+        @param normal_font_bold_weight_file_path: Str
+        @param title_font_regular_weight_file_path: Str
+        """
         if font_name not in self.get_ui_font_names():
             self.font_json_data[font_name] = {
                 "custom_font": True,
@@ -1139,6 +1858,19 @@ class FontManager:
             print(f"[FONT MANAGER: ADD UI FONT] Error a font already exists with the name '{font_name}'")
 
     def delete_custom_ui_font(self, font_name):
+        """
+        If a font with the font_name given exists as a custom font in the font_json_data
+        dictionary (we can get a list of all the custom fonts in the font_json_data dictionary
+        using the get_custom_ui_font_names method), we will first check if the font_name given
+        is the same as the current_font_name attribute. If it is we will set the current_font_name
+        attribute equal to the default font we load at the start of the game (by default I use the
+        'Roboto' font) and we will also run the set_current_font method and pass in the name of the
+        default font we use as a string. After this, we will remove the key-value pair associated
+        with the font_name given, from the font_json_data dictionary, and then we will run the
+        save_font_json_data method.
+
+        @param font_name: Str
+        """
         if font_name in self.get_custom_ui_font_names():
             if font_name == self.current_font_name:
                 self.current_font_name = "Roboto"
@@ -1151,6 +1883,17 @@ class FontManager:
 
 
     def set_current_font(self, font_name):
+        """
+        If a font with the font_name specified exists as a key in the font_json_data dictionary (we can
+        get a list of all the keys in the font_json_data dictionary using the get_ui_font_names method)
+        we will the set the current_font_name attribute to be equal to the font_name given, and we will
+        perform the relevant operations to ensure that the UI is using this new font. In the case that
+        the font with the font_name specified does not exist in the font_json_data dictionary we will
+        return False.
+
+        @param font_name: Str
+        @return: None or False
+        """
         if font_name in self.get_ui_font_names():
             self.current_font_name = font_name
             for ui_element in self.theme_json_data:
@@ -1165,6 +1908,14 @@ class FontManager:
             return False
 
     def set_normal_font_size(self, font_size):
+        """
+        This function will set the ui_normal_font_size_value attribute to be
+        equal to the font_size given, we will then perform the relevant operations
+        to ensure that the UI also uses this font size for every element on the screen
+        except for the titles at the top of windows.
+
+        @param font_size: int
+        """
         for ui_element in self.theme_json_data:
             if 'font' in self.theme_json_data[ui_element]:
                 if 'normal_font' in self.theme_json_data[ui_element]['font']:
@@ -1174,9 +1925,24 @@ class FontManager:
             self.theme_manager.update_theming(json.dumps(self.theme_json_data))
 
     def get_ui_font_names(self):
+        """
+        This function will return a list containing all the keys in the
+        font_json_data dictionary.
+
+        @return: List
+        """
         return list(self.font_json_data.keys())
 
     def get_custom_ui_font_names(self):
+        """
+        This function will go through each font in the font_json_data dictionary. It will
+        then retrieve the dictionary which is the value of the font and check if the custom_font
+        key in this dictionary contains the value True. If it does we will add this font to the
+        custom_font_names list. After we have iterated over all the fonts in the font_json_data
+        dictionary we will return the custom_font_names list.
+
+        @return: List
+        """
         custom_font_names = []
         for font in self.font_json_data:
             if self.font_json_data[font]['custom_font']:
@@ -1185,6 +1951,15 @@ class FontManager:
         return custom_font_names
 
     def custom_ui_fonts_exist(self):
+        """
+        This function will go through each font in the font_json_data dictionary. It will
+        then retrieve the dictionary which is the value of the font and check if the custom_font
+        key in this dictionary contains the value True. If it does we will return True and exit
+        the function otherwise we will continue to the next iteration. If we have completed all
+        the iterations then this would mean that there aren't any custom fonts in the font_json_data
+        dictionary, and so we will return False.
+        @return:
+        """
         for font_name in self.font_json_data:
             if self.font_json_data[font_name]['custom_font']:
                 return True
@@ -1199,6 +1974,15 @@ class SettingsWindowStages(IntEnum):
 
 class SettingsWindow(pygame_gui.elements.UIWindow):
     def __init__(self, manager, theme_manager, theme_json_data, grid, font_manager):
+        """
+        Initializes the SettingsWindow class.
+
+        @param manager: pygame_gui.ui_manager.UIManager
+        @param theme_manager: pygame_gui.core.interfaces.appearance_theme_interface.IUIAppearanceThemeInterface
+        @param theme_json_data: Dict
+        @param grid: Grid
+        @param font_manager: FontManager
+        """
         self.manager = manager
         self.theme_manager = theme_manager
         self.theme_json_data = theme_json_data
@@ -1217,6 +2001,17 @@ class SettingsWindow(pygame_gui.elements.UIWindow):
         self.load_user_settings()
 
     def load_user_settings(self):
+        """
+        This function will first open the data/settings/user_settings.json file, and it
+        will read all the json data in the file and convert it into a dictionary which will
+        be stored in the user_settings_json_data attribute. We will then perform the
+        relevant operations required to apply the settings in the user_settings_json_data
+        dictionary to the UI and the grid (this consists of things such as the corner roundness
+        of UI Elements, the shape of UI Elements, the border width of the UI Elements, the thickness
+        of the lines on the grid, the font size of normal UI Elements, the font size of titles in
+        the UI and the font we should be using in the UI.
+        """
+
         with open('data/settings/user_settings.json') as file:
             self.user_settings_json_data = json.loads(file.read())
 
@@ -1241,10 +2036,20 @@ class SettingsWindow(pygame_gui.elements.UIWindow):
             self.save_user_settings()
 
     def save_user_settings(self):
+        """
+        This function will turn the dictionary stored in the user_settings_json_data
+        attribute into a json string, and we will overwrite the file at data/settings/user_settings.json
+        with this json string.
+        """
         with open('data/settings/user_settings.json', 'w') as file:
             file.write(json.dumps(self.user_settings_json_data))
 
     def handle_settings_window_border_width_changed(self):
+        """
+        This function will set the changed_ui_border_width attribute to True, and it will
+        perform the relevant operations to ensure that the border width of the UI Elements
+        is the same as the ui_border_width_value attribute.
+        """
         print("ui_border_width_value:", self.ui_border_width_value)
         self.theme_json_data['#ui_element_shape']['misc']['border_width'] = str(self.ui_border_width_value)
         self.theme_json_data['drop_down_menu']['misc']['border_width'] = str(self.ui_border_width_value)
@@ -1276,6 +2081,11 @@ class SettingsWindow(pygame_gui.elements.UIWindow):
                                                                          manager=self.manager)
 
     def handle_settings_window_ui_corner_roundness_changed(self):
+        """
+        This function will perform the relevant operations to ensure that the
+        corner roundness of the UI Elements is the same as the ui_corner_roundness_value
+        attribute.
+        """
         self.theme_json_data['#ui_element_shape']['misc']['shape_corner_radius'] = str(self.ui_corner_roundness_value)
         self.theme_json_data['horizontal_slider.#sliding_button']['misc']['shape_corner_radius'] = str(self.ui_corner_roundness_value // 2)
         self.theme_json_data['selection_list.@selection_list_item']['misc']['shape_corner_radius'] = str(self.ui_corner_roundness_value)
@@ -1290,13 +2100,31 @@ class SettingsWindow(pygame_gui.elements.UIWindow):
         self.theme_manager.update_theming(json.dumps(self.theme_json_data))
 
     def should_build_tutorial_window_on_startup(self):
+        """
+        This function will return the result of performing the logical negation operation
+        on the boolean stored as the value of the 'disabled_tutorial_on_startup' key in
+        the user_settings_json_data dictionary.
+
+        @return: bool
+        """
         return not self.user_settings_json_data['disable_tutorial_on_startup']
 
     def set_disable_tutorial_window_on_startup(self, option):
+        """
+        This function will set the value of the 'disable_tutorial_on_startup' key
+        in the user_settings_json_data dictionary to the boolean value option given.
+        After this it will run the save_user_settings method.
+
+        @param option: bool
+        """
         self.user_settings_json_data['disable_tutorial_on_startup'] = option
         self.save_user_settings()
 
     def build_settings_window(self):
+        """
+        It will first create a window and then create the widgets for SettingsWindowStages.SETTINGS_WINDOW_SETTINGS_SCREEN.
+        After this it will run the handle_settings_window_border_width_changed method.
+        """
         self.stage = SettingsWindowStages.SETTINGS_WINDOW_SETTINGS_SCREEN
 
         if self.window_running == False:
@@ -1428,6 +2256,9 @@ class SettingsWindow(pygame_gui.elements.UIWindow):
         self.handle_settings_window_border_width_changed()
 
     def clean_settings_window(self):
+        """
+        Removes the widgets for SettingsWindowStages.SETTINGS_WINDOW_SETTINGS_SCREEN.
+        """
         self.stage = None
         self.welcome_to_settings_text_box.kill()
         self.ui_element_shape_label.kill()
@@ -1450,6 +2281,9 @@ class SettingsWindow(pygame_gui.elements.UIWindow):
         self.ui_save_settings_button.kill()
 
     def build_custom_font_creation_window(self):
+        """
+        Creates the widgets for SettingsWindowStages.SETTINGS_WINDOW_CUSTOM_FONT_CREATION_SCREEN.
+        """
         self.stage = SettingsWindowStages.SETTINGS_WINDOW_CUSTOM_FONT_CREATION_SCREEN
 
         self.welcome_to_font_creation_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((70, -5), (self.window_width - 180, 80)),
@@ -1500,6 +2334,9 @@ class SettingsWindow(pygame_gui.elements.UIWindow):
                                                                       manager=self.manager)
 
     def clean_custom_font_creation_window(self):
+        """
+        Removes the widgets for SettingsWindowStages.SETTINGS_WINDOW_CUSTOM_FONT_CREATION_SCREEN.
+        """
         self.stage = None
         self.welcome_to_font_creation_text_box.kill()
         self.previous_page_button.kill()
@@ -1513,6 +2350,9 @@ class SettingsWindow(pygame_gui.elements.UIWindow):
         self.custom_font_create_button.kill()
 
     def build_custom_font_deletion_window(self):
+        """
+        Creates the widgets for SettingsWindowStages.SETTINGS_WINDOW_CUSTOM_FONT_DELETION_SCREEN.
+        """
         self.stage = SettingsWindowStages.SETTINGS_WINDOW_CUSTOM_FONT_DELETION_SCREEN
 
         self.welcome_to_font_deletion_text_box = pygame_gui.elements.UITextBox(relative_rect=pygame.Rect((70, -5), (self.window_width - 180, 80)),
@@ -1539,6 +2379,9 @@ class SettingsWindow(pygame_gui.elements.UIWindow):
                                                                       manager=self.manager)
 
     def clean_custom_font_deletion_window(self):
+        """
+        Removes the widgets for SettingsWindowStages.SETTINGS_WINDOW_CUSTOM_FONT_DELETION_SCREEN.
+        """
         self.stage = None
         self.welcome_to_font_deletion_text_box.kill()
         self.previous_page_button.kill()
@@ -1546,6 +2389,11 @@ class SettingsWindow(pygame_gui.elements.UIWindow):
         self.custom_font_delete_button.kill()
 
     def handle_settings_window_ui_button_pressed_event(self, event):
+        """
+        Handles the pygame_gui.UI_BUTTON_PRESSED event for SettingsWindow.
+
+        @param event: pygame.event
+        """
         if self.window_running:
             if self.stage == SettingsWindowStages.SETTINGS_WINDOW_SETTINGS_SCREEN:
                 if event.ui_element == self.ui_save_settings_button:
@@ -1646,6 +2494,11 @@ class SettingsWindow(pygame_gui.elements.UIWindow):
                     self.build_settings_window()
 
     def handle_settings_window_ui_drop_down_menu_changed_event(self, event):
+        """
+        Handles the pygame_gui.UI_DROP_DOWN_MENU_CHANGED event for SettingsWindow.
+
+        @param event: pygame.event
+        """
         if self.window_running:
             if self.stage == SettingsWindowStages.SETTINGS_WINDOW_SETTINGS_SCREEN:
                 if event.ui_element == self.ui_element_shape_drop_down_menu:
@@ -1681,6 +2534,11 @@ class SettingsWindow(pygame_gui.elements.UIWindow):
                                                                                               manager=self.manager)
 
     def handle_settings_window_ui_horizontal_slider_moved_event(self, event):
+        """
+        Handles the pygame_gui.UI_HORIZONTAL_SLIDER_MOVED event for SettingsWindow.
+
+        @param event: pygame.event
+        """
         if self.window_running:
             if self.stage == SettingsWindowStages.SETTINGS_WINDOW_SETTINGS_SCREEN:
                 if event.ui_element == self.ui_corner_roundness_slider:
@@ -1708,6 +2566,11 @@ class SettingsWindow(pygame_gui.elements.UIWindow):
                                                                                       manager=self.manager)
 
     def handle_settings_window_ui_file_dialog_path_picked_event(self, event):
+        """
+        Handles the pygame_gui.UI_FILE_DIALOG_PATH_PICKED event for SettingsWindow.
+
+        @param event: pygame.event
+        """
         if self.window_running:
             if self.stage == SettingsWindowStages.SETTINGS_WINDOW_CUSTOM_FONT_CREATION_SCREEN:
                 if event.ui_element == self.custom_font_file_path_dialog:
@@ -1736,6 +2599,11 @@ class SettingsWindow(pygame_gui.elements.UIWindow):
                     print("[CURRENT FILE PATHS]:", self.custom_normal_font_regular_weight_file_path_string, self.custom_normal_font_bold_weight_file_path_string, self.custom_title_font_regular_weight_file_path_string)
 
     def handle_settings_window_ui_text_entry_finished_event(self, event):
+        """
+        Handles the pygame_gui.UI_TEXT_ENTRY_FINISHED event for SettingsWindow.
+
+        @param event: pygame.event
+        """
         if self.window_running:
             if self.stage == SettingsWindowStages.SETTINGS_WINDOW_CUSTOM_FONT_CREATION_SCREEN:
                 if event.ui_element == self.custom_font_name_text_entry_line:
@@ -1743,6 +2611,11 @@ class SettingsWindow(pygame_gui.elements.UIWindow):
                         self.custom_font_name_text_entry_line.set_text("A custom font already exists with this name.")
 
     def handle_settings_window_ui_selection_list_new_selection(self, event):
+        """
+        Handles the pygame_gui.UI_SELECTION_LIST_NEW_SELECTION event for SettingsWindow.
+
+        @param event: pygame.event
+        """
         if self.window_running:
             if self.stage == SettingsWindowStages.SETTINGS_WINDOW_CUSTOM_FONT_DELETION_SCREEN:
                 if event.ui_element == self.custom_font_selection_list:
@@ -1750,6 +2623,11 @@ class SettingsWindow(pygame_gui.elements.UIWindow):
                     print(self.custom_fonts_to_delete_names)
 
     def handle_settings_window_ui_selection_list_dropped_selection(self, event):
+        """
+        Handles the pygame_gui.UI_SELECTION_LIST_DROPPED_SELECTION event for SettingsWindow.
+
+        @param event: pygame.event
+        """
         if self.window_running:
             if self.stage == SettingsWindowStages.SETTINGS_WINDOW_CUSTOM_FONT_DELETION_SCREEN:
                 if event.ui_element == self.custom_font_selection_list:
@@ -1757,6 +2635,9 @@ class SettingsWindow(pygame_gui.elements.UIWindow):
                     print(self.custom_fonts_to_delete_names)
 
     def shutdown(self):
+        """
+        Sets the window_running attribute to False.
+        """
         print("[SETTINGS WINDOW] Shutdown Settings Window")
         self.window_running = False
 
@@ -1767,6 +2648,20 @@ class GameUIStates(IntEnum):
 
 class GameUIManager:
     def __init__(self, screen_manager, rect_array_obj, color_manager, animation_manager, grid, client, server, pathfinding_algorithms_dict, maze_generation_algorithms_dict, events_dict):
+        """
+        Initializes the GameUIManager class.
+
+        @param screen_manager: ScreenManager
+        @param rect_array_obj: RectArray
+        @param color_manager: ColorManager
+        @param animation_manager: AnimationManager
+        @param grid: Grid
+        @param client: Client
+        @param server: Server
+        @param pathfinding_algorithms_dict: Dict
+        @param maze_generation_algorithms_dict: Dict
+        @param events_dict: Dict
+        """
         self.screen_manager = screen_manager
         self.rect_array_obj = rect_array_obj
         self.color_manager: ColorManager = color_manager
@@ -1832,7 +2727,6 @@ class GameUIManager:
                                                                                   starting_option='Random Maze',
                                                                                   manager=self.manager)
 
-        # TODO(ali): Could remove this label if it isn't needed later
         self.resolution_divider_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((50, 65), (250, 30)),
                                                                     text='Grid Size',
                                                                     manager=self.manager)
@@ -1842,7 +2736,6 @@ class GameUIManager:
                                                                                 value_range=(1, 8),
                                                                                 manager=self.manager)
 
-        # TODO(ali): Could remove this label it isn't needed later
         self.pathfinding_algorithm_speed_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((400, 65), (280, 30)),
                                                                              text='Pathfinding Algorithm Speed',
                                                                              manager=self.manager)
@@ -1852,7 +2745,6 @@ class GameUIManager:
                                                                                          value_range=(12, 100),
                                                                                          manager=self.manager)
 
-        # TODO(ali): Could remove this label if it isn't needed later
         self.recursive_division_speed_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((775, 65), (250, 30)),
                                                                           text='Recursive Division Speed',
                                                                           manager=self.manager)
@@ -1913,6 +2805,16 @@ class GameUIManager:
             self.tutorial_window.build_tutorial_welcome_screen()
 
     def generate_theme_menu(self, theme=None, kill_theme_menu=False):
+        """
+        If the theme variable given is set to None we will set the theme
+        variable to be equal the current_theme_name attribute in self.color_manager.
+        After this we will check if the kill_theme_menu variable given is set to True
+        if it is we will destroy the current theme menu. After this we will create a
+        new theme menu.
+
+        @param theme: Str or None
+        @param kill_theme_menu: Bool
+        """
         if theme == None:
             theme = self.color_manager.current_theme_name
 
@@ -1936,6 +2838,13 @@ class GameUIManager:
                                                              manager=self.manager)
 
     def generate_networking_menu(self, kill_networking_menu=True):
+        """
+        This function will first check if the kill_networking_menu variable given is set to True
+        if it is we will destroy the current networking menu. After this we will create a new
+        networking menu.
+
+        @param kill_networking_menu: bool
+        """
         if kill_networking_menu:
             self.networking_menu.kill()
 
@@ -1945,12 +2854,6 @@ class GameUIManager:
             options = ['Show Server Info', 'Destroy Server']
         elif self.ui_networking_manager.created_server == False and self.ui_networking_manager.connected_to_server:
             options = ['Disconnect from Server']
-        else:
-            # TODO(ali): Remove this else statements once you've finished making the networking menu.
-            print("----------\nERROR!!! generate_networking_menu(), doesn't have any valid options, you haven't reset or assigned either self.created_server or self.connected_to_server properly.\n---------------")
-            print("created_server:", self.ui_networking_manager.create_server)
-            print("connected_to_server:", self.ui_networking_manager.connected_to_server)
-
 
         self.networking_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((650, 10), (200, 50)),
                                                                   options_list=options,
@@ -1960,6 +2863,23 @@ class GameUIManager:
 
 
     def run_pathfinding_algorithm(self, pathfinding_algorithm, heuristic=None):
+        """
+        This function will be used to run a pathfinding algorithm, and it will
+        do the following things in the order given:
+
+        1) Run the reset_rect_array_adjacent_nodes method in self.rect_array_obj.
+        2) Run the gen_rect_array_with_adjacent_nodes method in self.rect_array_obj.
+        3) Run the reset_non_user_weights method in self.rect_array_obj.
+        4) Run the reset_path_pointer method in pathfinding_algorithm.
+        5) Run the reset_checked_nodes_pointer method in pathfinding_algorithm.
+        6) Run the reset_animated_checked_coords_stack method in pathfinding_algorithm.
+        7) Run the reset_animated_path_coords_stack method in pathfinding_algorithm.
+        8) Set the heuristic attribute in pathfinding_algorithm to be the same as the heuristic given.
+        9) Run the run method in pathfinding_algorithm.
+
+        @param pathfinding_algorithm: An instance of a child class of the PathfindingAlgorithm class.
+        @param heuristic: PathfindingHeuristics
+        """
         self.rect_array_obj.reset_rect_array_adjacent_nodes()
         self.rect_array_obj.gen_rect_array_with_adjacent_nodes()
         self.rect_array_obj.reset_non_user_weights()
@@ -1976,6 +2896,11 @@ class GameUIManager:
 
 
     def create_empty_heuristics_menu(self):
+        """
+        This function will first destroy the current heuristics menu, and it will
+        set the heuristic attribute to None. After this it will create a new heuristics
+        menu.
+        """
         self.heuristics_menu.kill()
         self.heuristic = None
         self.heuristics_menu = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((230, 10), (200, 50)),
@@ -1985,6 +2910,15 @@ class GameUIManager:
         self.heuristics_menu.disable()
 
     def create_heuristics_menu_with_distances(self, starting_value='Manhattan Distance'):
+        """
+        This function will first destroy the current heuristics menu. After this it will check
+        if the starting_value given is equal to the string 'Manhattan Distance' or 'Euclidean Distance'
+        and it will set the heuristic attribute to be PathfindingHeuristics.MANHATTAN_DISTANCE or
+        PathfindingHeuristics.EUCLIDEAN_DISTANCE accordingly. After this we will create a new heuristics menu
+        with the new value of the heuristics attribute.
+
+        @param starting_value: Str
+        """
         self.heuristics_menu.kill()
         if starting_value == 'Manhattan Distance':
             self.heuristic = PathfindingHeuristics.MANHATTAN_DISTANCE
@@ -1997,11 +2931,20 @@ class GameUIManager:
                                                                   manager=self.manager)
 
     def run_current_maze_generation_algorithm(self):
+        """
+        This function will first run the reset_path_pointer and reset_checked_nodes_pointer
+        methods on the current pathfinding algorithm (we can access the current pathfinding algorithm
+        by accessing the object stored as the value of the key which is self.current_pathfinding_algorithm in
+        the pathfinding_algorithms_dict dictionary). We will also run the reset_maze_pointer method on the
+        current maze generation algorithm (we can also access the current maze generation algorithm by accessing
+        the object stored as the value of the key which is self.current_maze_generation_algorithm in the
+        maze_generation_algorithms_dict dictionary). After this we will run the maze generation algorithm specified
+        by self.current_maze_generation_algorithm.
+        """
         self.pathfinding_algorithms_dict[self.current_pathfinding_algorithm].reset_path_pointer()
         self.pathfinding_algorithms_dict[self.current_pathfinding_algorithm].reset_checked_nodes_pointer()
 
         self.maze_generation_algorithms_dict[self.current_maze_generation_algorithm].reset_maze_pointer()
-        # screen_lock = True
 
         match self.current_maze_generation_algorithm:
             case MazeGenerationAlgorithmTypes.RANDOM_MARKED_MAZE:
@@ -2029,9 +2972,26 @@ class GameUIManager:
                 self.client.create_network_event(NetworkingEventTypes.RUN_MAZE_GENERATION_ALGORITHM, self.current_maze_generation_algorithm, self.recursive_division_skew, self.maze_generation_algorithms_dict[self.current_maze_generation_algorithm].maze.to_list())
 
     def get_current_pathfinding_algorithm(self):
+        """
+        This function will return the pathfinding algorithm object which is stored as the value of
+        the key self.current_pathfinding_algorithm in the pathfinding_algorithms_dict dictionary.
+
+        @return: An instance of a child class of the PathfindingAlgorithm class.
+        """
         return self.pathfinding_algorithms_dict[self.current_pathfinding_algorithm]
 
     def update_current_pathfinding_algorithm(self, pathfinding_algorithm, heuristic, is_server_event=False):
+        """
+        This function will set the current_pathfinding_algorithm attribute to be equal to the pathfinding_algorithm
+        given. This function will then destroy the current pathfinding algorithms menu and the heuristics menu
+        and create a new pathfinding algorithms menu and heuristics menu depending upon the pathfinding_algorithm and
+        heuristic given. After this we will check if the is_server_event variable given is set to True. If it
+        is we will run the build_ui_running_pathfinding_algorithm_state method.
+
+        @param pathfinding_algorithm: An instance of a child class of the PathfindingAlgorithm class.
+        @param heuristic: PathfindingHeuristics
+        @param is_server_event: bool
+        """
         self.current_pathfinding_algorithm = pathfinding_algorithm
         match self.current_pathfinding_algorithm:
             case PathfindingAlgorithmTypes.DFS:
@@ -2067,9 +3027,24 @@ class GameUIManager:
             self.build_ui_running_pathfinding_algorithm_state()
 
     def get_current_maze_generation_algorithm(self):
+        """
+        This function will return the maze geneartion algorithm object which is stored as the value of
+        the key self.current_maze_generation_algorithm in the maze_generation_algorithms_dict dictionary.
+
+        @return: An instance of a child class of the MazeGenerationAlgorithm class.
+        """
         return self.maze_generation_algorithms_dict[self.current_maze_generation_algorithm]
 
     def update_current_maze_generation_algorithm(self, maze_generation_algorithm, is_server_event=False):
+        """
+        This function will set the current_maze_generation_algorithm attribute to the maze_generation_algorithm
+        given. After this we will destroy the maze generation algorithm menu and create a new one. We will also
+        run the build_ui_running_recursive_division_state method if the is_server_event variable given is set to
+        True and the maze_generation_algorithm given is set to be MazeGenerationAlgorithmTypes.RECURSIVE_DIVISION.
+
+        @param maze_generation_algorithm: An instance of a child class of the MazeGenerationAlgorithm class.
+        @param is_server_event: bool
+        """
         self.current_maze_generation_algorithm = maze_generation_algorithm
         match self.current_maze_generation_algorithm:
             case MazeGenerationAlgorithmTypes.RANDOM_MARKED_MAZE:
@@ -2095,29 +3070,75 @@ class GameUIManager:
                                                                                   starting_option=starting_value,
                                                                                   manager=self.manager)
     def update_resolution_divider(self):
+        """
+        This function will set the value of the resolution divider slider to be the same as the
+        resolution_divider attribute in self.screen_manager.
+        """
         self.resolution_divider_slider.set_current_value(self.screen_manager.resolution_divider)
 
     def get_pathfinding_algorithm_speed(self):
+        """
+        Getter for the pathfinding_algorithm_speed attribute.
+
+        @return: int
+        """
         return self.pathfinding_algorithm_speed
 
     def get_recursive_division_speed(self):
+        """
+        Getter for the recursive_division_speed attribute.
+
+        @return: int
+        """
         return self.recursive_division_speed
 
     def get_cursor_node_type(self):
+        """
+        Getter for the cursor_node_type attribute.
+
+        @return: CursorNodeTypes
+        """
         return self.cursor_node_type
 
     def get_weight(self):
+        """
+        Getter for the weight attribute.
+
+        @return: int
+        """
         return self.weight
 
     def update_pathfinding_algorithm_speed(self, pathfinding_algorithm_speed):
+        """
+        This function will set the value of self.pathfinding_algorithm_speed to
+        the pathfinding_algorithm_speed given and also set the value of the
+        pathfinding algorithm speed slider to be the same as the pathfinding_algorithm_speed
+        given.
+
+        @param pathfinding_algorithm_speed: int
+        """
         self.pathfinding_algorithm_speed = pathfinding_algorithm_speed
         self.pathfinding_algorithm_speed_slider.set_current_value(self.pathfinding_algorithm_speed)
 
     def update_recursive_division_speed(self, recursive_division_speed):
+        """
+        This function will set the value of self.recursive_division_speed to
+        the recursive_division_speed given and also set the value of the
+        recursive division speed slider to be the same as the recursive_division_speed
+        given.
+        
+        @param recursive_division_speed: int
+        """
         self.recursive_division_speed = recursive_division_speed
         self.recursive_division_speed_slider.set_current_value(self.recursive_division_speed)
 
     def handle_ui_drop_down_menu_changed_event(self, event):
+        """
+        This function handles the pygame_gui.UI_DROP_DOWN_MENU_CHANGED event
+        for the GameUIManager, ThemeWindow and SettingsWindow.
+
+        @param event: pygame.event
+        """
         self.theme_window.handle_theme_window_ui_drop_down_menu_changed_event(event)
         self.settings_window.handle_settings_window_ui_drop_down_menu_changed_event(event)
         if event.ui_element == self.pathfinding_algorithms_menu:
@@ -2259,6 +3280,11 @@ class GameUIManager:
 
 
     def cancel_pathfinding_algorithm(self):
+        """
+        This function will reset the path pointer and checked nodes pointer for the current
+        pathfinding algorithm, as well as setting the timer for the DRAW_CHECKED_NODES and DRAW_PATH
+        events to 0. The function will then run the build_ui_normal_state method.
+        """
         self.pathfinding_algorithms_dict[self.current_pathfinding_algorithm].reset_path_pointer()
         self.pathfinding_algorithms_dict[self.current_pathfinding_algorithm].reset_checked_nodes_pointer()
         pygame.time.set_timer(self.events_dict['DRAW_CHECKED_NODES'], 0)
@@ -2266,14 +3292,28 @@ class GameUIManager:
         self.build_ui_normal_state()
 
     def cancel_recursive_division(self, cut_off_point=None):
+        """
+        This function will run the cut_maze method on the current maze generation algorithm and pass
+        in the cut_off_point variable given. It will then set the timer for the DRAW_MAZE event to 0
+        and then call the build_ui_normal_state method.
+
+        @param cut_off_point: int or None
+        """
         self.maze_generation_algorithms_dict[self.current_maze_generation_algorithm].cut_maze(cut_off_point)
         pygame.time.set_timer(self.events_dict['DRAW_MAZE'], 0)
         self.build_ui_normal_state()
 
     def handle_ui_button_pressed_event(self, event):
+        """
+        This function will handle the pygame_gui.UI_BUTTON_PRESSED_EVENT event for the
+        GameUIManager, ThemeWindow, SettingsWindow and the TutorialWindow.
+
+        @param event: pygame.event
+        """
         self.theme_window.handle_theme_window_ui_button_pressed_event(event)
         self.settings_window.handle_settings_window_ui_button_pressed_event(event)
         self.tutorial_window.handle_tutorial_window_ui_button_pressed(event)
+
         update_theme_menu = self.ui_networking_manager.handle_ui_networking_manager_ui_button_pressed_event(event)
         if update_theme_menu:
             self.generate_theme_menu(kill_theme_menu=True)
@@ -2303,6 +3343,12 @@ class GameUIManager:
             self.settings_window.build_settings_window()
 
     def handle_ui_horizontal_slider_moved_event(self, event):
+        """
+        This function will handle the pygame_gui.UI_HORIZONTAL_SLIDER_MOVED event for the
+        GameUIManager and the SettingsWindow.
+
+        @param event: pygame.event
+        """
         self.settings_window.handle_settings_window_ui_horizontal_slider_moved_event(event)
         if event.ui_element == self.resolution_divider_slider:
             self.screen_manager.set_resolution_divider(event.value)
@@ -2323,12 +3369,24 @@ class GameUIManager:
                 self.client.create_network_event(NetworkingEventTypes.SET_RECURSIVE_DIVISION_SPEED, self.recursive_division_speed)
 
     def handle_ui_text_entry_finished_event(self, event):
+        """
+        This function will handle the pygame_gui.UI_TEXT_ENTRY_FINISHED event for the
+        GameUIManager, ThemeWindow and the SettingsWindow.
+
+        @param event: pygame.event
+        """
         self.theme_window.handle_theme_window_ui_text_entry_finished_event(event)
         self.settings_window.handle_settings_window_ui_text_entry_finished_event(event)
         if event.ui_element == self.weighted_node_text_entry_line:
             self.weight = int(event.text)
 
     def handle_ui_window_closed_event(self, event):
+        """
+        This function will handle the pygame_gui.UI_WINDOW_CLOSE event for the GameUIManager,
+        ThemeWindow, UINetworkingManager, SettingsWindow and the TutorialWindow.
+
+        @param event: pygame.event
+        """
         if event.ui_element == self.theme_window:
             self.theme_window.shutdown()
 
@@ -2358,20 +3416,50 @@ class GameUIManager:
             self.settings_window.shutdown()
 
     def handle_ui_color_picker_color_picked_event(self, event):
+        """
+        This function will handle the pygame_gui.UI_COLOUR_PICKER_COLOUR_PICKED for the
+        GameUIManager and the ThemeWindow.
+
+        @param event: pygame.event
+        """
         self.theme_window.handle_theme_window_ui_color_picker_color_picked_event(event)
 
     def handle_ui_selection_list_new_selection(self, event):
+        """
+        This function will handle the pygame_gui.UI_SELECTION_LIST_NEW_SELECTION for the
+        GameUIManager, ThemeWindow, and the SettingsWindow.
+
+        @param event: pygame.event
+        """
         self.theme_window.handle_theme_window_ui_selection_list_new_selection(event)
         self.settings_window.handle_settings_window_ui_selection_list_new_selection(event)
 
     def handle_ui_selection_list_dropped_selection(self, event):
+        """
+        This function will handle the pygame_gui.UI_SELECTION_LIST_DROPPED_SELECTION for the
+        GameUIManager, ThemeWindow and the SettingsWindow.
+
+        @param event: pygame.event
+        """
         self.theme_window.handle_theme_window_ui_selection_list_dropped_selection(event)
         self.settings_window.handle_settings_window_ui_selection_list_dropped_selection(event)
 
     def handle_ui_file_dialog_path_picked_event(self, event):
+        """
+        This function will handle the pygame_gui.UI_FILE_DIALOG_PATH_PICKED for the
+        GameUIManager and the SettingsWindow.
+
+        @param event: pygame.event
+        """
         self.settings_window.handle_settings_window_ui_file_dialog_path_picked_event(event)
 
     def update_client_received_new_theme(self):
+        """
+        This function will first check if the received_new_theme attribute in self.client is equal
+        to True, if it is we will set it to False then we will call the generate_theme_menu method
+        and set the kill_theme_menu argument to True. We will then create a message window telling
+        the user that another client in the server has sent them a new theme.
+        """
         if self.client.received_new_theme:
             self.client.received_new_theme = False
             self.generate_theme_menu(kill_theme_menu=True)
@@ -2381,6 +3469,13 @@ class GameUIManager:
                                                manager=self.manager)
 
     def update_networking_server_connection_broken(self):
+        """
+        This function will first check if the server_connection_broken attribute in self.client is equal
+        to True, if it is we will set it to False then we will call the server_connection_has_broken method
+        in self.ui_networking_manager. We will then create the networking menu again using the generate_networking_menu
+        method, and we will also create the theme menu again using the generate_theme_menu method with the kill_theme_menu
+        argument being set to True.
+        """
         if self.client.server_connection_broken:
             self.client.server_connection_broken = False
             self.ui_networking_manager.server_connection_has_broken()
@@ -2388,6 +3483,15 @@ class GameUIManager:
             self.generate_theme_menu(kill_theme_menu=True)
 
     def set_colour_to_ui_element(self, ui_node_type, colour, update_theme=True):
+        """
+        This function will set the colour of the ui_node_type specified to the colour
+        specified. If the update_theme variable given is set to True we will also update
+        these changes so that they can be seen in the UI.
+
+        @param ui_node_type: ColorUITypes
+        @param colour: Tuple
+        @param update_theme: bool
+        """
         if type(colour) == pygame.Color:
             color_string = 'rgb' + str(self.color_manager.extract_rgb_color_from_pygame_color(colour))
         else:
@@ -2420,6 +3524,14 @@ class GameUIManager:
             self.theme_manager.update_theming(json.dumps(self.theme_json_data))
 
     def set_ui_colours_from_current_theme(self):
+        """
+        This function will go through each ui node type in ColorUITypes and call
+        the set_colour_to_ui_element method on it, we will set the colour argument
+        to be the colour in the theme for that ui node type (we can get this colour
+        by using the get_theme_color method in self.color_manager and pass in
+        the ui node type we are currently iterating over as the argument) and we will
+        also set the update_theme argument to False.
+        """
         theme_colors_dict = self.color_manager.get_theme_colors_dict()
         for ui_node_type in ColorUITypes:
             self.set_colour_to_ui_element(ui_node_type, self.color_manager.get_theme_color(ui_node_type), False)
@@ -2428,6 +3540,13 @@ class GameUIManager:
         print(f"[SET_UI_COLOURS_FROM_CURRENT_THEME] Set UI Colours from theme: '{self.color_manager.current_theme_name}'")
 
     def handle_ui_colour_animations(self):
+        """
+        This function will first call the update_ui_element_interpolation_dict method in self.animation_manager
+        and then iterate over each key-value pair in this dictionary (this key value pair will contain the ui node type
+        and the colour of the ui node type). We will then call the set_colour_to_ui_element method and pass in the ui node type
+        and colour. After this we will call the set_node_color method in self.color_manager and pass in the ui node type
+        and the colour.
+        """
         update_text_entry_line = False
         for ui_colour_to_update_dict in self.animation_manager.update_ui_element_interpolation_dict():
             for ui_node_type, colour in ui_colour_to_update_dict.items():
@@ -2446,6 +3565,11 @@ class GameUIManager:
         self.theme_manager.update_theming(json.dumps(self.theme_json_data))
 
     def handle_ui_border_width_changed(self):
+        """
+        If the changed_ui_border_width attribute in self.settings_window is set to True, we will set
+        it to False and then perform the required operations to ensure that the all the UI Elements
+        are using the correct border width.
+        """
         if self.settings_window.changed_ui_border_width:
             print("[GAME UI MANAGER] Redraw UIDropDownMenus with new border width.")
             self.settings_window.changed_ui_border_width = False
@@ -2475,6 +3599,12 @@ class GameUIManager:
             self.generate_networking_menu()
 
     def handle_bottom_ui_drop_down_menus_open(self):
+        """
+        If the marked or weighted node menu, clear nodes menu or theme menu are open we will return True
+        otherwise we will return False.
+
+        @return: bool
+        """
         for drop_down_menu in [self.marked_or_weighted_node_menu, self.clear_nodes_menu, self.theme_menu]:
             if drop_down_menu.current_state == drop_down_menu.menu_states['expanded']:
                 return True
@@ -2482,12 +3612,22 @@ class GameUIManager:
         return False
 
     def handle_ui_window_open(self):
+        """
+        This function will return True if there are any windows open in the game
+        otherwise it will return False.
+
+        @return: bool
+        """
         if len(self.manager.get_window_stack().get_stack()) > 0:
             return True
         else:
             return False
 
     def build_ui_normal_state(self):
+        """
+        This method will set the state attribute to GameUIStates.UI_NORMAL_STATE and
+        perform the required operations to ensure that the UI is in GameUIStates.UI_NORMAL_STATE.
+        """
         self.state = GameUIStates.UI_NORMAL_STATE
         self.run_button.set_text("Run")
         self.pathfinding_algorithms_menu.enable()
@@ -2513,6 +3653,10 @@ class GameUIManager:
         self.generate_networking_menu()
 
     def build_ui_running_pathfinding_algorithm_state(self):
+        """
+        This method will set the state attribute to GameUIStates.UI_RUNNING_PATHFINDING_ALGORITHM_STATE and
+        perform the required operations to ensure that the UI is in GameUIStates.UI_NORMAL_STATE.
+        """
         self.state = GameUIStates.UI_RUNNING_PATHFINDING_ALGORITHM_STATE
         self.run_button.set_text("Cancel")
         self.pathfinding_algorithms_menu.disable()
@@ -2539,6 +3683,10 @@ class GameUIManager:
         self.networking_menu.disable()
 
     def build_ui_running_recursive_division_state(self):
+        """
+        This method will set the state attribute to GameUIStates.UI_RUNNING_RECURSIVE_DIVISION_STATE and
+        perform the required operations to ensure that the UI is in GameUIStates.UI_RUNNING_PATHFINDING_ALGORITHM_STATE.
+        """
         self.state = GameUIStates.UI_RUNNING_RECURSIVE_DIVISION_STATE
         self.run_button.set_text("Cancel")
         self.pathfinding_algorithms_menu.disable()
@@ -2565,10 +3713,19 @@ class GameUIManager:
         self.networking_menu.disable()
 
     def not_normal_state(self):
+        """
+        This function will check if the state attribute is equal to the GameUIStates.UI_NORMAL_STATE,
+        if it is we will return False otherwise we will return True.
+
+        @return: bool
+        """
         if self.state != GameUIStates.UI_NORMAL_STATE:
             return True
         else:
             return False
 
     def draw(self):
+        """
+        This function will draw of the elements in the UI onto the screen.
+        """
         self.manager.draw_ui(self.screen_manager.screen)

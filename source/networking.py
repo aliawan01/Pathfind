@@ -35,6 +35,18 @@ class NetworkingEventTypes(IntEnum):
 
 class Client:
     def __init__(self, screen_manager, grid, rect_array_obj, pathfinding_algorithms_dict, maze_generation_algorithms_dict, animation_manager, events_dict, color_manager):
+        """
+        Initalizes the Client class.
+
+        @param screen_manager: ScreenManager
+        @param grid: Grid
+        @param rect_array_obj: RectArray
+        @param pathfinding_algorithms_dict: Dict
+        @param maze_generation_algorithms_dict: Dict
+        @param animation_manager: AnimationManager
+        @param events_dict: Dict
+        @param color_manager: ColorManager
+        """
         self.grid = grid
         self.screen_manager = screen_manager
         self.rect_array_obj = rect_array_obj
@@ -66,6 +78,19 @@ class Client:
         self.current_maze_generation_algorithm = None
 
     def connect_to_server(self, server_ip_address, port):
+        """
+        If the connected_to_server attribute is set to False, this function
+        will try to establish TCP connection with the server at the IP Address
+        and Port Number given. If we are able to successfully connect to the server
+        we will set the connected_to_server attribute to True and start a new Thread
+        running the handle_server_events method. However, if we are unable to connect
+        to the server we will return False.
+
+        @param server_ip_address: Str
+        @param port: int
+        @return: bool or None
+        """
+
         if self.connected_to_server == False:
             self.server_connection_broken = False
             try:
@@ -80,6 +105,22 @@ class Client:
             threading.Thread(target=self.handle_server_events, daemon=True).start()
 
     def create_network_event(self, event_type, *args):
+        """
+        If the connected_to_server attribute is set to True, this function will
+        send the data for the event we are creating to the server. This will be
+        done by first identifying what NetworkingEventType the event_type variable
+        we have been given is. Once we know which NetworkingEventType we are going
+        to send we will create a dictionary called command which will contain a key
+        which will be the event_type and the value for the key will the tuple args we
+        are given if it is not empty, if args is empty we will simply make the value
+        None. We will then turn the dictionary into json and send the json data to the
+        server. However, if the event_type was NetworkingEventTypes.DISCONNECT_FROM_SERVER
+        then we will also want to shut down the socket after sending the command to the server
+        and set the connected_to_sever attribute to False.
+
+        @param event_type: NetworkingEventTypes
+        @param args: Tuple
+        """
         if self.connected_to_server:
             match event_type:
                 case NetworkingEventTypes.DISCONNECT_FROM_SERVER:
@@ -165,7 +206,10 @@ class Client:
                     command = {NetworkingEventTypes.CANCEL_RECURSIVE_DIVISION: args}
 
             print("[SOME CLIENT]: Created and sent event: ", command)
-            self.client_socket.sendall(json.dumps(command).encode())
+            try:
+                self.client_socket.sendall(json.dumps(command).encode())
+            except BrokenPipeError:
+                print("[SOME CLIENT] Can't send information to server, it has been shut down.")
 
             if command == NetworkingEventTypes.DISCONNECT_FROM_SERVER:
                 self.client_socket.shutdown(socket.SHUT_RDWR)
@@ -173,6 +217,18 @@ class Client:
                 self.client_socket = None
 
     def update_resolution_divider(self, resolution_divider):
+        """
+        If the changed_resolution_divider attribute is set to True,
+        this function will set the changed_resolution_divider attribute
+        to False and return a list contain 2 elements which is the boolean
+        value True and the self.resolution_divider attribute. However,
+        if the changed_resolution_divider attribute is set to False, we will
+        return a list containing the boolean value False and resolution_divider
+        variable we have been given.
+
+        @param resolution_divider: int
+        @return: List
+        """
         if self.changed_resolution_divider:
             self.changed_resolution_divider = False
             return [True, self.resolution_divider]
@@ -180,6 +236,18 @@ class Client:
             return [False, resolution_divider]
 
     def update_pathfinding_algorithm_speed(self, pathfinding_algorithm_speed):
+        """
+        If the changed_pathfinding_algorithm_speed attribute is set to True,
+        this function will set the changed_pathfinding_algorithm_speed attribute
+        to False and return a list containing 2 elements which is the boolean
+        value True and the self.pathfinding_algorithm_speed attribute. However,
+        if the changed_pathfinding_algorithm_speed attribute is set to False, we will
+        return a list containing the boolean value False and pathfinding_algorithm_speed
+        variable we have been given.
+
+        @param pathfinding_algorithm_speed: int
+        @return: List
+        """
         if self.changed_pathfinding_algorithm_speed:
             self.changed_pathfinding_algorithm_speed = False
             return [True, self.pathfinding_algorithm_speed]
@@ -187,6 +255,18 @@ class Client:
             return [False, pathfinding_algorithm_speed]
 
     def update_recursive_division_speed(self, recursive_division_speed):
+        """
+        If the changed_recursive_division_speed attribute is set to True,
+        this function will set the changed_recursive_division_speed attribute
+        to False and return a list containing 2 elements which is the boolean
+        value True and the self.recursive_division_speed attribute. However,
+        if the changed_recursive_division_speed attribute is set to False, we will
+        return a list containing the boolean value False and recursive_division_speed
+        variable we have been given.
+
+        @param recursive_division_speed: int
+        @return: List
+        """
         if self.changed_recursive_division_speed:
             self.changed_recursive_division_speed = False
             return [True, self.recursive_division_speed]
@@ -194,6 +274,18 @@ class Client:
             return [False, recursive_division_speed]
 
     def update_current_pathfinding_algorithm(self, pathfinding_algorithm):
+        """
+        If the changed_current_pathfinding_algorithm attribute is set to True,
+        this function will set the changed_current_pathfinding_algorithm attribute
+        to False and return a list containing 2 elements which is the boolean
+        value True and the self.current_pathfinding_algorithm attribute. However,
+        if the changed_current_pathfinding_algorithm attribute is set to False, we will
+        return a list containing the boolean value False and current_pathfinding_algorithm
+        variable we have been given.
+
+        @param pathfinding_algorithm: An instance of a child class of the PathfindingAlgorithm class.
+        @return: List
+        """
         if self.changed_current_pathfinding_algorithm:
             self.changed_current_pathfinding_algorithm = False
             return [True, self.current_pathfinding_algorithm]
@@ -201,6 +293,18 @@ class Client:
             return [False, pathfinding_algorithm]
 
     def update_current_maze_generation_algorithm(self, maze_generation_algorithm):
+        """
+        If the changed_current_maze_generation_algorithm attribute is set to True,
+        this function will set the changed_current_maze_generation_algorithm attribute
+        to False and return a list containing 2 elements which is the boolean
+        value True and the self.current_maze_generation_algorithm attribute. However,
+        if the changed_current_maze_generation_algorithm attribute is set to False, we will
+        return a list containing the boolean value False and current_maze_generation_algorithm
+        variable we have been given.
+
+        @param maze_generation_algorithm: An instance of a child class of the MazeGenerationAlgorithm class.
+        @return: List
+        """
         if self.changed_current_maze_generation_algorithm:
             self.changed_current_maze_generation_algorithm = False
             return [True, self.current_maze_generation_algorithm]
@@ -208,13 +312,29 @@ class Client:
             return [False, maze_generation_algorithm]
 
     def reset_cancel_pathfinding_algorithm(self):
+        """
+        This function will set the cancel_pathfinding_algorithm to False
+        """
         self.cancel_pathfinding_algorithm = False
 
     def reset_cancel_recursive_division(self):
+        """
+        This function will set the cancel_recursive_division and
+        recursive_division_cut_off_point attributes to False.
+        """
         self.cancel_recursive_division = False
         self.recursive_division_cut_off_point = None
 
     def apply_resolution_divider(self):
+        """
+        This function will run the set_resolution_divider method in self.screen_manager
+        and pass in the self.resolution_divider attribute so that resolution_divider attribute
+        in self.screen_manager has been updated. We will then recreate the grid using the
+        reset_rect_array method in self.rect_array_obj. If the current_pathfinding_algorithm attribute
+        is not equal to None, we will also reset the path and checked nodes stacks using the reset_path_pointer
+        and reset_checked_nodes_pointer methods respectively. Additionally, if the current_maze_generation_algorithm
+        is not equal to None we will also reset the maze_pointer attribute using the reset_maze_pointer method.
+        """
         self.screen_manager.set_resolution_divider(self.resolution_divider)
         self.rect_array_obj.reset_rect_array()
 
@@ -226,6 +346,16 @@ class Client:
             self.current_maze_generation_algorithm.reset_maze_pointer()
 
     def handle_server_events(self):
+        """
+        This function will be run in a separate thread. It will run a loop
+        which will continuously check for new messages from the server as long as
+        the connected_to_server attribute is set to True. If it receives and event
+        from the server it will turn the json string into a dictionary and interpret
+        the NetworkingEventType the dictionary contains. Depending upon what the
+        NetworkingEventType is the function will then apply the event.
+
+        @return: None
+        """
         while self.connected_to_server:
             try:
                 server_events = self.client_socket.recv(100000).decode()
@@ -440,6 +570,12 @@ class Client:
 
 class Server:
     def __init__(self, grid, color_manager):
+        """
+        Initalizes the Server class.
+
+        @param grid: Grid
+        @param color_manager: ColorManager
+        """
         self.grid = grid
         self.color_manager = color_manager
         self.connected_clients_dict = {}
@@ -449,9 +585,28 @@ class Server:
         self.recursive_division_speed = 15
 
     def get_number_of_currently_connected_clients(self):
+        """
+        Returns the number of key-value pairs in the connected_clients_dict dictionary.
+
+        @return: int
+        """
         return len(self.connected_clients_dict.values())
 
     def handle_client(self, client_socket, client_address):
+        """
+        This function will be run in a separate thread. It will run a loop
+        which will continuously check for new messages from the client_socket as long as
+        the server_running attribute is set to True. When it receives a message from the client
+        it will turn the json string into a dictionary and check if the event type of the dictionary is
+        NetworkingEventTypes.DISCONNECT_FROM_SERVER in which case it will remove the client from the
+        connected_clients_dict dictionary and exit the function. If the event is not
+        NetworkingEventTypes.DISCONNECT_FROM_SERVER the server will send the dictionary to all the
+        other clients in the connected_clients_dict dictionary.
+
+        @param client_socket: socket.socket
+        @param client_address: Str
+        @return: None
+        """
         print(f"[SERVER] Currently connected clients: {self.connected_clients_dict}")
         print(f"[SERVER] Length of currently connected clients: {self.get_number_of_currently_connected_clients()}")
 
@@ -461,7 +616,10 @@ class Server:
             except BrokenPipeError:
                 return
             except ConnectionResetError:
-                self.connected_clients_dict.pop(client_address)
+                try:
+                    self.connected_clients_dict.pop(client_address)
+                except KeyError:
+                    print("[SERVER] Disconnected client has already been removed from the connected_clients_dict dictionary.")
                 print(f"[SERVER] Client disconnected: {client_address}")
                 print(f"[SERVER] Currently connected clients: {self.connected_clients_dict}")
                 print(f"[SERVER] Length of currently connected clients: {self.get_number_of_currently_connected_clients()}")
@@ -494,11 +652,31 @@ class Server:
                                 print("[SERVER] sent information to other client socket:", other_client_socket)
                                 other_client_socket.sendall(client_info.encode())
 
-    def get_pathfinding_algorithm_speed_and_recursive_division_speed(self, pathfinding_algorithm_speed, recursive_division_speed):
+    def set_pathfinding_algorithm_speed_and_recursive_division_speed(self, pathfinding_algorithm_speed, recursive_division_speed):
+        """
+        This function is a setter for both the pathfinding_algorithm_speed and recursive_division_speed attributes.
+
+        @param pathfinding_algorithm_speed: int
+        @param recursive_division_speed: int
+        """
         self.pathfinding_algorithm_speed = pathfinding_algorithm_speed
         self.recursive_division_speed = recursive_division_speed
 
     def client_server_loop(self):
+        """
+        This function will be run in a separate thread. It will run a loop where it will
+        continuously add clients who are trying to join the server to the connected_clients_dict
+        dictionary as long as the server_running attribute is set to True. Once it has accepted a client
+        it will get a list containing information about the grid from the get_board_info method in self.grid.
+        It will append the pathfinding_algorithm_speed and recursive_division_speed attributes to this list and send
+        it to the client. In addition to this, this function will get information about the current theme name using the
+        current_theme_name attribute in self.color_manager as well as the dictionary containing the colours the theme uses
+        from the get_theme_colors_dict method in self.color_manager, it will then send this information to the client.
+        After this, the function will run the handle_client method in a separate thread and pass in information about the
+        client's address and socket.
+
+        @return: None
+        """
         while self.server_running:
             try:
                 client_socket, client_address = self.server_socket.accept()
@@ -527,6 +705,15 @@ class Server:
             threading.Thread(target=self.handle_client, args=(client_socket, client_address), daemon=True).start()
 
     def run_server(self, ip_address, port):
+        """
+        If the server_running variable is set to False, this function will set the
+        server_running variable to True and create a new TCP socket on the server_socket
+        attribute which will be bound to the IP Address and Port Number we have been given.
+        We will then run the client_server_loop method in a separate thread.
+
+        @param ip_address: Str
+        @param port: int
+        """
         if self.server_running == False:
             print(f"[SERVER] Running on ip address: {ip_address}, port: {port}")
             self.server_running = True
@@ -539,12 +726,26 @@ class Server:
             threading.Thread(target=self.client_server_loop, daemon=True).start()
 
     def kick_out_clients(self):
+        """
+        This function will go through each client in the connected_clients_dict dictionary
+        and send them a dictionary whose key will be NetworkingEventTypes.DISCONNECT_FROM_SERVER
+        and this key will have a value of None (this will tell all the clients to disconnect
+        from the server).
+        """
         if self.server_running:
             for client_socket in list(self.connected_clients_dict.values()):
                 command = {NetworkingEventTypes.DISCONNECT_FROM_SERVER: None}
                 client_socket.sendall(json.dumps(command).encode())
 
     def shutdown(self):
+        """
+        This function will shut down the server by doing the following:
+        1) Running the kick_out_clients method.
+        2) Closing the socket running on the server_socket attribute
+        3) Set the connected_to_clients_dict dictionary to an empty dictionary.
+        4) Set the server_running attribute to False
+        5) Set the server_socket attribute to None.
+        """
         if self.server_running:
             self.kick_out_clients()
             self.server_running = False

@@ -16,6 +16,14 @@ class MazeGenerationAlgorithmTypes(IntEnum):
 
 class MazeGenerationAlgorithm:
     def __init__(self, screen_manager, rect_array_obj, color_manager, animation_manager):
+        """
+        Initalizes the MazeGenerationAlgorithm class.
+
+        @param screen_manager: ScreenManager
+        @param rect_array_obj: RectArray
+        @param color_manager: ColorManager
+        @param animation_manager: AnimationManager
+        """
         self.screen_manager = screen_manager
         self.animation_manager = animation_manager
         self.rect_array_obj = rect_array_obj
@@ -27,15 +35,35 @@ class MazeGenerationAlgorithm:
         self.type = None
 
     def reset_maze(self):
+        """
+        This function will set the value of the self.maze attribute to be a new stack which will have a
+        size that is the same as the number of nodes in the grid (we can calculate this by multiplying
+        the num_of_rows attribute by the num_of_columns attribute which are both found in self.screen_manager.
+        """
         self.maze = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
 
     def reset_animated_coords_stack(self):
+        """
+        This function will set the value of the self.animated_coords attribute to be a new stack which will have a
+        size that is the same as the number of nodes in the grid (we can calculate this by multiplying
+        the num_of_rows attribute by the num_of_columns attribute which are both found in self.screen_manager.
+        """
         self.animated_coords = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
 
     def reset_maze_pointer(self):
+        """
+        This function will set the value of the self.maze_pointer attribute to be -1.
+        """
         self.maze_pointer = -1
 
     def update_maze_pointer(self):
+        """
+        This function will increment the value of self.maze_pointer as long as it is less than the
+        size of the self.maze stack (we can get the size of self.maze using self.maze.get_size()). If
+        this condition is met we will increment self.maze_pointer and return 0 otherwise we will return -1.
+
+        @return: int
+        """
         if self.maze_pointer != self.maze.get_size():
             self.maze_pointer += 1
             return 0
@@ -43,6 +71,17 @@ class MazeGenerationAlgorithm:
             return -1
 
     def cut_maze(self, cut_off_index=None):
+        """
+        This function is used to change the number of coordinates in the self.maze stack.
+        If the cut_off_index variable has a value of None we will then make the cut_off_index
+        variable have the same value as the self.maze_pointer attribute. If the cut_off_index
+        variable has been given a value other than None then we will set the self.maze_pointer
+        attribute to have the same value as the cut_off_index variable. We will then resize
+        the self.maze stack by removing any coordinates which come after the index of the
+        cut_off_index variable.
+
+        @param cut_off_index: int or None
+        """
         if cut_off_index == None:
             cut_off_index = self.maze_pointer
         else:
@@ -51,6 +90,21 @@ class MazeGenerationAlgorithm:
         self.maze.stack = self.maze.stack[:cut_off_index]
 
     def draw(self):
+        """
+        This function is called every frame when we need to draw a maze generation algorithm.
+
+        When we first start drawing a maze generation algorithm the self.maze_pointer attribute
+        is set to 0. Over time, we increment the value of self.maze_pointer (this process is handled
+        separately and not by this function) and start drawing and animating nodes onto the screen.
+
+        We will first check if the coordinate in self.maze at the index of self.maze_pointer is
+        in the self.animated_coords stack. If it is not we will animate the coordinate using the
+        add_coords_to_animation_dict method in self.animation_manager, and we will also push these
+        coordinates onto the self.animated_coords stack.
+
+        After this we will then draw all the other coordinates which came before the coordinate at
+        self.maze_pointer as rectangles (since they will have been animated before).
+        """
         for x in range(self.maze_pointer):
             coord = self.maze.stack[x]
             if self.animated_coords.exists(coord) == False:
@@ -62,10 +116,26 @@ class MazeGenerationAlgorithm:
 
 class RandomWeightedMaze(MazeGenerationAlgorithm):
     def __init__(self, screen_manager, rect_array_obj, color_manager, animation_manager):
+        """
+        Initializes the RandomWeightedMaze class.
+
+        @param screen_manager: ScreenManager
+        @param rect_array_obj: RectArray
+        @param color_manager: ColorManager
+        @param animation_manager: AnimationManager
+        """
         super().__init__(screen_manager, rect_array_obj, color_manager, animation_manager)
         self.type = MazeGenerationAlgorithmTypes.RANDOM_WEIGHTED_MAZE
 
     def create_random_weighted_maze(self):
+        """
+        This algorithm will go through each RectNode in self.rect_array_obj.array and
+        randomly choose whether the RectNode should be weighted, if we decided that the
+        RectNode should be weighted we will choose a random weight for it and set the
+        RectNode's is_user_weight attribute to True and the weight attribute to the weight
+        we have randomly generated. We will also animate this RectNode using the
+        add_coords_to_animation_dict method in self.animation_manager.
+        """
         self.reset_maze()
 
         for y in range(self.screen_manager.num_of_rows):
@@ -80,10 +150,25 @@ class RandomWeightedMaze(MazeGenerationAlgorithm):
 
 class RandomMarkedMaze(MazeGenerationAlgorithm):
     def __init__(self, screen_manager, rect_array_obj, color_manager, animation_manager):
+        """
+        Initializes the RandomMarkedMaze class.
+
+        @param screen_manager: ScreenManager
+        @param rect_array_obj: RectArrayObj
+        @param color_manager: ColorManager
+        @param animation_manager: AnimationManager
+        """
         super().__init__(screen_manager, rect_array_obj, color_manager, animation_manager)
         self.type = MazeGenerationAlgorithmTypes.RANDOM_MARKED_MAZE
 
     def create_random_marked_maze(self):
+        """
+        This algorithm will go through each RectNode in self.rect_array_obj.array and
+        randomly choose whether the RectNode should be marked, if we decided that the
+        RectNode should be marked we will set the RectNode's marked attribute to True.
+        We will also animate this RectNode using the add_coords_to_animation_dict method
+        in self.animation_manager.
+        """
         self.reset_maze()
 
         for y in range(self.screen_manager.num_of_rows):
@@ -101,12 +186,31 @@ class RecursiveDivisionSkew(IntEnum):
 
 class RecursiveDivisionMaze(MazeGenerationAlgorithm):
     def __init__(self, screen_manager, rect_array_obj, color_manager, animation_manager):
+        """
+        Initializes the RecursiveDivisionMaze class.
+
+        @param screen_manager: ScreenManager
+        @param rect_array_obj: RectArrayObj
+        @param color_manager: ColorManager
+        @param animation_manager: AnimationManager
+        """
         super().__init__(screen_manager, rect_array_obj, color_manager, animation_manager)
         self.empty_nodes_x = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
         self.empty_nodes_y = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
         self.type = MazeGenerationAlgorithmTypes.RECURSIVE_DIVISION
 
     def recursive_division(self, start_x, start_y, end_x, end_y, skew=None):
+        """
+        This function recursively calls itself to generate the Recursive Division Maze, and it will
+        push the coordinates of the marked nodes in the maze to the self.maze stack.
+
+        @param start_x: int
+        @param start_y: int
+        @param end_x: int
+        @param end_y: int
+        @param skew: RecursiveDivisionSkew
+        @return: None
+        """
         if (
                 start_x not in range(self.screen_manager.num_of_columns + 1) or 
                 end_x not in range(self.screen_manager.num_of_columns + 1) or
@@ -210,6 +314,15 @@ class RecursiveDivisionMaze(MazeGenerationAlgorithm):
 
 
     def run_recursive_division(self):
+        """
+        This function is called to run recursive division, it will reset the self.maze stack
+        using the reset_maze method as well as making the self.empty_nodes_x and self.empty_nodes_y
+        attributes both point to empty Stacks which are have the same size as the number of nodes in the
+        grid (this can be calculated by multiplying the num_of_rows and num_of_columns attributes found
+        in self.screen_manager). This function will then call the recursive_division function which will
+        recursively call itself until it has finished generated the maze (it will push all the coordinates
+        in the maze to the self.maze stack).
+        """
         self.reset_maze()
         self.empty_nodes_x = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)
         self.empty_nodes_y = Stack(self.screen_manager.num_of_rows*self.screen_manager.num_of_columns)

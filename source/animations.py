@@ -19,6 +19,19 @@ class AnimationBackgroundTypes(Enum):
 
 class AnimationNode:
     def __init__(self, coords, animation_type, foreground_color, background_color, speed, column_width, row_width, row_width_int, grid_height_offset):
+        """
+        Initializes the AnimationNode class
+
+        @param coords: List
+        @param animation_type: AnimationTypes
+        @param foreground_color: pygame.Color
+        @param background_color: pygame.Color
+        @param speed: float
+        @param column_width: float
+        @param row_width: float
+        @param row_width_int: int
+        @param grid_height_offset: int
+        """
         self.type = animation_type
         self.background_color = background_color
         self.foreground_color = foreground_color
@@ -32,12 +45,24 @@ class AnimationNode:
 
 class UIAnimationNode:
     def __init__(self, initial_colour, final_colour):
+        """
+        Initializes the UIAnimationNode class
+
+        @param initial_colour: pygame.Color
+        @param final_colour: pygame.Color
+        """
         self.initial_colour = initial_colour
         self.final_colour = final_colour
         self.fraction = 0
 
 class AnimationManager:
     def __init__(self, screen_manager, rect_array_obj):
+        """
+        Initalizes the AnimationManager class.
+
+        @param screen_manager: ScreenManager
+        @param rect_array_obj: RectArray
+        """
         self.screen_manager = screen_manager
         self.rect_array_obj = rect_array_obj
         self.start_node_coords, self.end_node_coords = self.rect_array_obj.get_start_and_end_node_coords()
@@ -46,6 +71,16 @@ class AnimationManager:
         self.ui_element_interpolation_dict = {}
 
     def add_coords_to_animation_dict(self, coords, animation_type, foreground_color, background_color, speed=1):
+        """
+        Adds coordinates of nodes which need to be animated to the self.animation_dict dictionary.
+
+        @param coords: List
+        @param animation_type: AnimationTypes
+        @param foreground_color: pygame.Color
+        @param background_color: pygame.Color
+        @param speed: float
+        @return: None
+        """
         if tuple(coords) in self.animation_dict.keys():
             if self.animation_dict[tuple(coords)].type == animation_type:
                 return
@@ -53,10 +88,24 @@ class AnimationManager:
         self.animation_dict[tuple(coords)] = AnimationNode(coords, animation_type, foreground_color, background_color, speed, self.screen_manager.column_width, self.screen_manager.row_width, self.screen_manager.row_width_int, self.screen_manager.grid_height_offset)
 
     def interpolate_board_or_border(self, interpolation_type, initial_color, final_color, speed=1):
+        """
+        Adds the colours which need to be animated for either the board or the border to self.board_or_border_interpolation_dict dictionary.
+
+        @param interpolation_type: AnimationTypes
+        @param initial_color: pygame.Color
+        @param final_color: pygame.Color
+        @param speed: float
+        """
         if self.board_and_border_interpolation_dict[interpolation_type] == None:
             self.board_and_border_interpolation_dict[interpolation_type] = [initial_color, final_color, 0]
 
     def update_border_and_board_interpolation(self):
+        """
+        If the border or board colour is being animated then this function will return
+        the colour which needs to be drawn in the current frame.
+
+        @return: Dictionary
+        """
         events_to_remove = []
         background_color = None
         border_color = None
@@ -86,6 +135,11 @@ class AnimationManager:
         return {'BACKGROUND_COLOR': background_color, 'BORDER_COLOR': border_color}
 
     def update_coords_animations(self, background_color):
+        """
+        Will update and draw each node which is being animated in the self.animation_dict dictionary
+
+        @param background_color: pygame.Color
+        """
         start_node_coords, end_node_coords = self.rect_array_obj.get_start_and_end_node_coords()
         coords_to_remove = []
 
@@ -160,10 +214,24 @@ class AnimationManager:
             self.animation_dict.pop(removing_coord)
 
     def add_ui_element_to_ui_element_interpolation_dict(self, ui_element_type, initial_colour, final_colour):
+        """
+        Allows for a specific UI Color to be animated to a different colour by adding it to the
+        self.ui_element_interpolation_dict dictionary.
+
+        @param ui_element_type: ColorUITypes
+        @param initial_colour: pygame.Color
+        @param final_colour: pygame.Color
+        """
         if ui_element_type not in self.ui_element_interpolation_dict.keys():
             self.ui_element_interpolation_dict[ui_element_type] = UIAnimationNode(initial_colour, final_colour)
 
     def update_ui_element_interpolation_dict(self):
+        """
+        This will return a list containing the colours which should be drawn on the current frame
+        of each UI Color which is being animated.
+
+        @return: List
+        """
         ui_elements_to_remove = []
         ui_colors_to_return = []
 
