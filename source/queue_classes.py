@@ -6,9 +6,21 @@ class Queue:
         self.heap = []
 
     def __iter__(self):
+        """
+        Makes it so that when we loop over the instance of the Queue
+        class it will actually loop over the self.heap list.
+
+        @return: Iterator
+        """
         return iter(self.heap)
 
     def __str__(self):
+        """
+        Whenever we try to print out the instance of the Queue class it
+        will instead print the self.heap list.
+
+        @return: Str
+        """
         return str(self.heap)
 
     def remove_empty_values(self):
@@ -85,9 +97,21 @@ class PriorityQueue:
         self.heap = []
 
     def __iter__(self):
+        """
+        Makes it so that when we loop over the instance of the PriorityQueue
+        class it will actually loop over the self.heap list.
+
+        @return: Iterator
+        """
         return iter(self.heap)
 
     def __str__(self):
+        """
+        Whenever we try to print out the instance of the PriorityQueue class it
+        will instead print the self.heap list.
+
+        @return: Str
+        """
         return str(self.heap)
 
     def enqueue(self, item, priority):

@@ -80,6 +80,7 @@ class ColorManager:
         the theme colours dictionary as a pygame.Color object.
 
         @param type: Int
+
         @return: pygame.Color
         """
         return pygame.Color(self.theme_colors[type])
@@ -400,6 +401,7 @@ class ColorManager:
         pygame.Color instance into a tuple and it will then return the tuple.
 
         @param color: pygame.Color
+
         @return: Tuple
         """
         return (color[0], color[1], color[2])
@@ -650,6 +652,7 @@ class ColorManager:
         will return False.
 
         @param name: Str
+
         @return: Bool
         """
         for theme in self.themes_list:
@@ -664,6 +667,7 @@ class ColorManager:
         from the self.themes_list dictionary if it exists (otherwise it will return None).
 
         @param name: Str
+
         @return: Dict or None
         """
         for theme in self.themes_list:

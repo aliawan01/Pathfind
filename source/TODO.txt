@@ -1,5 +1,17 @@
+- Fix bug with settings window not opening properly when restarting.
+
 FUNCTIONS WHICH NEED PSEUDOCODE:
 - networking - handle_server_events
 - maze_generation_algorithms - recursive division
 - pathfinding_algorithms
 - Maybe building UI screen functions?
+
+grid.py
+animations.py
+color_manager.py
+maze_generation_algorithms.py
+networking.py
+pathfinding_algorithms.py
+queue_classes.py
+stack.py
+ui_manager.py

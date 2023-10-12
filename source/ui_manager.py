@@ -1958,7 +1958,8 @@ class FontManager:
         the function otherwise we will continue to the next iteration. If we have completed all
         the iterations then this would mean that there aren't any custom fonts in the font_json_data
         dictionary, and so we will return False.
-        @return:
+
+        @return: bool
         """
         for font_name in self.font_json_data:
             if self.font_json_data[font_name]['custom_font']:
@@ -3316,6 +3317,7 @@ class GameUIManager:
 
         update_theme_menu = self.ui_networking_manager.handle_ui_networking_manager_ui_button_pressed_event(event)
         if update_theme_menu:
+            self.generate_networking_menu()
             self.generate_theme_menu(kill_theme_menu=True)
 
         if self.state == GameUIStates.UI_NORMAL_STATE:
@@ -3387,6 +3389,7 @@ class GameUIManager:
 
         @param event: pygame.event
         """
+        print("Shutdown ui window")
         if event.ui_element == self.theme_window:
             self.theme_window.shutdown()
 

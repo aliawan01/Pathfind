@@ -114,6 +114,7 @@ def main():
             if event.type == pygame_gui.UI_TEXT_ENTRY_FINISHED:
                 ui_manager.handle_ui_text_entry_finished_event(event)
 
+            if event.type == pygame_gui.UI_WINDOW_CLOSE:
                 ui_manager.handle_ui_window_closed_event(event)
 
             if event.type == pygame_gui.UI_COLOUR_PICKER_COLOUR_PICKED:

@@ -14,9 +14,21 @@ class Stack:
         self.pointer = -1
 
     def __iter__(self):
+        """
+        Makes it so that when we loop over the instance of the Stack
+        class it will actually loop over the self.stack list.
+
+        @return: Iterator
+        """
         return iter(self.stack)
 
     def __str__(self):
+        """
+        Whenever we try to print out the instance of the Stack class it
+        will instead print the self.stack list.
+
+        @return: Str
+        """
         return str(self.stack)
 
     def push(self, value, show_errors=True):

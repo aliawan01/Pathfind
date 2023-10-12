@@ -6,7 +6,7 @@ from enum import Enum, IntEnum
 from stack import Stack
 from queue_classes import Queue, PriorityQueue
 
-class AnimationTypes(Enum):
+class AnimationTypes(IntEnum):
     EXPANDING_SQUARE = 0
     SHRINKING_SQUARE = 1
     CIRCLE_TO_SQUARE = 2
@@ -14,7 +14,7 @@ class AnimationTypes(Enum):
     BOARD_LINEAR_INTERPOLATION = 4
     BORDER_LINEAR_INTERPOLATION = 5
 
-class AnimationBackgroundTypes(Enum):
+class AnimationBackgroundTypes(IntEnum):
     THEME_BACKGROUND = 0
 
 class AnimationNode:
