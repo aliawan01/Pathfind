@@ -196,18 +196,18 @@ class RectArray:
                 if x+1 < self.screen_manager.num_of_columns:
                     if self.array[y][x+1].marked == False:
                         self.array[y][x].adjacent_nodes[0] = [y, x+1]
-                # Up
-                if y-1 > -1:
-                    if self.array[y-1][x].marked == False:
-                        self.array[y][x].adjacent_nodes[1] = [y-1, x]
-                # Left
-                if x-1 > -1:
-                    if self.array[y][x-1].marked == False:
-                        self.array[y][x].adjacent_nodes[2] = [y, x-1]
                 # Down
                 if y+1 < self.screen_manager.num_of_rows:
                     if self.array[y+1][x].marked == False:
-                        self.array[y][x].adjacent_nodes[3] = [y+1, x]
+                        self.array[y][x].adjacent_nodes[1] = [y+1, x]
+                # Up
+                if y-1 > -1:
+                    if self.array[y-1][x].marked == False:
+                        self.array[y][x].adjacent_nodes[2] = [y-1, x]
+                # Left
+                if x-1 > -1:
+                    if self.array[y][x-1].marked == False:
+                        self.array[y][x].adjacent_nodes[3] = [y, x-1]
 
     def reset_rect_array_adjacent_nodes(self):
         """

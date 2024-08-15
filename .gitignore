@@ -4,3 +4,4 @@
 b.bat
 *.py[cod]
 __pycache__/
+venv/

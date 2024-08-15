@@ -1,12 +1,11 @@
+import json
+from copy import deepcopy
+
 import pygame
 from pygame.locals import *
 
-from animations import *
 from grid import *
-from copy import deepcopy
 
-from enum import IntEnum
-import json
 
 class ColorNodeTypes(IntEnum):
     BORDER_COLOR = 0,

@@ -684,6 +684,7 @@ class Server:
                 return
 
             self.connected_clients_dict[client_address] = client_socket
+            print(self.connected_clients_dict)
 
             if len(self.connected_clients_dict) > 1:
                 board_info = self.grid.get_board_info()
