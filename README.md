@@ -1,7 +1,7 @@
 # Pathfind ![Static Badge](https://img.shields.io/badge/License-MIT_License-green)
 
 ## Description
-Welcome to Pathfind! This project will allow you to visualize different pathfinding and maze generation algorithms in an interactive and engaging way. I initially created this project as a task at school but I quickly realized how it could grow into a much more versatile and feature rich tool.
+Welcome to Pathfind! This project will allow you to visualize different pathfinding and maze generation algorithms in an interactive and engaging way. Initially, I created this project as a task at school but quickly realized how it could grow into a much more versatile and feature rich tool.
 ## Demo
 
 https://github.com/user-attachments/assets/f184785c-2532-432c-9c4c-0cb6777a4288
