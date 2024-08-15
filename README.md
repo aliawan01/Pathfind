@@ -3,6 +3,7 @@
 ## Description
 Welcome to Pathfind! This project will allow you to visualize different pathfinding and maze generation algorithms in an interactive and engaging way. I initially created this project as a task at school but I quickly realized how it could grow into a much more versatile and feature rich tool.
 ## Demo
+https://github.com/user-attachments/assets/66580216-aebc-41b3-a476-9035f4cc96cf
 
 
 ## Supported Algorithms
