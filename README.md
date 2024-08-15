@@ -38,8 +38,8 @@ Welcome to Pathfind! This project will allow you to visualize different pathfind
 - pygame-ce
 - pygame_gui==0.6.9
 
-### Setting up Virtual Env (recommended)
-#### Windows
+## Setting up Virtual Env (recommended)
+### Windows
 1. Install `virutalenv` package
 `pip install virtualenv`
 2. Create virtual environemnt
@@ -49,7 +49,7 @@ Welcome to Pathfind! This project will allow you to visualize different pathfind
 4. Install Packages
 `pip install -r requirements.txt`
 
-#### Linux/Mac
+### Linux/Mac
 1. Install `virutalenv` package
 `pip3 install virtualenv`
 2. Create virtual environemnt
@@ -59,9 +59,9 @@ Welcome to Pathfind! This project will allow you to visualize different pathfind
 4. Install Packages
 `pip3 install -r requirements.txt`
 
-### Run
+## Run
 After you have ensured that the requirements are installed on your system (or virtual environment) enter the root directory of the project and run the following command.
-#### Windows
+### Windows
 `python source\main.py`
-#### Linux/Mac
+### Linux/Mac
 `python3 source/main.py`
